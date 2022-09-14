@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { Meta } from "$lib/components";
 	import { page } from "$app/stores";
-
-	export let message: string;
-	export let status: string;
 </script>
 
 <Meta title="Ошибка" description="Ошибка {status}" noindex />
