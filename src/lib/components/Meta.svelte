@@ -1,9 +1,7 @@
 <script lang="ts">
-	import { getIPFSLink } from "$lib/utils";
-
 	export let title: string;
 	export let description: string;
-	export let cover: string = getIPFSLink("QmSnwhp78vrJo57jPshuwPQqc2s6U8CUqq51AazvSECWdF/default_cover.webp");
+	export let cover: string = "/images/splash.png";
 	export let noindex = false;
 
 	title = title + " — cofob.ru";
