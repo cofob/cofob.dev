@@ -1,0 +1,19 @@
+@import "nprogress/nprogress.css";
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	@font-face {
+		font-family: "Manrope";
+		src: url("/fonts/Manrope.woff2") format("woff2"), url("/fonts/Manrope.ttf") format("truetype");
+		font-weight: 100 1000;
+		font-stretch: 25% 151%;
+	}
+
+	html {
+		@apply motion-safe:scroll-smooth antialiased break-words;
+		font-family: Manrope, sans-serif;
+	}
+}

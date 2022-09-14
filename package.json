@@ -1,0 +1,52 @@
+{
+	"name": "cofob-ru",
+	"type": "module",
+	"version": "0.0.1",
+	"license": "MIT",
+	"description": "svelte-powered website",
+	"homepage": "https://cofob.ru/",
+	"scripts": {
+		"dev": "vite dev",
+		"build": "DEPLOY_TARGET=node vite build",
+		"build:static": "DEPLOY_TARGET=static vite build && cp ./build/200.html ./build/ipfs-404.html",
+		"build:cloudflare": "DEPLOY_TARGET=cloudflare vite build",
+		"package": "svelte-kit package",
+		"preview": "vite preview",
+		"postinstall": "svelte-kit sync",
+		"check": "svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-check --tsconfig ./tsconfig.json --watch",
+		"lint": "prettier --check --plugin-search-dir=. . && eslint .",
+		"format": "prettier --write --plugin-search-dir=. .",
+		"start": "yarn build && yarn preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-cloudflare": "latest",
+		"@sveltejs/adapter-node": "latest",
+		"@sveltejs/adapter-static": "latest",
+		"@sveltejs/kit": "latest",
+		"@types/nprogress": "latest",
+		"@typescript-eslint/eslint-plugin": "latest",
+		"@typescript-eslint/parser": "latest",
+		"autoprefixer": "latest",
+		"cssnano": "latest",
+		"cssnano-preset-advanced": "latest",
+		"eslint": "latest",
+		"eslint-config-prettier": "latest",
+		"eslint-plugin-svelte3": "latest",
+		"postcss": "latest",
+		"postcss-discard-comments": "latest",
+		"postcss-import": "latest",
+		"prettier": "latest",
+		"prettier-plugin-svelte": "latest",
+		"svelte": "latest",
+		"svelte-check": "latest",
+		"svelte-heros": "latest",
+		"svelte-preprocess": "latest",
+		"tailwindcss": "latest",
+		"typescript": "latest",
+		"vite": "latest"
+	},
+	"dependencies": {
+		"nprogress": "latest"
+	}
+}
