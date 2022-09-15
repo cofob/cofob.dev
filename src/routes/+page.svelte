@@ -5,7 +5,7 @@
 <Meta title="Главная" description="Персональный сайт кофоба" />
 
 <Section>
-	<div class="text-center">
+	<div class="text-center py-20 sm:py-32">
 		<Heading level={1}>
 			Привет! Я <BlueLine animate>cofob</BlueLine>.
 		</Heading>
