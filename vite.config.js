@@ -12,11 +12,6 @@ const config = {
 	compilerOptions: {
 		cssHash: get_css_hash,
 	},
-	define: {
-		"import.meta.env.VITE_VERSION": JSON.stringify(
-			child_process.execSync("git describe --tags --abbrev=0 --always").toString().trim(),
-		),
-	},
 	plugins: [sveltekit()],
 };
 
