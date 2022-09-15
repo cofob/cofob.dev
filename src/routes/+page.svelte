@@ -1,15 +1,14 @@
 <script lang="ts">
-	import { Meta, BlueLine } from "$lib/components";
-	import Section from "$src/lib/components/Section.svelte";
+	import { Meta, BlueLine, Section, Heading } from "$lib/components";
 </script>
 
 <Meta title="Главная" description="Персональный сайт кофоба" />
 
 <Section>
 	<div class="text-center">
-		<p class="sm:text-7xl text-5xl font-medium">
+		<Heading level={1}>
 			Привет! Я <BlueLine animate>cofob</BlueLine>.
-		</p>
+		</Heading>
 		<p>Разработчик Python, Rust, Web приложений.</p>
 		<a href="/portfolio">
 			<button class="mt-2 font-semibold text-md rounded-lg border-2 border-zinc-800 p-1"> Портфолио -> </button>
