@@ -8,15 +8,15 @@
 
 <style>
 	.h1 {
-		@apply sm:text-7xl text-5xl font-semibold;
+		@apply sm:text-7xl text-5xl font-semibold mb-2;
 	}
 
 	.h2 {
-		@apply sm:text-6xl text-4xl font-medium;
+		@apply sm:text-6xl text-4xl font-medium mb-2;
 	}
 
 	.h3 {
-		@apply sm:text-5xl text-3xl font-medium;
+		@apply sm:text-5xl text-3xl font-medium mb-2;
 	}
 
 	.h4 {
