@@ -1,7 +1,9 @@
 <script lang="ts">
+	import { getIPFSLink } from "$lib/utils";
+
 	export let title: string;
 	export let description: string;
-	export let cover: string = "/images/splash.png";
+	export let cover: string = getIPFSLink("bafybeibkbtxn255q765pfxw2tcfgi34bnehu3egsiro7xwpvtfl4nx6a7e/splash.png");
 	export let noindex = false;
 
 	title = title + " — cofob.ru";

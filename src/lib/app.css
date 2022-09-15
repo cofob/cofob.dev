@@ -7,7 +7,10 @@
 @layer base {
 	@font-face {
 		font-family: "Manrope";
-		src: url("/fonts/Manrope.woff2") format("woff2"), url("/fonts/Manrope.ttf") format("truetype");
+		src: url("https://static.ipfsqr.ru/ipfs/bafybeih5wcd2evjszwj2wjxpwud5fohdwh4oje5re46omuoxhnj6bdpaty/Manrope.woff2")
+				format("woff2"),
+			url("https://static.ipfsqr.ru/ipfs/bafybeih5jsijgo7adldrc4iddntuxp22cyfdr5lahnctjj5fmznsytuvby/Manrope.ttf")
+				format("truetype");
 		font-weight: 100 1000;
 		font-stretch: 25% 151%;
 	}
