@@ -11,7 +11,7 @@
 	<title>{title}</title>
 
 	<!-- Meta - запрещённая в России организация -->
-	<meta content="#ea590b" name="theme-color" />
+	<meta content="#7dd3fc" name="theme-color" />
 	<meta content="Russian" name="language" />
 	<meta content="ru_RU" name="og:locale" />
 	<meta content="cofob.ru" property="og:site_name" />
