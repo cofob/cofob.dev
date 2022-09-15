@@ -1,7 +1,7 @@
 <script lang="ts">
-	import Cofob from "./Cofob.svelte";
+	import BlueLine from "./BlueLine.svelte";
 </script>
 
 <footer>
-	<p class="text-center my-4">(c) <Cofob /> 2021--2022</p>
+	<p class="text-center my-4">(c) <BlueLine>cofob</BlueLine> 2021--2022</p>
 </footer>

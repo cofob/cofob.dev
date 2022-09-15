@@ -1,11 +1,11 @@
 <script lang="ts">
-	import Cofob from "./Cofob.svelte";
+	import BlueLine from "./BlueLine.svelte";
 </script>
 
 <nav class="py-2 px-4">
 	<div class="flex justify-between">
 		<div>
-			<a href="/"><Cofob /></a>
+			<a href="/"><BlueLine>cofob</BlueLine></a>
 		</div>
 		<div class="flex gap-x-3">
 			<a href="/portfolio">Портфолио</a>
