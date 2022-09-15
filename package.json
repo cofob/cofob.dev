@@ -8,7 +8,7 @@
 	"scripts": {
 		"dev": "vite dev",
 		"build": "DEPLOY_TARGET=node vite build",
-		"build:static": "DEPLOY_TARGET=static vite build && cp ./build/200.html ./build/ipfs-404.html",
+		"build:static": "DEPLOY_TARGET=static vite build && cp ./build/200.html ./build/ipfs-404.html && cp ./build/200.html ./build/index.html",
 		"build:cloudflare": "DEPLOY_TARGET=cloudflare vite build",
 		"package": "svelte-kit package",
 		"preview": "vite preview",

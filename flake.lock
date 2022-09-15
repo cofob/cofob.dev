@@ -1,5 +1,25 @@
 {
   "nodes": {
+    "bp": {
+      "inputs": {
+        "nixpkgs": [
+          "nixpkgs"
+        ]
+      },
+      "locked": {
+        "lastModified": 1662627485,
+        "narHash": "sha256-Kg8u2ekU0+MsuLzgKqiaus3HquLLo2Qq+oGbQfIppos=",
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "rev": "cab951dd024dd367511d48440de6f93664ee35aa",
+        "type": "github"
+      },
+      "original": {
+        "owner": "serokell",
+        "repo": "nix-npm-buildpackage",
+        "type": "github"
+      }
+    },
     "flake-utils": {
       "locked": {
         "lastModified": 1656928814,
@@ -33,6 +53,7 @@
     },
     "root": {
       "inputs": {
+        "bp": "bp",
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs"
       }
