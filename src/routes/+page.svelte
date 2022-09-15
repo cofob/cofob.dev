@@ -7,7 +7,7 @@
 
 <Section>
 	<div class="text-center">
-		<p class="text-7xl font-medium">
+		<p class="sm:text-7xl text-5xl font-medium">
 			Привет! Я <BlueLine animate>cofob</BlueLine>.
 		</p>
 		<p>Разработчик Python, Rust, Web приложений.</p>
