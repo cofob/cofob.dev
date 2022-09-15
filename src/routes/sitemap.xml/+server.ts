@@ -4,7 +4,8 @@ export async function GET() {
 		"Content-Type": "application/xml",
 	};
 
-	return new Response(`<?xml version="1.0" encoding="UTF-8" ?>
+	return new Response(
+		`<?xml version="1.0" encoding="UTF-8" ?>
 		<urlset
 			xmlns="https://www.sitemaps.org/schemas/sitemap/0.9"
 			xmlns:news="https://www.google.com/schemas/sitemap-news/0.9"
@@ -19,5 +20,7 @@ export async function GET() {
 				<priority>1</priority>
 				<lastmod>2022-09-14</lastmod>
 			</url>
-		</urlset>`, { headers: headers });
+		</urlset>`,
+		{ headers: headers },
+	);
 }

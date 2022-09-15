@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Meta, BlueLine } from "$lib/components";
-import Section from "$src/lib/components/Section.svelte";
+	import Section from "$src/lib/components/Section.svelte";
 </script>
 
 <Meta title="Главная" description="Персональный сайт кофоба" />
