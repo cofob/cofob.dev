@@ -16,4 +16,12 @@
 		@apply motion-safe:scroll-smooth antialiased break-words;
 		font-family: Manrope, sans-serif;
 	}
+
+	body {
+		@apply bg-white text-gray-800;
+	}
+
+	.link {
+		@apply text-sky-500 hover:underline hover:text-sky-600;
+	}
 }

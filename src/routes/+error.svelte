@@ -3,12 +3,12 @@
 	import { page } from "$app/stores";
 </script>
 
-<Meta title="Ошибка" description="Ошибка {status}" noindex />
+<Meta title={$page.status.toString()} description="Ошибка {$page.status}" noindex />
 
 <div>
 	{#if $page.status == 404}
-		<p>404</p>
+		<p>Страница не найдена</p>
 	{/if}
-	{$page.error?.message}
-	<a href="/">на главную -></a>
+	<p>Ошибка: {$page.error?.message}</p>
+	<a href="/" class="link">На главную -></a>
 </div>
