@@ -3,11 +3,11 @@ pipeline:
     image: node:18
     commands:
       - yarn
-  lint:
-    image: node:18
-    commands:
-      - yarn lint
-      - yarn check
+  # lint:
+  #   image: node:18
+  #   commands:
+  #     - yarn lint
+  #     - yarn check
   build:
     image: node:18
     commands:
