@@ -12,19 +12,19 @@ pipeline:
     image: node:18
     commands:
       - yarn build:static
-  mk-car:
-    image: cofob/ipfs-tools
+  create-preview:
+    image: debian
     commands:
-      - ipfs-car --wrapWithDirectory false --pack build/ --output build.car
-  pin-web3:
-    image: cofob/node-hugo-jq
-    commands:
-      - |
-        curl -X 'POST' \
-          'https://api.web3.storage/car' \
-          -H 'accept: application/json' \
-          -H "Authorization: Bearer $JWT" \
-          -H 'Content-Type: application/vnd.ipld.car' \
-          --data-binary '@build.car' | jq -r .cid > cid.txt
-      - echo "https://$(cat cid.txt).ipfs.ipfsqr.ru/"
-    secrets: [JWT]
+      - |-
+        apt-get update && apt-get install zip openssl curl -y
+        cd build ; zip -r ../build.zip . * ; cd ..
+        export RAND=`openssl rand -hex 12`
+        echo $RAND
+        while [ "$(curl -F "file=@build.zip" "https://preview.frsqr.xyz/upload/$RAND")" != "success" ]
+        do
+          echo trying...
+        done
+        echo
+        echo "result ->"
+        echo "https://preview.frsqr.xyz/$RAND/"
+        rm -f build.zip
