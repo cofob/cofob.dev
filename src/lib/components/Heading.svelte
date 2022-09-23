@@ -6,7 +6,7 @@
 
 <svelte:element this={element} class={element}><slot /></svelte:element>
 
-<style>
+<style lang="postcss">
 	.h1 {
 		@apply sm:text-7xl text-5xl font-semibold mb-2;
 	}

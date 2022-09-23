@@ -1,4 +1,3 @@
-import child_process from "child_process";
 import { sveltekit } from "@sveltejs/kit/vite";
 
 const get_css_hash = ({ css, hash }) => {

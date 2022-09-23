@@ -3,28 +3,18 @@ pipeline:
     image: node:18
     commands:
       - yarn
-  # lint:
-  #   image: node:18
-  #   commands:
-  #     - yarn lint
-  #     - yarn check
+  lint:
+    image: node:18
+    commands:
+      - yarn lint
   build:
     image: node:18
     commands:
       - yarn build:static
-  create-preview:
-    image: debian
+  pin-cluster:
+    image: cofob/ipfs-cluster-ctl
     commands:
-      - |-
-        apt-get update && apt-get install zip openssl curl -y
-        cd build ; zip -r ../build.zip . * ; cd ..
-        export RAND=`openssl rand -hex 12`
-        echo $RAND
-        while [ "$(curl -F "file=@build.zip" "https://preview.frsqr.xyz/upload/$RAND")" != "success" ]
-        do
-          echo trying...
-        done
-        echo
-        echo "result ->"
-        echo "https://preview.frsqr.xyz/$RAND/"
-        rm -f build.zip
+      - ipfs-cluster-ctl --host /dns4/rat.frsqr.xyz/tcp/9094 --basic-auth default:$CLUSTER_SECRET add -r --expire-in 2160h --name cofob-ru-build-$(date +%s) -Q build/ > cid.txt
+      - cat cid.txt
+      - echo "https://ipfsqr.ru/ipfs/$(cat cid.txt)"
+    secrets: [CLUSTER_SECRET]

@@ -15,7 +15,7 @@
 	</div>
 </nav>
 
-<style>
+<style lang="postcss">
 	a {
 		@apply hover:underline;
 	}

@@ -13,7 +13,7 @@
 	</div>
 </div>
 
-<style>
+<style lang="postcss">
 	button {
 		@apply mt-2 w-full h-8 border-2 rounded-lg hover:bg-zinc-100 motion-safe:transition-colors;
 	}

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Meta, BlueLine, Section, Heading } from "$lib/components";
+	import { Meta, Section, Heading } from "$lib/components";
 	import Card from "./Card.svelte";
 </script>
 

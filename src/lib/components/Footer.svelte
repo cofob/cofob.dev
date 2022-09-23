@@ -7,7 +7,7 @@
 	<p><a href="https://git.frsqr.xyz/cofob/cofob.ru">Исходный код сайта</a></p>
 </footer>
 
-<style>
+<style lang="postcss">
 	a {
 		@apply hover:underline;
 	}
