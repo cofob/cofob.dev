@@ -18,6 +18,10 @@ switch (process.env.DEPLOY_TARGET) {
 		adapter = static_adapter({ fallback: "200.html" });
 }
 
+const get_css_hash = ({ css, hash }) => {
+	return `css-${hash(css)}`;
+};
+
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
 	preprocess: [
@@ -25,6 +29,10 @@ const config = {
 			postcss: true,
 		}),
 	],
+
+	compilerOptions: {
+		cssHash: get_css_hash,
+	},
 
 	kit: {
 		adapter,
