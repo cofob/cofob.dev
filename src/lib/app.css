@@ -7,10 +7,8 @@
 @layer base {
 	@font-face {
 		font-family: "Manrope";
-		src: url("https://cloudflare-ipfs.com/ipfs/bafybeih5wcd2evjszwj2wjxpwud5fohdwh4oje5re46omuoxhnj6bdpaty/Manrope.woff2")
-				format("woff2"),
-			url("https://cloudflare-ipfs.com/ipfs/bafybeih5jsijgo7adldrc4iddntuxp22cyfdr5lahnctjj5fmznsytuvby/Manrope.ttf")
-				format("truetype");
+		src: url("https://ipfs.cofob.dev/ipfs/bafybeih5wcd2evjszwj2wjxpwud5fohdwh4oje5re46omuoxhnj6bdpaty/Manrope.woff2") format("woff2"),
+			url("https://ipfs.cofob.dev/ipfs/bafybeih5jsijgo7adldrc4iddntuxp22cyfdr5lahnctjj5fmznsytuvby/Manrope.ttf") format("truetype");
 		font-weight: 100 1000;
 		font-stretch: 25% 151%;
 	}
