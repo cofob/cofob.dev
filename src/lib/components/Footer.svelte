@@ -4,7 +4,7 @@
 
 <footer class="text-center my-4">
 	<p>(c) <BlueLine>cofob</BlueLine> 2021--2022</p>
-	<p><a href="https://github.com/cofob/cofob.ru">Исходный код сайта</a></p>
+	<p><a href="https://github.com/cofob/cofob.dev">Исходный код сайта</a></p>
 </footer>
 
 <style lang="postcss">

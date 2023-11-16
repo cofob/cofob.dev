@@ -14,7 +14,7 @@
 		<Card source="https://github.com/nix-community/mineflake" name="Mineflake">
 			Утилита для декларативного создания майнкрафт серверов. Написана при помощи Rust и Nix.
 		</Card>
-		<Card source="https://github.com/cofob/cofob.ru" name="Этот сайт">
+		<Card source="https://github.com/cofob/cofob.dev" name="Этот сайт">
 			Сайт на SvelteKit и TailwindCSS. Сделан для того, чтобы показать свои проекты и немного рассказать о себе.
 		</Card>
 		<Card source="https://github.com/fire-square" name="firesquare.ru">

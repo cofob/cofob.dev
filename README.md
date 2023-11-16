@@ -1,3 +1,3 @@
-# cofob.ru
+# cofob.dev
 
 My personal website

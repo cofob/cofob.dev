@@ -6,7 +6,7 @@
 	export let cover: string = getIPFSLink("bafybeibkbtxn255q765pfxw2tcfgi34bnehu3egsiro7xwpvtfl4nx6a7e/splash.png");
 	export let noindex = false;
 
-	title = title + " — cofob.ru";
+	title = title + " — cofob.dev";
 </script>
 
 <svelte:head>
@@ -16,9 +16,9 @@
 	<meta content="#7dd3fc" name="theme-color" />
 	<meta content="Russian" name="language" />
 	<meta content="ru_RU" name="og:locale" />
-	<meta content="cofob.ru" property="og:site_name" />
+	<meta content="cofob.dev" property="og:site_name" />
 	<meta
-		content="cofob,cofob.ru,персональный сайт,personal website,кофоб,егор терновой,portfolio,портфолио"
+		content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой,portfolio,портфолио"
 		name="keywords"
 	/>
 	<meta content="index, follow" name="robots" />
