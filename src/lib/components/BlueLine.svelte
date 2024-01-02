@@ -1,16 +1,15 @@
 <script lang="ts">
-	import { onMount } from "svelte";
+	import { lineRainbowStore } from "$lib/store";
 
 	export let animate = false;
 	export let rainbow: boolean | undefined = undefined;
 
 	let rainbowLocal = rainbow || false;
-	onMount(() => {
-		let params = new URLSearchParams(window.location.search);
-		if (params.has("gay")) {
-			rainbowLocal = true;
-		}
-	});
+	if (rainbow === undefined) {
+		lineRainbowStore.subscribe((value) => {
+			rainbowLocal = value;
+		});
+	}
 </script>
 
 <span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate>
@@ -28,7 +27,6 @@
 	}
 
 	.rainbow::before {
-		background: rgb(121, 9, 9);
 		background: linear-gradient(
 			80deg,
 			#ff000090 0%,
