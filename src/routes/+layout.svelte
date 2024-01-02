@@ -55,12 +55,24 @@
 	/>
 </svelte:head>
 
-<Navbar />
+<div>
+	<Navbar />
 
-<main>
-	<slot />
-</main>
+	<main>
+		<slot />
+	</main>
 
-<Footer />
+	<Footer />
+</div>
 
 {@html import.meta.env.VITE_ANALYTICS}
+
+<style lang="postcss">
+	div {
+		@apply flex flex-col min-h-screen;
+	}
+
+	main {
+		flex: 1;
+	}
+</style>
