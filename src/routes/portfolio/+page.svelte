@@ -34,7 +34,7 @@
 		<Card source="https://github.com/cofob/EmerVPN" name="EmerVPN"
 			>Proof-of-concept реализация анонимного full-mesh wireguard пиринга на блокчейне Emercoin.</Card
 		>
-		<div class="rounded-lg border-2 h-min">
+		<div class="rounded-lg border-2">
 			<div class="m-2">
 				Больше проектов на моём <a href="https://github.com/cofob/" class="link" target="_blank">GitHub</a>.
 			</div>

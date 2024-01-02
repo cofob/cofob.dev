@@ -3,11 +3,11 @@
 	export let source: string;
 </script>
 
-<div class="rounded-lg border-2 h-min">
-	<div class="m-2">
+<div class="rounded-lg border-2">
+	<div class="m-2 flex flex-col min-h-full">
 		<p class="font-medium text-center">{name}</p>
-		<p class="mt-1 mx-1"><slot /></p>
-		<a href={source} target="_blank">
+		<p class="mt-1 mx-1" style="flex: 1"><slot /></p>
+		<a href={source} target="_blank" class="mb-4">
 			<button>Исходный код</button>
 		</a>
 	</div>
