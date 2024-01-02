@@ -11,6 +11,7 @@
 			url("https://ipfs.cofob.dev/ipfs/bafybeih5jsijgo7adldrc4iddntuxp22cyfdr5lahnctjj5fmznsytuvby/Manrope.ttf") format("truetype");
 		font-weight: 100 1000;
 		font-stretch: 25% 151%;
+		font-display: swap;
 	}
 
 	html {
