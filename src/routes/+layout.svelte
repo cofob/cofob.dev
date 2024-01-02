@@ -27,6 +27,12 @@
 	onMount(() => {
 		if (sessionStorage.getItem("rainbow")) {
 			lineRainbowStore.set(sessionStorage.getItem("rainbow") === "1");
+			let params = new URLSearchParams(window.location.search);
+			if (params.has("rainbow")) {
+				params.delete("rainbow");
+				let query = params.size > 0 ? "?" + params.toString() : "";
+				window.history.replaceState({}, document.title, window.location.pathname + query);
+			}
 		} else {
 			let params = new URLSearchParams(window.location.search);
 			if (params.has("rainbow")) {
