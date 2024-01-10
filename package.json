@@ -33,7 +33,7 @@
 		"eslint": "8.23.1",
 		"eslint-config-prettier": "8.5.0",
 		"eslint-plugin-svelte3": "latest",
-		"postcss": "8.4.16",
+		"postcss": "8.4.31",
 		"postcss-discard-comments": "latest",
 		"postcss-import": "16.0.0",
 		"prettier": "^2",
