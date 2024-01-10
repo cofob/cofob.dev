@@ -23,7 +23,7 @@
 		"@sveltejs/adapter-cloudflare": "1.0.0-next.33",
 		"@sveltejs/adapter-node": "1.0.0-next.90",
 		"@sveltejs/adapter-static": "1.0.0-next.43",
-		"@sveltejs/kit": "1.0.0-next.481",
+		"@sveltejs/kit": "1.15.2",
 		"@types/nprogress": "0.2.0",
 		"@typescript-eslint/eslint-plugin": "5.37.0",
 		"@typescript-eslint/parser": "5.37.0",
