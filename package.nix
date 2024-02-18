@@ -8,7 +8,7 @@ buildNpmPackage {
 
   nodejs = nodejs;
 
-  npmDepsHash = "sha256-aKeZzYTka32uUk1umewl2FBjD9TtcvjaybfFepvWYoE=";
+  npmDepsHash = "sha256-LVCMhQ9h47H6u7yr5ihfqw2FoD2oFKclp1ooelq9SSU=";
 
   installPhase = ''
     cp -r build $out
