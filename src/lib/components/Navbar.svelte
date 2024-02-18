@@ -8,7 +8,7 @@
 			<a href="/"><BlueLine>cofob</BlueLine></a>
 		</div>
 		<div class="flex gap-x-3">
-			<a href="https://keys.openpgp.org/vks/v1/by-fingerprint/5F3D9D3DECE08651DE14D29FACAD4265E193794D">PGP</a>
+			<a href="/pgp">PGP</a>
 			<a href="/portfolio">Портфолио</a>
 		</div>
 	</div>

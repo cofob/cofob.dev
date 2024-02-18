@@ -1,4 +1,11 @@
------BEGIN PGP PUBLIC KEY BLOCK-----
+export async function GET() {
+	const headers = {
+		"Cache-Control": "max-age=0, s-maxage=3600",
+		"Content-Type": "text/plain",
+	};
+
+	return new Response(
+		`-----BEGIN PGP PUBLIC KEY BLOCK-----
 Comment: 5F3D 9D3D ECE0 8651 DE14  D29F ACAD 4265 E193 794D
 Comment: Egor Ternovoy (Backup email) <cofob@riseup.net>
 Comment: Egor Ternovoy (Mail email address) <i.am@cofob.dev>
@@ -28,4 +35,7 @@ PezghlHeFNKfrK1CZeGTeU0FAmJ0hH8CGwwFCQ8MZdEACgkQrK1CZeGTeU0F3wEA
 kz0aCvfiiEslqySwznqSpc4AhzXxCLNJ53FA1WIosWABALAml8MFcXMhMOXH7UYv
 4G07SdAcUsdRgbCtIoth10EF
 =KVvg
------END PGP PUBLIC KEY BLOCK-----
+-----END PGP PUBLIC KEY BLOCK-----`,
+		{ headers: headers },
+	);
+}
