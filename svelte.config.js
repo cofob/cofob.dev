@@ -43,6 +43,8 @@ const config = {
 		},
 
 		trailingSlash: "always",
+
+		inlineStyleThreshold: 1024 * 16, // inline css files smaller than 16 kb
 	},
 };
 
