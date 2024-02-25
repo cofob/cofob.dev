@@ -3,7 +3,6 @@
 	import NProgress from "nprogress";
 	import { navigating } from "$app/stores";
 	import { Footer, Navbar } from "$lib/components";
-	import { getIPFSLink } from "$lib/utils";
 	import { onMount } from "svelte";
 	import { lineRainbowStore } from "$src/lib/store";
 
@@ -51,7 +50,7 @@
 	<link
 		rel="icon"
 		type="image/x-icon"
-		href={getIPFSLink("bafybeig42d7cgsldoaaw7o4snl7sikfg4exi72gx3an2dgzqpy2x5dvnti/favicon.ico")}
+		href="/favicon.ico"
 	/>
 </svelte:head>
 
