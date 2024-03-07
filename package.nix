@@ -23,7 +23,8 @@ buildNpmPackage {
 
     mkdir $out/bin
     cat <<EOF > $out/bin/cofob-dev
-      #!${nodejs}/bin/node $out/index.js
+      #!${bash}/bin/bash
+      ${nodejs}/bin/node $out/index.js
     EOF
     chmod u+x $out/bin/cofob-dev
   '';
