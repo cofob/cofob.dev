@@ -3,40 +3,35 @@
 	import Card from "./Card.svelte";
 </script>
 
-<Meta title="Портфолио" description="Список проектов кофоба" />
+<Meta title="Portfolio" description="cofob portfolio" />
 
 <Section>
 	<div class="text-center">
-		<Heading level={1}>Портфолио</Heading>
+		<Heading level={1}>Portfolio</Heading>
 	</div>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-4">
 		<Card source="https://github.com/nix-community/mineflake" name="Mineflake">
-			Утилита для декларативного создания майнкрафт серверов. Написана при помощи Rust и Nix.
+			A utility for declarative creation of minecraft servers. Written with the help of Rust and Nix.
 		</Card>
-		<Card source="https://github.com/cofob/cofob.dev" name="Этот сайт">
-			Сайт на SvelteKit и TailwindCSS. Сделан для того, чтобы показать свои проекты и немного рассказать о себе.
+		<Card source="https://github.com/cofob/cofob.dev" name="This site">
+			Site on SvelteKit and TailwindCSS. Made to show my projects and tell a little about myself.
 		</Card>
 		<Card source="https://github.com/fire-square" name="firesquare.ru">
-			Майнкрафт сервер с богатой историей. Под него разработана своя система деплоя через NixOS (mineflake), свои
-			плагины, в процессе лаунчер и сайт. Работает более года.
+			Minecraft server with a rich history. Under it developed its own system deploy through NixOS (mineflake), its own
+			plugins. Worked for 2 years.
 		</Card>
-		<Card source="https://github.com/fire-square/firesquare" name="firesquare launcher">
-			Майнкрафт лаунчер и API на Rust + Tauri + Yew + Axum. Разработан для firesquare.ru.
-		</Card>
-		<Card source="https://github.com/cofob/AlfisViewer/" name="AlfisViewer">
-			Alfis блокчейн обозреватель на Django.
-		</Card>
+		<Card source="https://github.com/cofob/AlfisViewer/" name="AlfisViewer">Alfis blockchain observer on Django.</Card>
 		<Card source="https://github.com/cofob/DiscordRPC" name="DiscordRPC">
-			Python программа для собственного статуса Discord Rich Presence.
+			Python program for Discord Rich Presence's own Discord status.
 		</Card>
-		<Card source="https://github.com/cofob/Emercoin.py" name="Emercoin.py">Python API для Emercoin блокчейна.</Card>
+		<Card source="https://github.com/cofob/Emercoin.py" name="Emercoin.py">Python API for Emercoin blockchain.</Card>
 		<Card source="https://github.com/cofob/EmerVPN" name="EmerVPN"
-			>Proof-of-concept реализация анонимного full-mesh wireguard пиринга на блокчейне Emercoin.</Card
+			>Proof-of-concept implementation of anonymous full-mesh wireguard peering on the Emercoin blockchain.</Card
 		>
 		<div class="rounded-lg border-2">
 			<div class="m-2">
-				Больше проектов на моём <a href="https://github.com/cofob/" class="link" target="_blank">GitHub</a>.
+				More projects on my <a href="https://github.com/cofob/" class="link" target="_blank">GitHub</a>.
 			</div>
 		</div>
 	</div>

@@ -18,13 +18,13 @@ export async function GET() {
 		<loc>/</loc>
 		<changefreq>weekly</changefreq>
 		<priority>1</priority>
-		<lastmod>2023-11-16</lastmod>
+		<lastmod>2024-03-07</lastmod>
 	</url>
 	<url>
 		<loc>/portfolio/</loc>
 		<changefreq>weekly</changefreq>
 		<priority>0.7</priority>
-		<lastmod>2023-11-16</lastmod>
+		<lastmod>2024-03-07</lastmod>
 	</url>
 </urlset>`,
 		{ headers: headers },

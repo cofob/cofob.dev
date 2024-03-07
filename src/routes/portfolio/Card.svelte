@@ -8,7 +8,7 @@
 		<p class="font-medium text-center">{name}</p>
 		<p class="mt-1 mx-1" style="flex: 1"><slot /></p>
 		<a href={source} target="_blank" class="mb-4">
-			<button>Исходный код</button>
+			<button>Source code</button>
 		</a>
 	</div>
 </div>

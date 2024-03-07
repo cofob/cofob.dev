@@ -47,11 +47,7 @@
 
 <svelte:head>
 	<link rel="preconnect" href={import.meta.env.VITE_IPFS_ENDPOINT} />
-	<link
-		rel="icon"
-		type="image/x-icon"
-		href="/static/favicon.ico"
-	/>
+	<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 </svelte:head>
 
 <div>

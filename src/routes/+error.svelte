@@ -3,7 +3,7 @@
 	import { page } from "$app/stores";
 </script>
 
-<Meta title={$page.status.toString()} description="Ошибка {$page.status}" noindex />
+<Meta title={$page.status.toString()} description="Error {$page.status}" noindex />
 
 <Section>
 	<div class="text-center">
@@ -11,9 +11,9 @@
 			<BlueLine animate>{$page.status}.</BlueLine>
 		</Heading>
 		{#if $page.status == 404}
-			<p>Страница не найдена</p>
+			<p>Page not found</p>
 		{/if}
 		<p>{$page.error?.message}</p>
-		<a href="/" class="link">На главную -></a>
+		<a href="/" class="link">Home -></a>
 	</div>
 </Section>

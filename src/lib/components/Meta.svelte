@@ -15,7 +15,7 @@
 	<!-- Meta - запрещённая в России организация -->
 	<meta content="#7dd3fc" name="theme-color" />
 	<meta content="Russian" name="language" />
-	<meta content="ru_RU" name="og:locale" />
+	<meta content="en_US" name="og:locale" />
 	<meta content="cofob.dev" property="og:site_name" />
 	<meta
 		content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой,portfolio,портфолио"
