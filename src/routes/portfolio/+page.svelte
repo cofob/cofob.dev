@@ -8,6 +8,10 @@
 <Section>
 	<div class="text-center">
 		<Heading level={1}>Portfolio</Heading>
+		<p>
+			<b>⚠️ Page outdated!</b> Actual info on
+			<a href="https://github.com/cofob" class="link" target="_blank">GitHub</a>.
+		</p>
 	</div>
 
 	<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-4">
