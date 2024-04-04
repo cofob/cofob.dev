@@ -8,7 +8,7 @@ buildNpmPackage {
 
   nodejs = nodejs;
 
-  npmDepsHash = "sha256-LVCMhQ9h47H6u7yr5ihfqw2FoD2oFKclp1ooelq9SSU=";
+  npmDepsHash = "sha256-zVk86Fkp2zWvO2bxut4pW9bEcv7L1kSJ2hZ40MVEytY=";
 
   postBuild = ''
     # compress static
