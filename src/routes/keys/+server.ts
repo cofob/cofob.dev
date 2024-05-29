@@ -5,7 +5,7 @@ export async function GET() {
 	};
 
 	return new Response(
-		`ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIETMEzhigdZelWae3V4tQ7/LXsub39SRG2X+jPMeoHMx cofob@riseup.net`,
+		`ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJsSKOtKRM9+bvCs6iioOrcayMdsdwaQN/lJAQJkXE+w cofob@riseup.net`,
 		{ headers: headers },
 	);
 }
