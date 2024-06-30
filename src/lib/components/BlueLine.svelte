@@ -56,10 +56,10 @@
 
 	@keyframes show {
 		from {
-			transform: skewY(-6deg) scaleX(0.2);
+			transform: skewY(-6deg) scaleX(0.25);
 		}
 		to {
-			transform: skewY(-6deg) scaleX(0.75);
+			transform: skewY(-6deg) scaleX(1);
 		}
 	}
 </style>
