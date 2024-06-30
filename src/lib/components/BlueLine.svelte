@@ -47,6 +47,7 @@
 	.animate::before {
 		will-change: transform;
 		animation: 0.75s show ease;
+		transform-origin: right;
 	}
 
 	.down {
@@ -55,10 +56,10 @@
 
 	@keyframes show {
 		from {
-			transform: scaleX(0.2);
+			transform: skewY(-6deg) scaleX(0.2);
 		}
 		to {
-			transform: scaleX(0.75);
+			transform: skewY(-6deg) scaleX(0.75);
 		}
 	}
 </style>
