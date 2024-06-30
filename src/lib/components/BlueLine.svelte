@@ -45,6 +45,7 @@
 	}
 
 	.animate::before {
+		will-change: transform;
 		animation: 0.75s show ease;
 	}
 
@@ -54,10 +55,10 @@
 
 	@keyframes show {
 		from {
-			width: 20%;
+			transform: scaleX(0.2);
 		}
 		to {
-			width: 75%;
+			transform: scaleX(0.75);
 		}
 	}
 </style>
