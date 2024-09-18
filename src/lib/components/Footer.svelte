@@ -3,8 +3,8 @@
 </script>
 
 <footer class="text-center my-4">
-	<p>(c) <BlueLine>cofob</BlueLine> 2021--{new Date().getFullYear()}</p>
-	<p><a href="https://github.com/cofob/cofob.dev">Website source code</a></p>
+	<p>(c) <BlueLine>cofob</BlueLine>@riseup.net 2021--{new Date().getFullYear()}</p>
+	<p>IE Egor Ternovoi (304739031, Tbilisi, Georgia)</p>
 </footer>
 
 <style lang="postcss">

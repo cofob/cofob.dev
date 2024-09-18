@@ -2,6 +2,7 @@
 	import { lineRainbowStore } from "$lib/store";
 
 	export let animate = false;
+	export let v2 = false;
 	export let rainbow: boolean | undefined = undefined;
 
 	let rainbowLocal = rainbow || false;
@@ -12,7 +13,7 @@
 	}
 </script>
 
-<span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate>
+<span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate class:v2>
 	<span class="down"><slot /></span>
 </span>
 
@@ -20,6 +21,10 @@
 	.top {
 		@apply before:block before:absolute before:h-2/4 before:w-3/4 before:bottom-0.5
 					 before:-right-1 before:-skew-y-6 before:rounded-full relative inline-block;
+	}
+
+	.v2 {
+		@apply before:w-2/4 before:-skew-y-6 before:mb-2;
 	}
 
 	.blue {

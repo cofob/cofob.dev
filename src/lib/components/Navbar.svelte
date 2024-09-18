@@ -9,7 +9,6 @@
 		</div>
 		<div class="flex gap-x-3">
 			<a href="/pgp">PGP</a>
-			<a href="/portfolio">Portfolio</a>
 		</div>
 	</div>
 </nav>
