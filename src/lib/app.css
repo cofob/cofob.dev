@@ -21,9 +21,52 @@
 	body {
 		@apply bg-white text-zinc-800;
 		font-family: Manrope, sans-serif;
+		position: relative;
+		overflow: hidden;
+	}
+
+	body::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(45deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5));
+		animation: backgroundAnimation 10s infinite;
 	}
 
 	.link {
 		@apply text-sky-500 hover:underline hover:text-sky-600;
+	}
+}
+
+@layer components {
+	.background-animation {
+		position: relative;
+		overflow: hidden;
+	}
+
+	.background-animation::before {
+		content: "";
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 100%;
+		height: 100%;
+		background: linear-gradient(45deg, rgba(255, 0, 150, 0.5), rgba(0, 204, 255, 0.5));
+		animation: backgroundAnimation 10s infinite;
+	}
+
+	@keyframes backgroundAnimation {
+		0% {
+			transform: translateX(0) translateY(0);
+		}
+		50% {
+			transform: translateX(50px) translateY(50px);
+		}
+		100% {
+			transform: translateX(0) translateY(0);
+		}
 	}
 }

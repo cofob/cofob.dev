@@ -50,7 +50,7 @@
 	<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 </svelte:head>
 
-<div>
+<div class="background-animation">
 	<Navbar />
 
 	<main>
