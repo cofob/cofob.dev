@@ -2,7 +2,6 @@
 	import { lineRainbowStore } from "$lib/store";
 
 	export let animate = false;
-	export let hoverAnimate = false;
 	export let rainbow: boolean | undefined = undefined;
 
 	let rainbowLocal = rainbow || false;
