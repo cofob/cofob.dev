@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Meta, Section, Heading } from "$lib/components";
+	import { Meta, Section, Heading, BlueLine } from "$lib/components";
 	import ProjectCard from "./ProjectCard.svelte";
 	import PublicationCard from "./PublicationCard.svelte";
 	import EventCard from "./EventCard.svelte";
@@ -23,7 +23,7 @@
 			</div>
 		</div>
 
-		<div class="mt-4">
+		<div class="mt-4 flex flex-wrap justify-between items-center">
 			<div class="flex flex-wrap gap-2">
 				<Tag>Python</Tag>
 				<Tag>Virtualization</Tag>
@@ -33,6 +33,25 @@
 				<Tag>Linux</Tag>
 				<Tag>Nginx</Tag>
 			</div>
+			<div class="flex gap-4 mt-3 sm:mt-0">
+				<a href="https://t.me/cofob" target="_blank" class="link">Telegram</a>
+				<a href="https://github.com/cofob" target="_blank" class="link">GitHub</a>
+				<a href="https://www.linkedin.com/in/egor-ternovoi-702547316/" target="_blank" class="link">LinkedIn</a>
+			</div>
+		</div>
+	</Section>
+
+	<Section>
+		<div class="text-center mt-8">
+			<Heading level={3}>About Me</Heading>
+		</div>
+		<div class="mt-2 text-center text-lg text-zinc-600">
+			<p>
+				I'm a <BlueLine>Python developer</BlueLine> and <BlueLine>DevOps engineer</BlueLine> with expertise in virtualization, 
+				networking, and system architecture. With a passion for open-source and functional programming, 
+				I focus on building reliable, scalable infrastructure and elegant technical solutions. 
+				Currently taking time off for relocation plans while exploring new opportunities.
+			</p>
 		</div>
 	</Section>
 
@@ -42,19 +61,33 @@
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
 			<p>
-				Explore some of my personal projects, contributions, and tools that I’ve developed using various technologies
+				Explore some of my personal projects, contributions, and tools that I've developed using various technologies
 				and platforms.
 			</p>
 		</div>
 
+		<div class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50">
+			<div class="font-semibold text-lg mb-2">
+				Featured: <BlueLine>Fastside</BlueLine>
+			</div>
+			<div class="mb-2">
+				A high-performance smart redirecting gateway for frontend services, built with Rust. 
+				Designed for efficiency and reliability, Fastside offers seamless request routing with minimal resource usage.
+				<div class="mt-2">
+					<div class="flex flex-wrap gap-2 mb-2">
+						<Tag>Rust</Tag>
+						<Tag>Performance</Tag>
+						<Tag>Networking</Tag>
+					</div>
+					<div class="flex gap-4 mt-2">
+						<a href="https://github.com/cofob/fastside" target="_blank" class="link">Source Code</a>
+						<a href="https://fastsi.de" target="_blank" class="link">View Website</a>
+					</div>
+				</div>
+			</div>
+		</div>
+
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-4">
-			<ProjectCard source="https://github.com/cofob/fastside" name="Fastside">
-				A smart redirecting gateway for frontend services, built with Rust. <a
-					href="https://fastsi.de"
-					class="link"
-					target="_blank">View website.</a
-				>
-			</ProjectCard>
 			<ProjectCard source="https://github.com/cofob/aeza-assistant" name="aeza-assistant">
 				A Python-based Telegram bot for notifications about location sales changes in the Aeza hosting service, powered
 				by aiogram.
@@ -169,14 +202,14 @@
 			<Heading level={3}>Events</Heading>
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
-			<p>Below are events where I’ve either participated, spoken, or contributed.</p>
+			<p>Below are events that I've organized in Tbilisi, Georgia.</p>
 		</div>
 
 		<ul class="list-disc ml-6 mt-4">
 			<EventCard
 				source="https://t.me/f0rthsp4ce/408"
 				name="Fprog Tbilisi Meetup"
-				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: December 1, 2024"
+				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: December 1, 2024 | Role: Organizer"
 			>
 				A series of workshops and talks covering topics like formal verification in Lean4, optimizations in Common Lisp,
 				and metaprogramming in Lisp, followed by discussions and hands-on sessions.
@@ -184,7 +217,7 @@
 			<EventCard
 				source="https://t.me/f0rthsp4ce/405"
 				name="What is Nix?"
-				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: October 17, 2024"
+				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: October 17, 2024 | Role: Organizer"
 			>
 				An introduction to Nix, Nixpkgs, and NixOS, comparing them to Docker and exploring functional programming in
 				Nix.
@@ -192,7 +225,7 @@
 			<EventCard
 				source="https://t.me/f0rthsp4ce/373"
 				name="Tbilisi Guix Meetup #1"
-				meta="Location: F0RTHSP4CE, Khorava 18 | Date: June 1, 2024"
+				meta="Location: F0RTHSP4CE, Khorava 18 | Date: June 1, 2024 | Role: Organizer"
 			>
 				Three insightful talks: 1) Overview of GNU Guix and its comparison with other Linux distros. 2) Hacking any
 				project in Guix in 3 seconds. 3) Interactive development with Guile Scheme. Followed by Q&A and a hands-on
