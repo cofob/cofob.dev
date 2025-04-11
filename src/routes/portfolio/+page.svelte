@@ -47,7 +47,7 @@
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
 			<p>
-				I'm a <BlueLine>Python developer</BlueLine> and <BlueLine>DevOps engineer</BlueLine> with expertise in virtualization, 
+				I'm a Python <BlueLine>developer</BlueLine> and <BlueLine>DevOps</BlueLine> engineer with expertise in virtualization, 
 				networking, and system architecture. With a passion for open-source and functional programming, 
 				I focus on building reliable, scalable infrastructure and elegant technical solutions. 
 				Currently taking time off for relocation plans while exploring new opportunities.
