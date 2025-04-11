@@ -71,13 +71,13 @@
 				Featured: <BlueLine>Fastside</BlueLine>
 			</div>
 			<div class="mb-2">
-				A high-performance smart redirecting gateway for frontend services, built with Rust. 
-				Designed for efficiency and reliability, Fastside offers seamless request routing with minimal resource usage.
+				A fast smart redirecting gateway for frontend services, built with Rust. 
+				Fastside provides links for various open-source services for reliable access.
 				<div class="mt-2">
 					<div class="flex flex-wrap gap-2 mb-2">
 						<Tag bg="bg-white" border="border border-sky-200">Rust</Tag>
-						<Tag bg="bg-white" border="border border-sky-200">Performance</Tag>
-						<Tag bg="bg-white" border="border border-sky-200">Networking</Tag>
+						<Tag bg="bg-white" border="border border-sky-200">Open-source</Tag>
+						<Tag bg="bg-white" border="border border-sky-200">Self-hosted</Tag>
 					</div>
 					<div class="flex gap-4 mt-2">
 						<a href="https://github.com/cofob/fastside" target="_blank" class="link">Source Code</a>
