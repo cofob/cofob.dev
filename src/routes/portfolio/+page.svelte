@@ -69,7 +69,7 @@
 		</div>
 
 		<div 
-			class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50"
+			class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50 featured-card transition-all duration-300"
 			on:mouseenter={() => isHovering = true}
 			on:mouseleave={() => isHovering = false}
 		>
@@ -252,3 +252,15 @@
 		</div>
 	</Section>
 </Section>
+
+<style>
+  .featured-card {
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+  }
+  
+  .featured-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #7dd3fc;
+  }
+</style>
