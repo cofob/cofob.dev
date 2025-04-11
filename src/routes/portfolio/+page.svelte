@@ -98,12 +98,12 @@
 			<Heading level={3}>Experience</Heading>
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
-			<p>My professional experience spans across various roles, contributing to multiple projects and companies.</p>
+			<p>My professional experience spans across various roles, contributing to multiple projects and companies. Currently taking time off for relocation plans.</p>
 		</div>
 
 		<div class="mt-4">
-			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - Present">
-				As a DevOps Engineer, I am responsible for the back-end infrastructure supporting the billing system. Key
+			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - 04/2025">
+				As a DevOps Engineer, I was responsible for the back-end infrastructure supporting the billing system. Key
 				accomplishments:
 				<ul class="list-inside list-disc">
 					<li>
@@ -113,10 +113,10 @@
 					<li>Implemented alerting and monitoring systems to improve response times and system health.</li>
 				</ul>
 			</ExperienceCard>
-			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="Python Developer" date="05/2023 - Present">
-				Leading a small Python development team, I focus on critical projects for the hosting provider:
+			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="Python Developer" date="05/2023 - 04/2025">
+				Led a small Python development team, focusing on critical projects for the hosting provider:
 				<ul class="list-inside list-disc">
-					<li>Manager for over 80,000 virtual machines with an internal system built as an alternative to OpenStack.</li>
+					<li>Manager for over 100,000 virtual machines with an internal system built as an alternative to OpenStack.</li>
 					<li>
 						Developed a unique VPN service to bypass geo-blocks in Russia using a custom DNS-based traffic balancing
 						mechanism.
