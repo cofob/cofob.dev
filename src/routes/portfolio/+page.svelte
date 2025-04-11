@@ -68,7 +68,7 @@
 
 		<div class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50">
 			<div class="font-semibold text-lg mb-2">
-				Featured: <BlueLine>Fastside</BlueLine>
+				Featured: <BlueLine hoverAnimate>Fastside</BlueLine>
 			</div>
 			<div class="mb-2">
 				A fast smart redirecting gateway for frontend services, built with Rust. 

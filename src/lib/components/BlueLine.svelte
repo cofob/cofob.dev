@@ -2,6 +2,7 @@
 	import { lineRainbowStore } from "$lib/store";
 
 	export let animate = false;
+	export let hoverAnimate = false;
 	export let rainbow: boolean | undefined = undefined;
 
 	let rainbowLocal = rainbow || false;
@@ -12,7 +13,7 @@
 	}
 </script>
 
-<span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate>
+<span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate class:hoverAnimate>
 	<span class="down"><slot /></span>
 </span>
 
@@ -48,6 +49,15 @@
 		will-change: transform;
 		animation: 0.75s show ease;
 		transform-origin: right;
+	}
+
+	.hoverAnimate::before {
+		transition: transform 0.3s ease, opacity 0.3s ease;
+	}
+
+	.hoverAnimate:hover::before {
+		transform: skewY(-6deg) scaleX(1.05);
+		opacity: 0.8;
 	}
 
 	.down {
