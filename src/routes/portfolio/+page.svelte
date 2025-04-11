@@ -75,9 +75,9 @@
 				Designed for efficiency and reliability, Fastside offers seamless request routing with minimal resource usage.
 				<div class="mt-2">
 					<div class="flex flex-wrap gap-2 mb-2">
-						<Tag>Rust</Tag>
-						<Tag>Performance</Tag>
-						<Tag>Networking</Tag>
+						<Tag bg="bg-white" border="border border-sky-200">Rust</Tag>
+						<Tag bg="bg-white" border="border border-sky-200">Performance</Tag>
+						<Tag bg="bg-white" border="border border-sky-200">Networking</Tag>
 					</div>
 					<div class="flex gap-4 mt-2">
 						<a href="https://github.com/cofob/fastside" target="_blank" class="link">Source Code</a>
