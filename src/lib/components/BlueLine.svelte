@@ -13,7 +13,7 @@
 	}
 </script>
 
-<span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate class:hoverAnimate>
+<span class="top {rainbowLocal ? 'rainbow' : 'blue'} {hoverAnimate ? 'isHovering' : ''}" class:animate>
 	<span class="down"><slot /></span>
 </span>
 
@@ -21,6 +21,10 @@
 	.top {
 		@apply before:block before:absolute before:h-2/4 before:w-3/4 before:bottom-0.5
 					 before:-right-1 before:-skew-y-6 before:rounded-full relative inline-block;
+	}
+
+	.top::before {
+		transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease, right 0.3s ease;
 	}
 
 	.blue {
@@ -51,11 +55,7 @@
 		transform-origin: right;
 	}
 
-	.hoverAnimate::before {
-		transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease, right 0.3s ease;
-	}
-
-	.hoverAnimate:hover::before {
+	.isHovering::before {
 		transform: skewY(4deg);
 		width: 100%;
 		height: 75%;
