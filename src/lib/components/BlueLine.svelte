@@ -52,12 +52,13 @@
 	}
 
 	.hoverAnimate::before {
-		transition: transform 0.3s ease, width 0.3s ease, right 0.3s ease;
+		transition: transform 0.3s ease, width 0.3s ease, height 0.3s ease, right 0.3s ease;
 	}
 
 	.hoverAnimate:hover::before {
 		transform: skewY(0);
 		width: 100%;
+		height: 100%;
 		right: 0;
 	}
 
