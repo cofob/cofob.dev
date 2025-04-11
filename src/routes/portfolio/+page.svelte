@@ -5,8 +5,6 @@
 	import EventCard from "./EventCard.svelte";
 	import ExperienceCard from "./ExperienceCard.svelte";
 	import Tag from "./Tag.svelte";
-
-	let isHovering = false;
 </script>
 
 <Meta title="Portfolio" description="Egor Ternovoi's Portfolio" />
@@ -70,11 +68,9 @@
 
 		<div 
 			class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50 featured-card transition-all duration-300"
-			on:mouseenter={() => isHovering = true}
-			on:mouseleave={() => isHovering = false}
 		>
 			<div class="font-semibold text-lg mb-2">
-				Featured: <BlueLine hoverAnimate={isHovering}>Fastside</BlueLine>
+				Featured: <BlueLine>Fastside</BlueLine>
 			</div>
 			<div class="mb-2">
 				A fast smart redirecting gateway for frontend services, built with Rust. 
