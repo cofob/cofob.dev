@@ -56,7 +56,7 @@
 	}
 
 	.hoverAnimate:hover::before {
-		transform: skewY(15deg);
+		transform: skewY(4deg);
 		width: 100%;
 		height: 75%;
 		right: 0;
