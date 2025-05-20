@@ -50,7 +50,7 @@
 				I'm a Python <BlueLine>developer</BlueLine> and <BlueLine>DevOps</BlueLine> engineer with expertise in virtualization, 
 				networking, and system architecture. With a passion for open-source and functional programming, 
 				I focus on building reliable, scalable infrastructure and elegant technical solutions. 
-				Currently taking time off for relocation plans while exploring new opportunities.
+				Currently working as a Senior Python Developer while continuing to explore new technologies.
 			</p>
 		</div>
 	</Section>
@@ -136,10 +136,13 @@
 			<Heading level={3}>Experience</Heading>
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
-			<p>My professional experience spans across various roles, contributing to multiple projects and companies. Currently taking time off for relocation plans.</p>
+			<p>My professional experience spans across various roles, contributing to multiple projects and companies.</p>
 		</div>
 
 		<div class="mt-4">
+			<ExperienceCard company="NDA company" location="Tbilisi, Georgia" title="Senior Python Developer" date="05/2025 - Present">
+				Currently working as a Senior Python Developer on confidential projects. Details covered under NDA.
+			</ExperienceCard>
 			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - 04/2025">
 				As a DevOps Engineer, I was responsible for the back-end infrastructure supporting the billing system. Key
 				accomplishments:
