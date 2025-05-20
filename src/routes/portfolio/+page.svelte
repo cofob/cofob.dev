@@ -90,6 +90,9 @@
 		</div>
 
 		<div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-2 mt-4">
+			<ProjectCard source="https://github.com/cofob/autogenlib" name="AutoGenLib">
+				A Python library that automatically generates code on-the-fly using OpenAI's API. When you import a module that doesn't exist, AutoGenLib creates it based on context and high-level descriptions.
+			</ProjectCard>
 			<ProjectCard source="https://github.com/cofob/aeza-assistant" name="aeza-assistant">
 				A Python-based Telegram bot for notifications about location sales changes in the Aeza hosting service, powered
 				by aiogram.
