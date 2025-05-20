@@ -241,18 +241,6 @@
 			</EventCard>
 		</ul>
 	</Section>
-
-	<Section>
-		<div class="text-center mt-8">
-			<Heading level={5}
-				><a
-					href="https://drive.google.com/file/d/1DZW-9-dhSI24vI2eXi0am_SOhJrD4cqc/view?usp=sharing"
-					class="link"
-					target="_blank">Download my CV</a
-				></Heading
-			>
-		</div>
-	</Section>
 </Section>
 
 <style>
