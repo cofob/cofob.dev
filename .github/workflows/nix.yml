@@ -25,3 +25,65 @@ jobs:
       - name: Build derivations
         run: |
           nix build .
+
+  docker-publish:
+    name: Publish Docker Image
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Nix
+        uses: cachix/install-nix-action@v25
+        with:
+          nix_path: nixpkgs=channel:nixos-24.11
+
+      - uses: cachix/cachix-action@v14
+        with:
+          name: cofob
+          authToken: "${{ secrets.CACHIX_AUTH_TOKEN }}"
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.repository_owner }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Lowercase repository name
+        id: repo
+        uses: ASzc/change-string-case-action@v6
+        with:
+          string: ${{ github.repository }}
+
+      - name: Docker meta
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: |
+            ghcr.io/${{ steps.repo.outputs.lowercase }}
+          tags: |
+            type=schedule
+            type=ref,event=pr
+            type=ref,event=branch
+            type=semver,pattern={{version}}
+            type=semver,pattern={{major}}.{{minor}}
+            type=semver,pattern={{major}}
+            type=sha
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build and load Docker image
+        run: |
+          nix build .#dockerImage --print-out-paths | xargs docker load
+
+      - name: Push to registry
+        run: |
+          tags="${{ steps.meta.outputs.tags }}"
+          for tag in $tags; do
+            docker tag cofob-dev:latest "$tag"
+            docker push "$tag"
+          done
+
