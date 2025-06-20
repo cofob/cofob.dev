@@ -11,6 +11,7 @@
       (system:
         let
           pkgs = import nixpkgs { inherit system; };
+          cofob-dev = pkgs.callPackage ./package.nix { };
         in
         {
           devShells.default = pkgs.mkShell {
@@ -18,7 +19,16 @@
               nodejs
             ];
           };
-          packages.default = pkgs.callPackage ./package.nix { };
+          packages.default = cofob-dev;
+          packages.dockerImage = pkgs.dockerTools.buildLayeredImage {
+            name = "cofob-dev";
+            tag = "latest";
+            contents = [ cofob-dev ];
+            config = {
+              Cmd = [ "${cofob-dev}/bin/cofob-dev" ];
+              ExposedPorts = { "3000/tcp" = {}; };
+            };
+          };
         }
       );
 }
