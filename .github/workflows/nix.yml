@@ -77,7 +77,8 @@ jobs:
 
       - name: Build and load Docker image
         run: |
-          nix build .#dockerImage --print-out-paths | xargs docker load
+          nix build .#dockerImage
+          docker load < result
 
       - name: Push to registry
         run: |
