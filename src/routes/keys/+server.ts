@@ -5,7 +5,10 @@ export async function GET() {
 	};
 
 	return new Response(
-		`ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJsSKOtKRM9+bvCs6iioOrcayMdsdwaQN/lJAQJkXE+w cofob@riseup.net`,
+		`ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJsSKOtKRM9+bvCs6iioOrcayMdsdwaQN/lJAQJkXE+w
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIG/9imD3CsThK+gD/j202AwS8dmpWqiCaQGNWeWl8oxY
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFg9JjdQH3neby5z1IWB8xlMzWtfnaWvTJX82+p+Qapp
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIN6b75A2O7+oEzlGFMtWp7HcicyThJZAgQTNs/QzmP3M`,
 		{ headers: headers },
 	);
 }
