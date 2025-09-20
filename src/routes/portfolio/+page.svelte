@@ -93,10 +93,6 @@
 			<ProjectCard source="https://github.com/cofob/autogenlib" name="AutoGenLib">
 				A Python library that automatically generates code on-the-fly when you import the module using OpenAI's API.
 			</ProjectCard>
-			<ProjectCard source="https://github.com/cofob/aeza-assistant" name="aeza-assistant">
-				A Python-based Telegram bot for notifications about location sales changes in the Aeza hosting service, powered
-				by aiogram.
-			</ProjectCard>
 			<ProjectCard source="https://github.com/nix-community/mineflake" name="Mineflake">
 				A tool for declaratively managing Minecraft server setups, written in Rust and Nix.
 			</ProjectCard>
@@ -143,7 +139,7 @@
 			<ExperienceCard company="NDA company" location="Tbilisi, Georgia" title="Senior Python Developer" date="05/2025 - Present">
 				Currently working as a Senior Python Developer on confidential projects. Details covered under NDA.
 			</ExperienceCard>
-			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - 04/2025">
+			<ExperienceCard company="Hosting provider" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - 04/2025">
 				As a DevOps Engineer, I was responsible for the back-end infrastructure supporting the billing system. Key
 				accomplishments:
 				<ul class="list-inside list-disc">
@@ -154,7 +150,7 @@
 					<li>Implemented alerting and monitoring systems to improve response times and system health.</li>
 				</ul>
 			</ExperienceCard>
-			<ExperienceCard company="Aeza.net" location="Remote, Tbilisi" title="Python Developer" date="05/2023 - 04/2025">
+			<ExperienceCard company="Hosting provider" location="Remote, Tbilisi" title="Python Developer" date="05/2023 - 04/2025">
 				Led a small Python development team, focusing on critical projects for the hosting provider:
 				<ul class="list-inside list-disc">
 					<li>Manager for over 100,000 virtual machines with an internal system built as an alternative to OpenStack.</li>
@@ -166,7 +162,7 @@
 					<li>Responsible for interviewing and onboarding new team members.</li>
 				</ul>
 			</ExperienceCard>
-			<ExperienceCard company="Aeza.net" location="Remote, Russia" title="Technical Support" date="01/2023 - 05/2023">
+			<ExperienceCard company="Hosting provider" location="Remote, Russia" title="Technical Support" date="01/2023 - 05/2023">
 				Worked in the technical support department, leveraging deep server knowledge and strong communication skills:
 				<ul class="list-inside list-disc">
 					<li>Developed department best practices and authored documentation.</li>
