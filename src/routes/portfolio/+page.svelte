@@ -215,6 +215,13 @@
 
 		<ul class="list-disc ml-6 mt-4">
 			<EventCard
+				source="https://t.me/F0RTHSP4CE/461"
+				name="Fine-tuning LMs - from idea to prod"
+				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: September 19, 2025 | Role: Speaker"
+			>
+				Practical guide on fine-tuning specialized small language models to achieve 99% performance.
+			</EventCard>
+			<EventCard
 				source="https://t.me/f0rthsp4ce/408"
 				name="Fprog Tbilisi Meetup"
 				meta="Location: F0RTHSP4CE, Ana Kalandadze 5 | Date: December 1, 2024 | Role: Organizer"
