@@ -7,4 +7,6 @@
 /.output
 /.cloudflare
 /.direnv
+/.pi-subagents
+/.wrangler
 /result

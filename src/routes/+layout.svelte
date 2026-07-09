@@ -1,46 +1,49 @@
 <script lang="ts">
 	import "$lib/app.css";
 	import NProgress from "nprogress";
-	import { navigating } from "$app/stores";
+	import { navigating, page } from "$app/state";
+	import { replaceState } from "$app/navigation";
 	import { Footer, Navbar } from "$lib/components";
-	import { onMount } from "svelte";
-	import { lineRainbowStore } from "$src/lib/store";
+	import { onMount, type Snippet } from "svelte";
+	import { SvelteURL } from "svelte/reactivity";
+	import { lineRainbowStore } from "$lib/store";
+
+	let { children }: { children: Snippet } = $props();
 
 	NProgress.configure({
 		showSpinner: false,
 	});
 
-	$: {
-		if ($navigating) {
-			setTimeout(() => {
-				if ($navigating) {
-					NProgress.start();
-				}
-			}, 100);
-		}
-		if (!$navigating) {
+	$effect(() => {
+		if (!navigating) {
 			NProgress.done();
+			return;
 		}
-	}
+
+		const timer = window.setTimeout(() => {
+			if (navigating) NProgress.start();
+		}, 100);
+
+		return () => window.clearTimeout(timer);
+	});
 
 	onMount(() => {
-		if (sessionStorage.getItem("rainbow")) {
-			lineRainbowStore.set(sessionStorage.getItem("rainbow") === "1");
-			let params = new URLSearchParams(window.location.search);
-			if (params.has("rainbow")) {
-				params.delete("rainbow");
-				let query = params.size > 0 ? "?" + params.toString() : "";
-				window.history.replaceState({}, document.title, window.location.pathname + query);
-			}
-		} else {
-			let params = new URLSearchParams(window.location.search);
-			if (params.has("rainbow")) {
-				sessionStorage.setItem("rainbow", "1");
-				lineRainbowStore.set(true);
-				params.delete("rainbow");
-				let query = params.size > 0 ? "?" + params.toString() : "";
-				window.history.replaceState({}, document.title, window.location.pathname + query);
-			}
+		const url = new SvelteURL(window.location.href);
+		const hasRainbowQuery = url.searchParams.has("rainbow");
+		const storedRainbow = sessionStorage.getItem("rainbow");
+
+		if (hasRainbowQuery) {
+			sessionStorage.setItem("rainbow", "1");
+			lineRainbowStore.set(true);
+		} else if (storedRainbow !== null) {
+			lineRainbowStore.set(storedRainbow === "1");
+		}
+
+		if (hasRainbowQuery) {
+			url.searchParams.delete("rainbow");
+			// The URL is derived from the current page, not an application route literal.
+			// eslint-disable-next-line svelte/no-navigation-without-resolve
+			replaceState(url, page.state);
 		}
 	});
 </script>
@@ -54,15 +57,18 @@
 	<Navbar />
 
 	<main>
-		<slot />
+		{@render children()}
 	</main>
 
 	<Footer />
 </div>
 
+<!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted deployment-controlled analytics markup -->
 {@html import.meta.env.VITE_ANALYTICS}
 
 <style lang="postcss">
+	@reference "../lib/app.css";
+
 	div {
 		@apply flex flex-col min-h-screen;
 	}

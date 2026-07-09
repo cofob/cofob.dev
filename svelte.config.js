@@ -1,50 +1,37 @@
-import preprocess from "svelte-preprocess";
-import cf_adapter from "@sveltejs/adapter-cloudflare";
-import static_adapter from "@sveltejs/adapter-static";
-import node_adapter from "@sveltejs/adapter-node";
+import { vitePreprocess } from "@sveltejs/vite-plugin-svelte";
+import cloudflareAdapter from "@sveltejs/adapter-cloudflare";
+import staticAdapter from "@sveltejs/adapter-static";
+import nodeAdapter from "@sveltejs/adapter-node";
 
-let adapter;
-switch (process.env.DEPLOY_TARGET) {
-	case "cloudflare":
-		adapter = cf_adapter();
-		break;
-	case "static":
-		adapter = static_adapter({ fallback: "200.html" });
-		break;
-	case "node":
-		adapter = node_adapter({ precompress: true });
-		break;
-	default:
-		adapter = static_adapter({ fallback: "200.html" });
+function getAdapter() {
+	switch (process.env.DEPLOY_TARGET) {
+		case "cloudflare":
+			return cloudflareAdapter();
+		case "static":
+			return staticAdapter({ fallback: "200.html" });
+		case "node":
+			return nodeAdapter({ precompress: true });
+		default:
+			return staticAdapter({ fallback: "200.html" });
+	}
 }
-
-const get_css_hash = ({ css, hash }) => {
-	return `css-${hash(css)}`;
-};
 
 /** @type {import('@sveltejs/kit').Config} */
 const config = {
-	preprocess: [
-		preprocess({
-			postcss: true,
-		}),
-	],
-
+	preprocess: vitePreprocess(),
 	compilerOptions: {
-		cssHash: get_css_hash,
+		cssHash: ({ css, hash }) => `css-${hash(css)}`,
 	},
-
 	kit: {
-		adapter,
-
+		adapter: getAdapter(),
 		alias: {
 			$src: "src",
 			$components: "src/lib/components",
 		},
-
-		trailingSlash: "always",
-
-		inlineStyleThreshold: 1024 * 16, // inline css files smaller than 16 kb
+		inlineStyleThreshold: 1024 * 16,
+		prerender: {
+			entries: ["*"],
+		},
 	},
 };
 

@@ -2,7 +2,7 @@
   description = "Svelte-powered site";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixos-23.11";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-26.05";
     flake-utils.url = "github:numtide/flake-utils";
   };
 
@@ -15,10 +15,9 @@
         in
         {
           devShells.default = pkgs.mkShell {
-            buildInputs = with pkgs; [
-              nodejs
-            ];
+            packages = [ pkgs.nodejs_24 ];
           };
+
           packages.default = cofob-dev;
           packages.dockerImage = pkgs.dockerTools.buildLayeredImage {
             name = "cofob-dev";
@@ -26,7 +25,7 @@
             contents = [ cofob-dev ];
             config = {
               Cmd = [ "${cofob-dev}/bin/cofob-dev" ];
-              ExposedPorts = { "3000/tcp" = {}; };
+              ExposedPorts = { "3000/tcp" = { }; };
             };
           };
         }

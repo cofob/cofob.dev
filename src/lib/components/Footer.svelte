@@ -8,6 +8,8 @@
 </footer>
 
 <style lang="postcss">
+	@reference "../app.css";
+
 	a {
 		@apply hover:underline;
 	}

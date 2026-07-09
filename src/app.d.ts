@@ -1,15 +1,15 @@
-/// <reference types="@sveltejs/kit" />
+declare global {
+	namespace App {}
 
-// See https://kit.svelte.dev/docs/typescript
-// for information about these interfaces
-declare namespace App {
 	interface ImportMetaEnv {
-		VITE_DOMAIN: string;
-		VITE_IPFS_ENDPOINT: string;
-		VITE_ANALYTICS: string;
+		readonly VITE_DOMAIN: string;
+		readonly VITE_IPFS_ENDPOINT: string;
+		readonly VITE_ANALYTICS: string;
 	}
 
 	interface ImportMeta {
 		readonly env: ImportMetaEnv;
 	}
 }
+
+export {};

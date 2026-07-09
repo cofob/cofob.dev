@@ -1,0 +1,38 @@
+/
+  Cache-Control: public, max-age=300
+
+/keys
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/keys-git
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/pgp
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/keys.asc
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/keys-git.asc
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/9AC4AC29.asc
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/9AC4AC29.rev
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/B8DDB818.asc
+  Cache-Control: public, max-age=3600
+  Content-Type: text/plain; charset=utf-8
+
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+  Content-Type: application/xml; charset=utf-8

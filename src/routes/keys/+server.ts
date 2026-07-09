@@ -1,3 +1,5 @@
+export const prerender = process.env.DEPLOY_TARGET === "static";
+
 export async function GET() {
 	const headers = {
 		"Cache-Control": "public, max-age=3600",

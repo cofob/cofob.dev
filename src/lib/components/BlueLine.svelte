@@ -1,22 +1,18 @@
 <script lang="ts">
 	import { lineRainbowStore } from "$lib/store";
+	import type { Snippet } from "svelte";
 
-	export let animate = false;
-	export let rainbow: boolean | undefined = undefined;
-
-	let rainbowLocal = rainbow || false;
-	if (rainbow === undefined) {
-		lineRainbowStore.subscribe((value) => {
-			rainbowLocal = value;
-		});
-	}
+	let { animate = false, rainbow, children }: { animate?: boolean; rainbow?: boolean; children: Snippet } = $props();
+	let rainbowLocal = $derived(rainbow ?? $lineRainbowStore);
 </script>
 
 <span class="top {rainbowLocal ? 'rainbow' : 'blue'}" class:animate>
-	<span class="down"><slot /></span>
+	<span class="down">{@render children()}</span>
 </span>
 
 <style lang="postcss">
+	@reference "../app.css";
+
 	.top {
 		@apply before:block before:absolute before:h-2/4 before:w-3/4 before:bottom-0.5
 					 before:-right-1 before:-skew-y-6 before:rounded-full relative inline-block;

@@ -47,10 +47,10 @@
 		</div>
 		<div class="mt-2 text-center text-lg text-zinc-600">
 			<p>
-				I'm a Python <BlueLine><b>developer</b></BlueLine> and <BlueLine><b>DevOps</b></BlueLine> engineer with expertise in virtualization, 
-				networking, and system architecture. With a passion for open-source and functional programming, 
-				I focus on building reliable, scalable infrastructure and elegant technical solutions. 
-				Currently working as a Senior Python Developer while continuing to explore new technologies.
+				I'm a Python <BlueLine><b>developer</b></BlueLine> and <BlueLine><b>DevOps</b></BlueLine> engineer with expertise
+				in virtualization, networking, and system architecture. With a passion for open-source and functional programming,
+				I focus on building reliable, scalable infrastructure and elegant technical solutions. Currently working as a Senior
+				Python Developer while continuing to explore new technologies.
 			</p>
 		</div>
 	</Section>
@@ -66,15 +66,13 @@
 			</p>
 		</div>
 
-		<div 
-			class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50 featured-card transition-all duration-300"
-		>
+		<div class="mt-4 mb-4 border-2 rounded-lg p-4 border-sky-300 bg-sky-50 featured-card transition-all duration-300">
 			<div class="font-semibold text-lg mb-2">
 				Featured: <BlueLine>Fastside</BlueLine>
 			</div>
 			<div class="mb-2">
-				A fast smart redirecting gateway for frontend services, built with Rust. 
-				Fastside provides links for various open-source services for reliable access.
+				A fast smart redirecting gateway for frontend services, built with Rust. Fastside provides links for various
+				open-source services for reliable access.
 				<div class="mt-2">
 					<div class="flex flex-wrap gap-2 mb-2">
 						<Tag bg="bg-white" border="border border-sky-200">Rust</Tag>
@@ -136,10 +134,20 @@
 		</div>
 
 		<div class="mt-4">
-			<ExperienceCard company="NDA company" location="Tbilisi, Georgia" title="Senior Python Developer" date="05/2025 - Present">
+			<ExperienceCard
+				company="NDA company"
+				location="Tbilisi, Georgia"
+				title="Senior Python Developer"
+				date="05/2025 - Present"
+			>
 				Currently working as a Senior Python Developer on confidential projects. Details covered under NDA.
 			</ExperienceCard>
-			<ExperienceCard company="Hosting provider" location="Remote, Tbilisi" title="DevOps Engineer" date="08/2024 - 04/2025">
+			<ExperienceCard
+				company="Hosting provider"
+				location="Remote, Tbilisi"
+				title="DevOps Engineer"
+				date="08/2024 - 04/2025"
+			>
 				As a DevOps Engineer, I was responsible for the back-end infrastructure supporting the billing system. Key
 				accomplishments:
 				<ul class="list-inside list-disc">
@@ -150,10 +158,17 @@
 					<li>Implemented alerting and monitoring systems to improve response times and system health.</li>
 				</ul>
 			</ExperienceCard>
-			<ExperienceCard company="Hosting provider" location="Remote, Tbilisi" title="Python Developer" date="05/2023 - 04/2025">
+			<ExperienceCard
+				company="Hosting provider"
+				location="Remote, Tbilisi"
+				title="Python Developer"
+				date="05/2023 - 04/2025"
+			>
 				Led a small Python development team, focusing on critical projects for the hosting provider:
 				<ul class="list-inside list-disc">
-					<li>Manager for over 100,000 virtual machines with an internal system built as an alternative to OpenStack.</li>
+					<li>
+						Manager for over 100,000 virtual machines with an internal system built as an alternative to OpenStack.
+					</li>
 					<li>
 						Developed a unique VPN service to bypass geo-blocks in Russia using a custom DNS-based traffic balancing
 						mechanism.
@@ -162,7 +177,12 @@
 					<li>Responsible for interviewing and onboarding new team members.</li>
 				</ul>
 			</ExperienceCard>
-			<ExperienceCard company="Hosting provider" location="Remote, Russia" title="Technical Support" date="01/2023 - 05/2023">
+			<ExperienceCard
+				company="Hosting provider"
+				location="Remote, Russia"
+				title="Technical Support"
+				date="01/2023 - 05/2023"
+			>
 				Worked in the technical support department, leveraging deep server knowledge and strong communication skills:
 				<ul class="list-inside list-disc">
 					<li>Developed department best practices and authored documentation.</li>
@@ -247,13 +267,13 @@
 </Section>
 
 <style>
-  .featured-card {
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-  }
-  
-  .featured-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    border-color: #7dd3fc;
-  }
+	.featured-card {
+		box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+	}
+
+	.featured-card:hover {
+		transform: translateY(-2px);
+		box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+		border-color: #7dd3fc;
+	}
 </style>

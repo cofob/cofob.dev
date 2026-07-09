@@ -1,12 +1,15 @@
 <script lang="ts">
-	export let level: number;
+	import type { Snippet } from "svelte";
 
-	let element = `h${level}`;
+	let { level, children }: { level: number; children: Snippet } = $props();
+	let element = $derived(`h${level}`);
 </script>
 
-<svelte:element this={element} class={element}><slot /></svelte:element>
+<svelte:element this={element} class={element}>{@render children()}</svelte:element>
 
 <style lang="postcss">
+	@reference "../app.css";
+
 	.h1 {
 		@apply sm:text-7xl text-5xl font-semibold mb-2;
 	}
