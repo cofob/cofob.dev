@@ -6,7 +6,16 @@ import ts from "typescript-eslint";
 import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig(
-	globalIgnores([".svelte-kit/**", ".wrangler/**", "build/**", "node_modules/**", ".pi-subagents/**", "result"]),
+	globalIgnores([
+		".svelte-kit/**",
+		".wrangler/**",
+		"build/**",
+		"node_modules/**",
+		".pi-subagents/**",
+		"playwright-report/**",
+		"test-results/**",
+		"result",
+	]),
 	js.configs.recommended,
 	...ts.configs.recommended,
 	...svelte.configs["flat/recommended"],

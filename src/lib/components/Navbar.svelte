@@ -9,6 +9,7 @@
 			<a href={resolve("/")}><BlueLine>cofob</BlueLine></a>
 		</div>
 		<div class="flex gap-x-3">
+			<a href={resolve("/blog")}>Blog</a>
 			<a href={resolve("/pgp")}>PGP</a>
 			<a href={resolve("/keys")}>SSH</a>
 			<a href={resolve("/portfolio")}>Portfolio</a>

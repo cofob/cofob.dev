@@ -7,7 +7,7 @@
 	import Tag from "./Tag.svelte";
 </script>
 
-<Meta title="Portfolio" description="Egor Ternovoi's Portfolio" />
+<Meta title="Portfolio" description="Egor Ternovoi's Portfolio" url="/portfolio/" />
 
 <Section>
 	<div class="text-center">
@@ -19,7 +19,7 @@
 			<div class="text-lg font-semibold text-center sm:text-left">Egor Ternovoi</div>
 
 			<div class="text-sm text-zinc-600 text-center sm:text-right mt-2 sm:mt-0">
-				<a href="mailto:cofob@riseup.net" class="text-blue-500">cofob@riseup.net</a> | Tbilisi, Georgia
+				<a href="mailto:cofob@riseup.net" class="text-blue-700">cofob@riseup.net</a> | Tbilisi, Georgia
 			</div>
 		</div>
 

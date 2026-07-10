@@ -6,7 +6,7 @@
 
 <li>
 	<!-- eslint-disable-next-line svelte/no-navigation-without-resolve -- external URL prop -->
-	<a href={source} class="text-blue-500" target="_blank" rel="noreferrer">
+	<a href={source} class="text-blue-700" target="_blank" rel="noreferrer">
 		{name}
 	</a>
 	<div class="text-sm text-zinc-500">{meta}</div>

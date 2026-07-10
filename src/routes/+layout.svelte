@@ -33,12 +33,15 @@
 <svelte:head>
 	<link rel="preconnect" href={import.meta.env.VITE_IPFS_ENDPOINT} />
 	<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
+	<link rel="alternate" type="application/rss+xml" title="cofob.dev blog RSS" href="/rss.xml" />
+	<link rel="alternate" type="application/atom+xml" title="cofob.dev blog Atom" href="/atom.xml" />
 </svelte:head>
 
 <div>
+	<a class="skip-link" href="#main-content">Skip to main content</a>
 	<Navbar />
 
-	<main>
+	<main id="main-content" tabindex="-1">
 		{@render children()}
 	</main>
 
@@ -57,5 +60,13 @@
 
 	main {
 		flex: 1;
+	}
+
+	.skip-link {
+		@apply fixed top-2 left-2 z-50 -translate-y-20 rounded-lg bg-zinc-800 px-3 py-2 font-semibold text-white;
+	}
+
+	.skip-link:focus {
+		@apply translate-y-0;
 	}
 </style>

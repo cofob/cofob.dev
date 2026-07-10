@@ -38,6 +38,13 @@ try {
 	assert.equal(portfolio.status, 200);
 	assert.match(await portfolio.text(), /NDA company/);
 
+	const blog = await fetch(`${origin}/blog/`);
+	assert.equal(blog.status, 200);
+	assert.match(await blog.text(), /No posts have been published yet/);
+
+	const draft = await fetch(`${origin}/blog/example-post/`);
+	assert.equal(draft.status, 404);
+
 	const keys = await fetch(`${origin}/keys`);
 	assert.equal(keys.status, 200);
 	assert.match(keys.headers.get("content-type") ?? "", /^text\/plain/);
@@ -48,6 +55,17 @@ try {
 	assert.equal(sitemap.status, 200);
 	assert.match(sitemap.headers.get("content-type") ?? "", /^application\/xml/);
 	assert.match(await sitemap.text(), /<urlset/);
+	assert.match(await (await fetch(`${origin}/sitemap.xml`)).text(), /https:\/\/cofob\.dev\/blog\//);
+
+	const rss = await fetch(`${origin}/rss.xml`);
+	assert.equal(rss.status, 200);
+	assert.match(rss.headers.get("content-type") ?? "", /^application\/rss\+xml/);
+	assert.match(await rss.text(), /<rss/);
+
+	const atom = await fetch(`${origin}/atom.xml`);
+	assert.equal(atom.status, 200);
+	assert.match(atom.headers.get("content-type") ?? "", /^application\/atom\+xml/);
+	assert.match(await atom.text(), /<feed/);
 
 	const missing = await fetch(`${origin}/missing`);
 	assert.equal(missing.status, 404);

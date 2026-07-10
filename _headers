@@ -36,3 +36,11 @@
 /sitemap.xml
   Cache-Control: public, max-age=3600
   Content-Type: application/xml; charset=utf-8
+
+/rss.xml
+  Cache-Control: public, max-age=600
+  Content-Type: application/rss+xml; charset=utf-8
+
+/atom.xml
+  Cache-Control: public, max-age=600
+  Content-Type: application/atom+xml; charset=utf-8

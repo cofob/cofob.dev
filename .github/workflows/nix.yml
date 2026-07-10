@@ -19,6 +19,7 @@ jobs:
           node-version: 24.11.0
           cache: npm
       - run: npm ci
+      - run: npx playwright install --with-deps chromium
       - run: npm test
       - run: npm audit --audit-level=high
       - run: npm run test:static

@@ -1,0 +1,101 @@
+import { render } from "svelte/server";
+import { buildTime, getPublicPosts } from "$lib/blog/catalog";
+import { getPostComponent } from "$lib/blog/components";
+import { absoluteSiteUrl, getSiteOrigin } from "$lib/blog/url";
+import type { PostSummary } from "$lib/blog/types";
+import { escapeXml } from "$lib/blog/xml";
+
+export function renderRssFeed(): string {
+	const posts = getPublicPosts();
+	const items = posts.map((post) => renderRssItem(post)).join("\n");
+
+	return `<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/" xmlns:dc="http://purl.org/dc/elements/1.1/">
+	<channel>
+		<title>cofob.dev blog</title>
+		<link>${escapeXml(absoluteSiteUrl("/blog/"))}</link>
+		<description>Writing and notes from cofob.</description>
+		<language>en</language>
+		<lastBuildDate>${new Date(latestUpdate(posts)).toUTCString()}</lastBuildDate>
+		<atom:link href="${escapeXml(absoluteSiteUrl("/rss.xml"))}" rel="self" type="application/rss+xml" />
+		${items}
+	</channel>
+</rss>`;
+}
+
+export function renderAtomFeed(): string {
+	const posts = getPublicPosts();
+	const entries = posts.map((post) => renderAtomEntry(post)).join("\n");
+
+	return `<?xml version="1.0" encoding="UTF-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+	<title>cofob.dev blog</title>
+	<subtitle>Writing and notes from cofob.</subtitle>
+	<id>${escapeXml(absoluteSiteUrl("/blog/"))}</id>
+	<link href="${escapeXml(absoluteSiteUrl("/blog/"))}" />
+	<link href="${escapeXml(absoluteSiteUrl("/atom.xml"))}" rel="self" type="application/atom+xml" />
+	<updated>${new Date(latestUpdate(posts)).toISOString()}</updated>
+	<author><name>cofob</name><uri>${escapeXml(getSiteOrigin().href)}</uri></author>
+	${entries}
+</feed>`;
+}
+
+function renderRssItem(post: PostSummary): string {
+	const url = absoluteSiteUrl(`/blog/${post.slug}/`);
+	return `<item>
+		<title>${escapeXml(post.title)}</title>
+		<link>${escapeXml(url)}</link>
+		<guid isPermaLink="true">${escapeXml(url)}</guid>
+		<description>${escapeXml(post.description)}</description>
+		<pubDate>${new Date(post.published).toUTCString()}</pubDate>
+		<dc:language>${escapeXml(post.lang)}</dc:language>
+		<content:encoded><![CDATA[${renderPostHtml(post).replaceAll("]]>", "]]]]><![CDATA[>")}]]></content:encoded>
+	</item>`;
+}
+
+function renderAtomEntry(post: PostSummary): string {
+	const url = absoluteSiteUrl(`/blog/${post.slug}/`);
+	return `<entry>
+		<title>${escapeXml(post.title)}</title>
+		<id>${escapeXml(url)}</id>
+		<link href="${escapeXml(url)}" />
+		<published>${new Date(post.published).toISOString()}</published>
+		<updated>${new Date(post.updated ?? post.published).toISOString()}</updated>
+		<summary>${escapeXml(post.description)}</summary>
+		<content type="html" xml:lang="${escapeXml(post.lang)}">${escapeXml(renderPostHtml(post))}</content>
+	</entry>`;
+}
+
+function renderPostHtml(post: PostSummary): string {
+	const component = getPostComponent(post.slug);
+	if (!component) throw new Error(`Missing component for published post ${post.slug}`);
+
+	const body = render(component).body.replaceAll(/<!--[^]*?-->/g, "");
+	const postUrl = absoluteSiteUrl(`/blog/${post.slug}/`);
+	const content = absolutizeHtmlUrls(body, postUrl);
+	const updated = post.updated
+		? ` <span>Updated <time datetime="${escapeXml(post.updated)}">${escapeXml(post.updated.slice(0, 10))}</time>.</span>`
+		: "";
+
+	return `<article lang="${escapeXml(post.lang)}"><h1>${escapeXml(post.title)}</h1><p><time datetime="${escapeXml(
+		post.published,
+	)}">${escapeXml(post.published.slice(0, 10))}</time>.${updated}</p>${content}</article>`;
+}
+
+function absolutizeHtmlUrls(html: string, base: string): string {
+	return html.replace(/\b(src|href)="([^"]+)"/g, (match, attribute: string, value: string) => {
+		if (value.startsWith("#") || /^(?:data|mailto|tel):/i.test(value)) return match;
+		return `${attribute}="${escapeXml(new URL(value, base).href)}"`;
+	});
+}
+
+function latestUpdate(posts: PostSummary[]): string {
+	if (posts.length === 0) return buildTime;
+	return posts
+		.slice(1)
+		.reduce(
+			(latest, post) =>
+				Date.parse(post.updated ?? post.published) > Date.parse(latest) ? (post.updated ?? post.published) : latest,
+			posts[0].updated ?? posts[0].published,
+		);
+}

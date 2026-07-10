@@ -6,7 +6,9 @@
 	--color-sky-300: #7dd3fc;
 	--color-sky-500: #0ea5e9;
 	--color-sky-600: #0284c7;
+	--color-sky-700: #0369a1;
 	--color-blue-500: #3b82f6;
+	--color-blue-700: #1d4ed8;
 	--color-zinc-100: #f4f4f5;
 	--color-zinc-500: #71717a;
 	--color-zinc-600: #52525b;
@@ -43,7 +45,23 @@
 		font-family: Manrope, sans-serif;
 	}
 
+	:focus-visible {
+		outline: 3px solid #0ea5e9;
+		outline-offset: 3px;
+	}
+
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		::before,
+		::after {
+			scroll-behavior: auto !important;
+			transition-duration: 0.01ms !important;
+			animation-duration: 0.01ms !important;
+			animation-iteration-count: 1 !important;
+		}
+	}
+
 	.link {
-		@apply text-sky-500 hover:underline hover:text-sky-600;
+		@apply text-sky-700 hover:underline;
 	}
 }
