@@ -48,6 +48,7 @@ function renderRssItem(post: PostSummary): string {
 		<guid isPermaLink="true">${escapeXml(url)}</guid>
 		<description>${escapeXml(post.description)}</description>
 		<pubDate>${new Date(post.published).toUTCString()}</pubDate>
+		<dc:date>${new Date(post.updated ?? post.published).toISOString()}</dc:date>
 		<dc:language>${escapeXml(post.lang)}</dc:language>
 		<content:encoded><![CDATA[${renderPostHtml(post).replaceAll("]]>", "]]]]><![CDATA[>")}]]></content:encoded>
 	</item>`;
@@ -82,11 +83,22 @@ function renderPostHtml(post: PostSummary): string {
 	)}">${escapeXml(post.published.slice(0, 10))}</time>.${updated}</p>${content}</article>`;
 }
 
-function absolutizeHtmlUrls(html: string, base: string): string {
-	return html.replace(/\b(src|href)="([^"]+)"/g, (match, attribute: string, value: string) => {
-		if (value.startsWith("#") || /^(?:data|mailto|tel):/i.test(value)) return match;
-		return `${attribute}="${escapeXml(new URL(value, base).href)}"`;
-	});
+export function absolutizeHtmlUrls(html: string, base: string): string {
+	return html
+		.replace(/\b(src|href|poster)="([^"]+)"/g, (match, attribute: string, value: string) => {
+			if (value.startsWith("#") || /^(?:data|mailto|tel):/i.test(value)) return match;
+			return `${attribute}="${escapeXml(new URL(value, base).href)}"`;
+		})
+		.replace(/\bsrcset="([^"]+)"/g, (_match, value: string) => {
+			const candidates = value
+				.split(",")
+				.map((candidate) => candidate.trim())
+				.map((candidate) => {
+					const [url, descriptor] = candidate.split(/\s+/, 2);
+					return `${new URL(url, base).href}${descriptor ? ` ${descriptor}` : ""}`;
+				});
+			return `srcset="${escapeXml(candidates.join(", "))}"`;
+		});
 }
 
 function latestUpdate(posts: PostSummary[]): string {

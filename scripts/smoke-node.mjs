@@ -32,7 +32,15 @@ async function waitForServer() {
 try {
 	const home = await waitForServer();
 	assert.equal(home.headers.get("cache-control"), "public, max-age=300");
-	assert.match(await home.text(), /Hi! I/);
+	const homeHtml = await home.text();
+	assert.match(homeHtml, /Hi! I/);
+	assert.match(homeHtml, /application\/ld\+json/);
+	assert.match(homeHtml, /content="1200" property="og:image:width"/);
+	const socialPath = homeHtml.match(/content="https:\/\/cofob\.dev([^"?]+)" property="og:image"/)?.[1];
+	assert.ok(socialPath);
+	const social = await fetch(`${origin}${socialPath}`);
+	assert.equal(social.status, 200);
+	assert.match(social.headers.get("content-type") ?? "", /^image\/png/);
 
 	const portfolio = await fetch(`${origin}/portfolio/`);
 	assert.equal(portfolio.status, 200);
@@ -54,7 +62,7 @@ try {
 	const sitemap = await fetch(`${origin}/sitemap.xml`);
 	assert.equal(sitemap.status, 200);
 	assert.match(sitemap.headers.get("content-type") ?? "", /^application\/xml/);
-	assert.match(await sitemap.text(), /<urlset/);
+	assert.match(await sitemap.text(), /xmlns:image="http:\/\/www\.google\.com\/schemas\/sitemap-image\/1\.1"/);
 	assert.match(await (await fetch(`${origin}/sitemap.xml`)).text(), /https:\/\/cofob\.dev\/blog\//);
 
 	const rss = await fetch(`${origin}/rss.xml`);

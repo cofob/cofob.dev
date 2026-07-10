@@ -9,20 +9,21 @@
 		"node": ">=24.11.0"
 	},
 	"scripts": {
-		"dev": "vite dev",
-		"build": "DEPLOY_TARGET=node vite build",
-		"build:static": "DEPLOY_TARGET=static vite build && cp ./build/200.html ./build/ipfs-404.html && cp ./build/200.html ./build/index.html && cp ./_headers ./build/_headers",
-		"build:cloudflare": "DEPLOY_TARGET=cloudflare vite build",
+		"prepare:blog": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs",
+		"dev": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs --include-previews && BLOG_ASSETS_PREPARED=1 vite dev",
+		"build": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs && BLOG_ASSETS_PREPARED=1 DEPLOY_TARGET=node vite build",
+		"build:static": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs && BLOG_ASSETS_PREPARED=1 DEPLOY_TARGET=static vite build && cp ./build/200.html ./build/ipfs-404.html && cp ./_headers ./build/_headers",
+		"build:cloudflare": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs && BLOG_ASSETS_PREPARED=1 DEPLOY_TARGET=cloudflare vite build",
 		"preview": "vite preview",
 		"postinstall": "svelte-kit sync",
 		"test": "npm run check && npm run lint && npm run test:unit && npm run test:a11y && npm run test:smoke",
-		"test:unit": "vitest run src",
+		"test:unit": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs --include-previews && BLOG_ASSETS_PREPARED=1 vitest run src scripts",
 		"test:a11y": "playwright test",
 		"test:smoke": "npm run build && node scripts/smoke-node.mjs",
 		"test:static": "npm run build:static && node scripts/check-static.mjs",
 		"test:cloudflare": "npm run build:cloudflare && node scripts/smoke-cloudflare.mjs",
-		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
-		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"check": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs --include-previews && BLOG_ASSETS_PREPARED=1 svelte-kit sync && BLOG_ASSETS_PREPARED=1 svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "node --env-file-if-exists=.env scripts/prepare-blog-assets.mjs --include-previews && BLOG_ASSETS_PREPARED=1 svelte-kit sync && BLOG_ASSETS_PREPARED=1 svelte-check --tsconfig ./tsconfig.json --watch",
 		"lint": "prettier --check . && eslint .",
 		"format": "prettier --write .",
 		"start": "node build"
@@ -65,11 +66,16 @@
 		"workerd@1.20260708.1": true
 	},
 	"dependencies": {
+		"@aws-sdk/client-s3": "3.1084.0",
+		"@resvg/resvg-js": "2.6.2",
 		"domhandler": "^6.0.1",
 		"gray-matter": "^4.0.3",
 		"htmlparser2": "^12.0.0",
+		"manrope": "2.0.0",
 		"mdsvex": "^0.12.7",
 		"remark-gfm": "^4.0.1",
+		"satori": "0.26.0",
+		"sharp": "0.35.3",
 		"zod": "^4.4.3"
 	}
 }

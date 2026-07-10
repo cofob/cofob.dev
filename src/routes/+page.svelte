@@ -1,13 +1,20 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import { siteSocialImage } from "$lib/blog/catalog";
 	import { Meta, BlueLine, Section, Heading } from "$lib/components";
 	import PostCard from "$lib/components/blog/PostCard.svelte";
+	import { homeStructuredData } from "$lib/seo/structured-data";
 	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
 </script>
 
-<Meta title="Home" description="cofob's personal website" url="/" />
+<Meta
+	title="Home"
+	description="cofob's personal website"
+	url="/"
+	structuredData={homeStructuredData(siteSocialImage)}
+/>
 
 <Section>
 	<div class="text-center py-20 sm:py-32">

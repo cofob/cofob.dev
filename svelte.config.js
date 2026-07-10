@@ -45,6 +45,13 @@ const config = {
 	},
 	kit: {
 		adapter: getAdapter(),
+		...(process.env.BLOG_ASSETS_PREPARED === "1"
+			? {
+					files: {
+						assets: ".blog-build/static",
+					},
+				}
+			: {}),
 		alias: {
 			$src: "src",
 			$components: "src/lib/components",

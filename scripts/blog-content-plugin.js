@@ -1,130 +1,157 @@
-import { readFileSync, readdirSync, statSync } from "node:fs";
+import { readFileSync } from "node:fs";
 import path from "node:path";
-import matter from "gray-matter";
-import { z } from "zod";
+import {
+	MARKDOWN_IMAGE_PATTERN,
+	MARKDOWN_LINK_PATTERN,
+	isRemoteAsset,
+	readSourcePosts,
+	resolvePostAsset,
+} from "./blog-content.js";
 
 const CATALOG_ID = "virtual:blog-catalog";
 const COMPONENTS_ID = "virtual:blog-components";
 const RESOLVED_CATALOG_ID = `\0${CATALOG_ID}`;
 const RESOLVED_COMPONENTS_ID = `\0${COMPONENTS_ID}`;
-const SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
-const LANGUAGE_PATTERN = /^[A-Za-z]{2,3}(?:-[A-Za-z0-9]{2,8})*$/;
-const MARKDOWN_IMAGE_PATTERN = /!\[([^\]]*)\]\(([^\s)]+)(?:\s+["'][^"']*["'])?\)/g;
-const dateTimeSchema = z.preprocess(
-	(value) => (value instanceof Date ? value.toISOString() : value),
-	z.iso.datetime({ offset: true }),
-);
 
-const postSchema = z
-	.object({
-		title: z.string().trim().min(1),
-		description: z.string().trim().min(1),
-		published: dateTimeSchema,
-		updated: dateTimeSchema.optional(),
-		lang: z.string().regex(LANGUAGE_PATTERN).default("en"),
-		draft: z.boolean(),
-		cover: z.string().trim().min(1).optional(),
-		coverAlt: z.string().trim().min(1).optional(),
-		comments: z.url().optional(),
-	})
-	.strict()
-	.superRefine((post, context) => {
-		if (post.cover && !post.coverAlt) {
-			context.addIssue({ code: "custom", path: ["coverAlt"], message: "coverAlt is required when cover is set" });
-		}
-		if (!post.cover && post.coverAlt) {
-			context.addIssue({ code: "custom", path: ["cover"], message: "cover is required when coverAlt is set" });
-		}
-		if (post.updated && Date.parse(post.updated) < Date.parse(post.published)) {
-			context.addIssue({ code: "custom", path: ["updated"], message: "updated must not be earlier than published" });
-		}
-	});
-
-function isFediverseStatusUrl(value) {
-	if (!value) return true;
-
+function readManifest(root) {
+	if (process.env.BLOG_ASSETS_PREPARED !== "1") return;
 	try {
-		const url = new URL(value);
-		if (url.protocol !== "https:" || url.username || url.password || (url.port && url.port !== "443")) return false;
+		return JSON.parse(readFileSync(path.resolve(root, ".blog-build/manifest.json"), "utf8"));
+	} catch (error) {
+		throw new Error(`Blog assets were marked as prepared, but the manifest could not be read: ${error.message}`, {
+			cause: error,
+		});
+	}
+}
+
+function basicImage(source, alt) {
+	return { src: source, srcset: source, width: 0, height: 0, type: inferImageType(source), alt };
+}
+
+function inferImageType(source) {
+	try {
+		const extension = path.extname(new URL(source, "https://cofob.dev").pathname).toLowerCase();
 		return (
-			/^\/@[^/]+\/[^/]+\/?$/.test(url.pathname) ||
-			/^\/users\/[^/]+\/statuses\/[^/]+\/?$/.test(url.pathname) ||
-			/^\/notice\/[^/]+\/?$/.test(url.pathname)
+			{
+				".avif": "image/avif",
+				".gif": "image/gif",
+				".jpeg": "image/jpeg",
+				".jpg": "image/jpeg",
+				".png": "image/png",
+				".svg": "image/svg+xml",
+				".webp": "image/webp",
+			}[extension] ?? "image/*"
 		);
 	} catch {
-		return false;
+		return "image/*";
 	}
 }
 
-function formatZodError(error) {
-	return error.issues.map((issue) => `${issue.path.join(".") || "frontmatter"}: ${issue.message}`).join("; ");
+function getManifestAsset(root, slug, reference, manifest) {
+	if (!manifest || isRemoteAsset(reference)) return;
+	const resolved = resolvePostAsset(root, slug, reference);
+	return manifest.posts?.[slug]?.assets?.[resolved.sourceKey];
 }
 
-function assertStaticAsset(root, postSlug, assetUrl, label) {
-	if (/^(?:https?:)?\/\//.test(assetUrl) || assetUrl.startsWith("data:")) return;
+function resolvePost(root, post, manifest) {
+	const { modulePath, source, cover, coverAlt, socialImage, socialImageAlt, ...metadata } = post;
+	void source;
+	const coverAsset = cover
+		? isRemoteAsset(cover) || !manifest
+			? basicImage(cover, coverAlt)
+			: getManifestAsset(root, post.slug, cover, manifest)?.image
+		: undefined;
+	if (cover && !coverAsset) throw new Error(`${post.slug}: prepared cover is missing from the asset manifest`);
 
-	const staticRoot = path.resolve(root, "static");
-	const postAssetRoot = path.resolve(staticRoot, "blog", postSlug);
-	const decoded = decodeURIComponent(assetUrl.split(/[?#]/, 1)[0]);
-	const assetPath = decoded.startsWith("/")
-		? path.resolve(staticRoot, `.${decoded}`)
-		: path.resolve(postAssetRoot, decoded);
+	const generatedSocial = manifest?.posts?.[post.slug]?.socialImage;
+	const resolvedSocial =
+		socialImage && isRemoteAsset(socialImage)
+			? { src: socialImage, width: 1200, height: 630, type: inferImageType(socialImage), alt: socialImageAlt }
+			: generatedSocial;
+	if (manifest && !resolvedSocial)
+		throw new Error(`${post.slug}: prepared social image is missing from the asset manifest`);
 
-	if (!assetPath.startsWith(`${staticRoot}${path.sep}`)) throw new Error(`${label} must stay inside static/`);
-	if (!statSafe(assetPath)) throw new Error(`${label} does not exist: ${path.relative(root, assetPath)}`);
-}
-
-function statSafe(filePath) {
-	try {
-		return statSync(filePath).isFile();
-	} catch {
-		return false;
-	}
-}
-
-function validateMarkdownImages(root, slug, source) {
-	const prose = source.replace(/^(?:```|~~~)[^\n]*\n[^]*?^(?:```|~~~)\s*$/gm, "");
-	for (const match of prose.matchAll(MARKDOWN_IMAGE_PATTERN)) {
-		const [, alt, url] = match;
-		if (!alt.trim()) {
-			throw new Error(`Markdown image ${url} needs meaningful alt text; use an explicit <img alt=""> for decoration`);
-		}
-		assertStaticAsset(root, slug, url.replace(/^<|>$/g, ""), `Markdown image ${url}`);
-	}
-}
-
-function readPosts(root, buildTime, includePreviews) {
-	const directory = path.resolve(root, "src/lib/blog/posts");
-	const buildTimestamp = Date.parse(buildTime);
-
-	return readdirSync(directory, { withFileTypes: true })
-		.filter((entry) => entry.isFile() && entry.name.endsWith(".md"))
-		.map((entry) => {
-			const slug = entry.name.slice(0, -3);
-			if (!SLUG_PATTERN.test(slug)) throw new Error(`${entry.name}: post filename must be lower-kebab-case`);
-
-			const source = readFileSync(path.join(directory, entry.name), "utf8");
-			const parsed = matter(source);
-			const result = postSchema.safeParse(parsed.data);
-			if (!result.success) throw new Error(`${entry.name}: ${formatZodError(result.error)}`);
-
-			const metadata = result.data;
-			if (!isFediverseStatusUrl(metadata.comments)) {
-				throw new Error(`${entry.name}: comments must be a Mastodon status or Pleroma /notice/ HTTPS URL`);
-			}
-			if (metadata.cover) assertStaticAsset(root, slug, metadata.cover, "cover");
-			validateMarkdownImages(root, slug, parsed.content);
-
-			const isPublic = !metadata.draft && Date.parse(metadata.published) <= buildTimestamp;
-			return { slug, ...metadata, isPublic, modulePath: `/src/lib/blog/posts/${entry.name}` };
-		})
-		.filter((post) => includePreviews || post.isPublic)
-		.sort((left, right) => Date.parse(right.published) - Date.parse(left.published));
+	return {
+		...metadata,
+		slug: post.slug,
+		cover: coverAsset,
+		socialImage: resolvedSocial,
+		comments: post.comments,
+		isPublic: post.isPublic,
+		modulePath,
+	};
 }
 
 function serializePost(post) {
 	const serializable = Object.fromEntries(Object.entries(post).filter(([key]) => key !== "modulePath"));
 	return JSON.stringify(serializable);
+}
+
+function escapeAttribute(value) {
+	return value.replaceAll("&", "&amp;").replaceAll('"', "&quot;").replaceAll("<", "&lt;").replaceAll(">", "&gt;");
+}
+
+function responsiveImageMarkup(asset, alt) {
+	const dimensions = asset.width > 0 ? ` width="${asset.width}" height="${asset.height}"` : "";
+	return `<img src="${escapeAttribute(asset.src)}" srcset="${escapeAttribute(asset.srcset)}" sizes="(min-width: 800px) 768px, calc(100vw - 2rem)"${dimensions} alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">`;
+}
+
+export function rewritePostMarkdown(root, id, source, manifest) {
+	if (!manifest) return source;
+	const slug = path.basename(id, ".md");
+	const postAssets = manifest.posts?.[slug]?.assets;
+	if (!postAssets) return source;
+
+	return rewriteOutsideCodeFences(source, (segment) => {
+		let rewritten = segment.replace(
+			/<(img|source|video|audio)\b([^>]*?)\b(src|poster)=(['"])([^'"]+)\4([^>]*)>/gi,
+			(original, tag, before, attribute, quote, reference, after) => {
+				if (isRemoteAsset(reference)) return original;
+				const resolved = resolvePostAsset(root, slug, reference, { required: false });
+				if (!resolved) return original;
+				const entry = postAssets[resolved.sourceKey];
+				const url =
+					tag.toLowerCase() === "img" || attribute.toLowerCase() === "poster"
+						? entry?.image?.src
+						: entry?.original?.url;
+				if (!url) return original;
+				return `<${tag}${before}${attribute}=${quote}${escapeAttribute(url + resolved.suffix)}${quote}${after}>`;
+			},
+		);
+
+		rewritten = rewritten.replace(MARKDOWN_IMAGE_PATTERN, (original, alt, reference) => {
+			if (isRemoteAsset(reference)) return original;
+			const resolved = resolvePostAsset(root, slug, reference);
+			const asset = postAssets[resolved.sourceKey]?.image;
+			if (!asset) throw new Error(`${slug}: optimized image is missing for ${reference}`);
+			return responsiveImageMarkup(asset, alt);
+		});
+
+		return rewritten.replace(MARKDOWN_LINK_PATTERN, (original, label, reference) => {
+			if (isRemoteAsset(reference)) return original;
+			const resolved = resolvePostAsset(root, slug, reference, { required: false });
+			if (!resolved) return original;
+			const asset = postAssets[resolved.sourceKey];
+			if (!asset?.original) return original;
+			return `[${label}](${asset.original.url}${resolved.suffix})`;
+		});
+	});
+}
+
+function rewriteOutsideCodeFences(source, rewrite) {
+	let fence;
+	return source
+		.split(/(?<=\n)/)
+		.map((line) => {
+			const marker = line.match(/^\s*(`{3,}|~{3,})/u)?.[1];
+			if (marker) {
+				if (!fence) fence = marker[0];
+				else if (marker[0] === fence) fence = undefined;
+				return line;
+			}
+			return fence ? line : rewrite(line);
+		})
+		.join("");
 }
 
 export function blogContentPlugin({ buildTime }) {
@@ -144,22 +171,35 @@ export function blogContentPlugin({ buildTime }) {
 		},
 		load(id) {
 			if (id !== RESOLVED_CATALOG_ID && id !== RESOLVED_COMPONENTS_ID) return;
-			const posts = readPosts(root, buildTime, includePreviews);
+			const manifest = readManifest(root);
+			const effectiveBuildTime = manifest?.buildTime ?? buildTime;
+			const posts = readSourcePosts(root, effectiveBuildTime, includePreviews).map((post) =>
+				resolvePost(root, post, manifest),
+			);
 
 			if (id === RESOLVED_CATALOG_ID) {
-				return `export const buildTime = ${JSON.stringify(buildTime)};\nexport const posts = [${posts
-					.map(serializePost)
-					.join(",")}];`;
+				return `export const buildTime = ${JSON.stringify(effectiveBuildTime)};\nexport const siteSocialImage = ${JSON.stringify(
+					manifest?.siteSocialImage,
+				)};\nexport const posts = [${posts.map(serializePost).join(",")}];`;
 			}
 
 			const imports = posts.map((post, index) => `import Post${index} from ${JSON.stringify(post.modulePath)};`);
 			const entries = posts.map((post, index) => `${JSON.stringify(post.slug)}: Post${index}`);
 			return `${imports.join("\n")}\nexport const postComponents = {${entries.join(",")}};`;
 		},
-		handleHotUpdate(context) {
+		transform(source, id) {
+			if (!id.startsWith(path.resolve(root, "src/lib/blog/posts")) || !id.endsWith(".md")) return;
+			return { code: rewritePostMarkdown(root, id, source, readManifest(root)), map: null };
+		},
+		async handleHotUpdate(context) {
 			const postsDirectory = path.resolve(root, "src/lib/blog/posts");
 			const staticBlogDirectory = path.resolve(root, "static/blog");
 			if (!context.file.startsWith(postsDirectory) && !context.file.startsWith(staticBlogDirectory)) return;
+
+			if (process.env.BLOG_ASSETS_PREPARED === "1") {
+				const { prepareBlogAssets } = await import("./blog-assets.js");
+				await prepareBlogAssets({ root, includePreviews: true, mode: "local" });
+			}
 
 			for (const id of [RESOLVED_CATALOG_ID, RESOLVED_COMPONENTS_ID]) {
 				const module = context.server.moduleGraph.getModuleById(id);

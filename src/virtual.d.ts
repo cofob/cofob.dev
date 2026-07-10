@@ -1,5 +1,6 @@
 declare module "virtual:blog-catalog" {
 	export const buildTime: string;
+	export const siteSocialImage: import("./lib/blog/types").SocialImageAsset | undefined;
 	export const posts: import("./lib/blog/types").PostMetadata[];
 }
 

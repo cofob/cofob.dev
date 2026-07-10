@@ -2,8 +2,13 @@
 title: Example blog post
 description: A private authoring template for a new cofob.dev blog post.
 published: 2026-07-10T12:00:00+02:00
+# updated: 2026-07-11T09:30:00+02:00
 lang: en
 draft: true
+# cover: cover.png
+# coverAlt: A concise description of the cover image
+# socialImage: social.png
+# socialImageAlt: A concise description of the social card
 comments: https://social.example/@cofob/123456
 ---
 

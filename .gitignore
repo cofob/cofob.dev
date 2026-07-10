@@ -1,9 +1,10 @@
 /node_modules
 /build
 /.svelte-kit
+/.blog-build
 /package
 /.env.*
-/!.env.example
+!/.env.example
 /.output
 /.cloudflare
 /.direnv

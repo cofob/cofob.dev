@@ -1,9 +1,12 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import { siteSocialImage } from "$lib/blog/catalog";
 	import { formatPostDate } from "$lib/blog/format";
 	import { getPostComponent } from "$lib/blog/components";
 	import { Meta } from "$lib/components";
 	import Comments from "$lib/components/blog/Comments.svelte";
+	import ResponsiveImage from "$lib/components/blog/ResponsiveImage.svelte";
+	import { postStructuredData } from "$lib/seo/structured-data";
 	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
@@ -13,12 +16,13 @@
 <Meta
 	title={data.post.title}
 	description={data.post.description}
-	cover={data.post.cover}
+	image={data.post.socialImage ?? siteSocialImage}
 	url={resolve("/blog/[slug]", { slug: data.post.slug })}
 	type="article"
 	lang={data.post.lang}
 	published={data.post.published}
 	updated={data.post.updated}
+	structuredData={postStructuredData(data.post, siteSocialImage)}
 />
 
 <article class="article" lang={data.post.lang}>
@@ -44,7 +48,7 @@
 	</header>
 
 	{#if data.post.cover}
-		<img class="cover" src={data.post.cover} alt={data.post.coverAlt} decoding="async" />
+		<div class="cover"><ResponsiveImage image={data.post.cover} loading="eager" fetchpriority="high" /></div>
 	{/if}
 
 	<div class="blog-prose">
@@ -91,7 +95,7 @@
 		@apply mt-4 text-sm text-zinc-600;
 	}
 
-	.cover {
+	.cover :global(img) {
 		@apply mb-8 max-h-[32rem] w-full rounded-xl object-cover;
 	}
 

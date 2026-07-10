@@ -1,8 +1,8 @@
 import { dev } from "$app/environment";
-import { buildTime, posts } from "virtual:blog-catalog";
+import { buildTime, posts, siteSocialImage } from "virtual:blog-catalog";
 import type { PostMetadata, PostSummary } from "./types";
 
-export { buildTime };
+export { buildTime, siteSocialImage };
 
 export function getPublicPosts(): PostSummary[] {
 	return posts.filter((post) => post.isPublic).map(toSummary);

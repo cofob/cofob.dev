@@ -20,3 +20,12 @@ test("skip navigation and static comment consent are keyboard accessible", async
 	await page.goto("/blog/example-post/");
 	await expect(page.getByRole("button", { name: "Load comments" })).toBeVisible();
 });
+
+test("structured data is valid JSON on site and article pages", async ({ page }) => {
+	for (const path of ["/", "/blog/", "/blog/example-post/"]) {
+		await page.goto(path);
+		const documents = await page.locator('script[type="application/ld+json"]').allTextContents();
+		expect(documents.length).toBeGreaterThan(0);
+		for (const document of documents) expect(() => JSON.parse(document)).not.toThrow();
+	}
+});
