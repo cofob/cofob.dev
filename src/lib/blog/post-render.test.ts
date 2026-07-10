@@ -2,6 +2,7 @@ import { render } from "svelte/server";
 import { describe, expect, it } from "vitest";
 import PostCard from "$lib/components/blog/PostCard.svelte";
 import type { PostSummary } from "./types";
+import CodexStart from "./posts/codex-start.md";
 import ExamplePost, { metadata } from "./posts/example-post.md";
 
 describe("MDsveX post rendering", () => {
@@ -28,5 +29,16 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain("Published");
 		expect(output).toContain("Updated");
 		expect(output).toContain('datetime="2026-02-02T10:00:00+00:00"');
+	});
+
+	it("renders the codex-start chat excerpt as semantic server HTML", () => {
+		const output = render(CodexStart).body;
+		expect(output).toContain('<section class="chat ');
+		expect(output).toContain('aria-label="Мои сообщения о первой версии pi-start"');
+		expect(output).toContain('<p class="chat-author">cofob</p>');
+		expect(output).toContain('alt="Аватар cofob"');
+		expect(output).toContain("вайб на баше");
+		expect(output).toContain("https://site-assets.cofob.dev/codex-start/pi-start.cast");
+		expect(output).toContain("Открыть запись напрямую");
 	});
 });

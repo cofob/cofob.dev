@@ -7,6 +7,7 @@ import { defineConfig, globalIgnores } from "eslint/config";
 
 export default defineConfig(
 	globalIgnores([
+		".blog-build/**",
 		".svelte-kit/**",
 		".wrangler/**",
 		"build/**",
@@ -15,6 +16,7 @@ export default defineConfig(
 		"playwright-report/**",
 		"test-results/**",
 		"result",
+		"static/static/vendor/**",
 	]),
 	js.configs.recommended,
 	...ts.configs.recommended,
