@@ -50,7 +50,11 @@ try {
 
 	const blog = await fetch(`${origin}/blog/`);
 	assert.equal(blog.status, 200);
-	assert.match(await blog.text(), /No posts have been published yet/);
+	assert.match(await blog.text(), /codex-start/);
+
+	const post = await fetch(`${origin}/blog/codex-start/`);
+	assert.equal(post.status, 200);
+	assert.match(await post.text(), /Codex в отдельном контейнере/);
 
 	const sitemap = await fetch(`${origin}/sitemap.xml`);
 	assert.equal(sitemap.status, 200);
