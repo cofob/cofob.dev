@@ -1,7 +1,6 @@
 <script lang="ts">
 	import "$lib/app.css";
-	import NProgress from "nprogress";
-	import { navigating, page } from "$app/state";
+	import { page } from "$app/state";
 	import { replaceState } from "$app/navigation";
 	import { Footer, Navbar } from "$lib/components";
 	import { onMount, type Snippet } from "svelte";
@@ -9,23 +8,6 @@
 	import { lineRainbowStore } from "$lib/store";
 
 	let { children }: { children: Snippet } = $props();
-
-	NProgress.configure({
-		showSpinner: false,
-	});
-
-	$effect(() => {
-		if (!navigating) {
-			NProgress.done();
-			return;
-		}
-
-		const timer = window.setTimeout(() => {
-			if (navigating) NProgress.start();
-		}, 100);
-
-		return () => window.clearTimeout(timer);
-	});
 
 	onMount(() => {
 		const url = new SvelteURL(window.location.href);

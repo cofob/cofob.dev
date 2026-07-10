@@ -1,5 +1,4 @@
 @import "tailwindcss/index.css";
-@import "nprogress/nprogress.css";
 
 @theme {
 	--color-sky-50: #f0f9ff;
