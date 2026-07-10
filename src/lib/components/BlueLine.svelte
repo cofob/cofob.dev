@@ -14,12 +14,24 @@
 	@reference "../app.css";
 
 	.top {
-		@apply before:block before:absolute before:h-2/4 before:w-3/4 before:bottom-0.5
-					 before:-right-1 before:-skew-y-6 before:rounded-full relative inline-block;
+		position: relative;
+		display: inline-block;
 	}
 
-	.blue {
-		@apply before:bg-sky-300;
+	.top::before {
+		content: "";
+		position: absolute;
+		right: -0.25rem;
+		bottom: 0.125rem;
+		display: block;
+		width: 75%;
+		height: 50%;
+		transform: translate(0, 0) rotate(0) skew(0) skewY(-6deg) scaleX(1) scaleY(1);
+		border-radius: 9999px;
+	}
+
+	.blue::before {
+		background-color: #7dd3fc;
 	}
 
 	.rainbow::before {

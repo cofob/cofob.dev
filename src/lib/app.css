@@ -1,7 +1,29 @@
 @import "tailwindcss/index.css";
 @import "nprogress/nprogress.css";
 
+@theme {
+	--color-sky-50: #f0f9ff;
+	--color-sky-200: #bae6fd;
+	--color-sky-300: #7dd3fc;
+	--color-sky-500: #0ea5e9;
+	--color-sky-600: #0284c7;
+	--color-blue-500: #3b82f6;
+	--color-zinc-100: #f4f4f5;
+	--color-zinc-500: #71717a;
+	--color-zinc-600: #52525b;
+	--color-zinc-700: #3f3f46;
+	--color-zinc-800: #27272a;
+}
+
 @layer base {
+	*,
+	::before,
+	::after,
+	::backdrop,
+	::file-selector-button {
+		border-color: #e5e7eb;
+	}
+
 	@font-face {
 		font-family: "Manrope";
 		src:

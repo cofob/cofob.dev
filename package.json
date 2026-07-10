@@ -54,7 +54,9 @@
 		"nprogress": "0.2.0"
 	},
 	"overrides": {
-		"cookie": "0.7.2"
+		"@sveltejs/kit": {
+			"cookie": "0.7.2"
+		}
 	},
 	"allowScripts": {
 		"esbuild@0.28.1": true,
