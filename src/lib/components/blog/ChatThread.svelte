@@ -1,11 +1,34 @@
 <script lang="ts">
-	import type { Snippet } from "svelte";
+	interface ChatMessage {
+		text?: string;
+		link?: string;
+		linkLabel?: string;
+	}
 
-	let { children, label = "Фрагмент переписки" }: { children: Snippet; label?: string } = $props();
+	let {
+		author,
+		avatar,
+		messages,
+		label = "Фрагмент переписки",
+	}: { author: string; avatar: string; messages: ChatMessage[]; label?: string } = $props();
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -->
 <section class="chat" aria-label={label}>
-	{@render children()}
+	{#each messages as message, index (index)}
+		<div class="chat-row">
+			<img class="chat-avatar" src={avatar} alt={index === messages.length - 1 ? `Аватар ${author}` : ""} />
+			<div class="chat-bubble">
+				{#if index === 0}<p class="chat-author">{author}</p>{/if}
+				<p class="chat-text">
+					{#if message.link}
+						<a href={message.link} target="_blank" rel="noopener noreferrer">{message.linkLabel ?? message.link}</a
+						>{#if message.text}<br />{/if}
+					{/if}{message.text ?? ""}
+				</p>
+			</div>
+		</div>
+	{/each}
 </section>
 
 <style lang="postcss">
@@ -33,12 +56,26 @@
 		@apply m-0! h-10! w-10! rounded-full! object-cover;
 	}
 
-	.chat :global(.chat-row:not(:first-child) .chat-avatar) {
+	.chat :global(.chat-row:not(:last-child) .chat-avatar) {
 		visibility: hidden;
 	}
 
 	.chat :global(.chat-bubble) {
-		@apply relative max-w-[38rem] rounded-2xl rounded-bl-sm bg-white px-3 py-2 shadow-sm;
+		@apply relative max-w-[38rem] bg-white px-3 py-2 shadow-sm;
+		border-radius: 0.3rem;
+	}
+
+	.chat :global(.chat-row:first-child:not(:last-child) .chat-bubble) {
+		border-top-left-radius: 1rem;
+		border-top-right-radius: 1rem;
+	}
+
+	.chat :global(.chat-row:last-child:not(:first-child) .chat-bubble) {
+		border-bottom-right-radius: 1rem;
+	}
+
+	.chat :global(.chat-row:only-child .chat-bubble) {
+		border-radius: 1rem;
 	}
 
 	.chat :global(.chat-author) {

@@ -104,14 +104,14 @@ export function rewritePostMarkdown(root, id, source, manifest) {
 
 	return rewriteOutsideCodeFences(source, (segment) => {
 		let rewritten = segment.replace(
-			/<(img|source|video|audio)\b([^>]*?)\b(src|poster)=(['"])([^'"]+)\4([^>]*)>/gi,
+			/<(img|source|video|audio|Sticker|ChatThread)\b([^>]*?)\b(src|poster|avatar)=(['"])([^'"]+)\4([^>]*)>/gi,
 			(original, tag, before, attribute, quote, reference, after) => {
 				if (isRemoteAsset(reference)) return original;
 				const resolved = resolvePostAsset(root, slug, reference, { required: false });
 				if (!resolved) return original;
 				const entry = postAssets[resolved.sourceKey];
 				const url =
-					tag.toLowerCase() === "img" || attribute.toLowerCase() === "poster"
+					["img", "sticker"].includes(tag.toLowerCase()) || ["poster", "avatar"].includes(attribute.toLowerCase())
 						? entry?.image?.src
 						: entry?.original?.url;
 				if (!url) return original;
@@ -140,18 +140,28 @@ export function rewritePostMarkdown(root, id, source, manifest) {
 
 function rewriteOutsideCodeFences(source, rewrite) {
 	let fence;
-	return source
-		.split(/(?<=\n)/)
-		.map((line) => {
-			const marker = line.match(/^\s*(`{3,}|~{3,})/u)?.[1];
-			if (marker) {
-				if (!fence) fence = marker[0];
-				else if (marker[0] === fence) fence = undefined;
-				return line;
-			}
-			return fence ? line : rewrite(line);
-		})
-		.join("");
+	let prose = "";
+	let result = "";
+	const flush = () => {
+		result += rewrite(prose);
+		prose = "";
+	};
+
+	for (const line of source.split(/(?<=\n)/)) {
+		const marker = line.match(/^\s*(`{3,}|~{3,})/u)?.[1];
+		if (!fence && marker) {
+			flush();
+			fence = marker[0];
+			result += line;
+		} else if (fence) {
+			result += line;
+			if (marker?.[0] === fence) fence = undefined;
+		} else {
+			prose += line;
+		}
+	}
+	flush();
+	return result;
 }
 
 export function blogContentPlugin({ buildTime }) {

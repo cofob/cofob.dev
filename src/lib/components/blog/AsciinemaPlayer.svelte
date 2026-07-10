@@ -78,7 +78,7 @@
 	{#if !ready}
 		<p class="fallback" role={failed ? "status" : undefined}>
 			{failed ? "Плеер не загрузился. " : "Загрузка плеера… "}
-			<a href={src}>Открыть запись напрямую</a>
+			<a href={src} target="_blank" rel="noopener noreferrer">Открыть запись напрямую</a>
 		</p>
 	{/if}
 </figure>

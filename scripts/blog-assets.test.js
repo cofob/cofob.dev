@@ -20,6 +20,7 @@ async function fixtureRoot() {
 	await Promise.all([
 		mkdir(path.join(root, "src/lib/blog/posts"), { recursive: true }),
 		mkdir(path.join(root, "static/blog/test-post"), { recursive: true }),
+		mkdir(path.join(root, "static/stickers/test-pack"), { recursive: true }),
 		mkdir(path.join(root, "static/static"), { recursive: true }),
 	]);
 	await writeFile(path.join(root, "static/robots.txt"), "User-agent: *\n");
@@ -40,6 +41,13 @@ coverAlt: A red test image
 
 [Download the guide](guide.pdf)
 
+<Sticker
+  src="/stickers/test-pack/sticker.png"
+  alt="A shared sticker"
+  sourceName="Test pack"
+  sourceUrl="https://example.com/stickers"
+/>
+
 [Read another post](/blog/another-post/)
 `,
 	);
@@ -47,6 +55,9 @@ coverAlt: A red test image
 		.png()
 		.toFile(path.join(root, "static/blog/test-post/hero.png"));
 	await writeFile(path.join(root, "static/blog/test-post/guide.pdf"), "%PDF-1.4 fixture");
+	await sharp({ create: { width: 128, height: 128, channels: 4, background: "#facc15" } })
+		.png()
+		.toFile(path.join(root, "static/stickers/test-pack/sticker.png"));
 	return root;
 }
 
@@ -74,6 +85,10 @@ describe("blog asset preparation", () => {
 			code: "ENOENT",
 		});
 
+		const sticker = manifest.posts["test-post"].assets["stickers/test-pack/sticker.png"];
+		expect(sticker.image.src).toMatch(/^\/media\/stickers\/test-pack\/sticker\.[a-f0-9]{12}\.128w\.webp$/);
+		await expect(readFile(path.join(root, ".blog-build/static", sticker.image.src))).resolves.toBeTruthy();
+
 		const social = manifest.posts["test-post"].socialImage;
 		expect(social).toMatchObject({ width: 1200, height: 630, type: "image/png" });
 		const socialMetadata = await sharp(path.join(root, ".blog-build/static", social.src)).metadata();
@@ -84,6 +99,7 @@ describe("blog asset preparation", () => {
 		expect(rewritten).toContain('srcset="');
 		expect(rewritten).toContain("1440w");
 		expect(rewritten).toContain(guide.original.url);
+		expect(rewritten).toContain(sticker.image.src);
 		expect(rewritten).toContain("[Read another post](/blog/another-post/)");
 	});
 

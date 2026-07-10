@@ -21,6 +21,8 @@ Set the optional `updated` field to a timezone-qualified ISO timestamp when a pu
 
 Put local media in `static/blog/<post-slug>/` and reference it from Markdown with a relative URL. Displayed JPEG, PNG, WebP, AVIF, and GIF images are automatically converted to responsive WebP variants up to 1440 pixels wide; SVG remains SVG. The generated markup includes intrinsic dimensions and mobile-friendly `srcset` data. Original raster files are published only when explicitly linked as downloads. Video, audio, PDFs, and other linked post-local attachments are copied or uploaded without conversion.
 
+Reusable stickers live in `static/stickers/<sticker-pack>/` and are referenced with an absolute `/stickers/...` path. They use the same image optimization pipeline, but their generated asset keys are shared across posts instead of being nested below a post slug.
+
 Every Markdown image needs meaningful alternative text, for example `![Terminal showing a successful build](build.png)`. The build rejects missing files and empty Markdown alternatives. A `cover` requires `coverAlt`. Use optional `socialImage` and `socialImageAlt` fields as a pair to override the automatically generated 1200×630 social card. Local social overrides are normalized to PNG; absolute HTTPS overrides are expected to be 1200×630 and are used unchanged.
 
 Set the optional `comments` field to a public Mastodon status URL or Pleroma/Akkoma `/notice/` URL to use its replies as blog comments. Node and Cloudflare builds fetch comments server-side; static builds ask the reader before contacting the remote instance. All modes degrade to a link to the original thread if its API is unavailable.

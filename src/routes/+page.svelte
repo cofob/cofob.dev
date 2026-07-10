@@ -2,7 +2,7 @@
 	import { resolve } from "$app/paths";
 	import { siteSocialImage } from "$lib/blog/catalog";
 	import { Meta, BlueLine, Section, Heading } from "$lib/components";
-	import PostCard from "$lib/components/blog/PostCard.svelte";
+	import LatestPostLink from "$lib/components/blog/LatestPostLink.svelte";
 	import { homeStructuredData } from "$lib/seo/structured-data";
 	import type { PageData } from "./$types";
 
@@ -28,11 +28,10 @@
 
 {#if data.latestPost}
 	<Section>
-		<div class="latest-heading">
-			<Heading level={2}>Latest post</Heading>
-			<a href={resolve("/blog")}>All posts <span aria-hidden="true">→</span></a>
+		<div class="latest">
+			<LatestPostLink post={data.latestPost} />
+			<a class="all-posts" href={resolve("/blog")}>All posts</a>
 		</div>
-		<PostCard post={data.latestPost} latest />
 	</Section>
 {/if}
 
@@ -43,11 +42,11 @@
 		@apply mt-3 inline-flex min-h-11 items-center rounded-lg border-2 border-zinc-800 px-3 py-2 font-semibold hover:bg-zinc-100;
 	}
 
-	.latest-heading {
-		@apply mb-5 flex flex-wrap items-baseline justify-between gap-3;
+	.latest {
+		@apply mx-auto max-w-2xl;
 	}
 
-	.latest-heading a {
-		@apply font-semibold text-sky-700 hover:underline;
+	.all-posts {
+		@apply mt-2 block text-right text-xs text-zinc-600 hover:underline;
 	}
 </style>

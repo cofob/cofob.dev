@@ -58,7 +58,7 @@
 	}
 
 	.post-list {
-		@apply mx-auto grid max-w-3xl gap-5;
+		@apply mx-auto grid max-w-4xl gap-5;
 	}
 
 	.empty-state {

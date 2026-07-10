@@ -79,9 +79,14 @@ function collectPostReferences(root, post) {
 	for (const match of prose.matchAll(MARKDOWN_LINK_PATTERN)) {
 		addReference(references, root, post, match[2], "original", false);
 	}
-	for (const match of prose.matchAll(/<(img|source|video|audio)\b[^>]*?\b(src|poster)=(['"])([^'"]+)\3[^>]*>/gi)) {
+	for (const match of prose.matchAll(
+		/<(img|source|video|audio|Sticker|ChatThread)\b[^>]*?\b(src|poster|avatar)=(['"])([^'"]+)\3[^>]*>/gi,
+	)) {
 		const [, tag, attribute, , reference] = match;
-		const role = tag.toLowerCase() === "img" || attribute.toLowerCase() === "poster" ? "display" : "original";
+		const role =
+			["img", "sticker"].includes(tag.toLowerCase()) || ["poster", "avatar"].includes(attribute.toLowerCase())
+				? "display"
+				: "original";
 		addReference(references, root, post, reference, role, true);
 	}
 	for (const match of prose.matchAll(/<a\b[^>]*?\bhref=(['"])([^'"]+)\1[^>]*>/gi)) {
@@ -159,10 +164,12 @@ function ensureTrailingSlash(value) {
 }
 
 function outputKey(prefix, slug, sourceKey, marker, extension) {
-	const relative = sourceKey.replace(new RegExp(`^blog/${slug}/`), "");
+	const postPrefix = `blog/${slug}/`;
+	const isPostAsset = sourceKey.startsWith(postPrefix);
+	const relative = isPostAsset ? sourceKey.slice(postPrefix.length) : sourceKey;
 	const parsed = path.posix.parse(relative);
 	const filename = `${parsed.name}.${marker}${extension}`;
-	return path.posix.join(prefix, slug, parsed.dir, filename);
+	return path.posix.join(prefix, ...(isPostAsset ? [slug] : []), parsed.dir, filename);
 }
 
 async function createResponsiveImage(writer, slug, reference) {
@@ -472,6 +479,7 @@ export async function prepareBlogAssets({
 	await mkdir(stageRoot, { recursive: true });
 	await cp(path.resolve(root, "static"), stageRoot, { recursive: true });
 	await rm(path.join(stageRoot, "blog"), { recursive: true, force: true });
+	await rm(path.join(stageRoot, "stickers"), { recursive: true, force: true });
 
 	const writer = createArtifactWriter({ mode, stageRoot, prefix, external });
 	const posts = readSourcePosts(root, buildTime, includePreviews);

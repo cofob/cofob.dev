@@ -64,7 +64,7 @@
 	@reference "../../../lib/app.css";
 
 	.article {
-		@apply mx-auto my-10 max-w-3xl px-4 sm:my-16;
+		@apply mx-auto my-10 max-w-5xl px-4 sm:my-16;
 	}
 
 	.preview-banner {

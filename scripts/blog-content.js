@@ -69,6 +69,7 @@ export function resolvePostAsset(root, slug, assetUrl, { required = true } = {})
 
 	const staticRoot = path.resolve(root, "static");
 	const postAssetRoot = path.resolve(staticRoot, "blog", slug);
+	const sharedStickerRoot = path.resolve(staticRoot, "stickers");
 	const { pathname, suffix } = splitAssetReference(assetUrl);
 	let decoded;
 	try {
@@ -80,9 +81,11 @@ export function resolvePostAsset(root, slug, assetUrl, { required = true } = {})
 		? path.resolve(staticRoot, `.${decoded}`)
 		: path.resolve(postAssetRoot, decoded);
 
-	if (assetPath !== postAssetRoot && !assetPath.startsWith(`${postAssetRoot}${path.sep}`)) {
+	const isPostAsset = assetPath === postAssetRoot || assetPath.startsWith(`${postAssetRoot}${path.sep}`);
+	const isSharedSticker = assetPath === sharedStickerRoot || assetPath.startsWith(`${sharedStickerRoot}${path.sep}`);
+	if (!isPostAsset && !isSharedSticker) {
 		if (!required) return;
-		throw new Error(`Blog asset ${assetUrl} must stay inside static/blog/${slug}/`);
+		throw new Error(`Blog asset ${assetUrl} must stay inside static/blog/${slug}/ or static/stickers/`);
 	}
 	if (!statSafe(assetPath)) {
 		if (!required) return;
