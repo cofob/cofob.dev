@@ -52,6 +52,8 @@ draft: false
 
 Хотелось утилиту, которая сама менеджит worktree и позволяет агентам внутри работать без human approvals вообще, поэтому я сделал <a href="https://github.com/cofob/codex-start" target="_blank" rel="noopener noreferrer">codex-start</a>.
 
+![Схема двух изолированных worktree Codex в Docker с SSH, .git и ~/.config](visualization.webp)
+
 Сейчас он запускает полноценный Codex в воспроизводимых Docker или Podman-окружениях, сам создаёт отдельные git worktree и позволяет запускать сколько угодно агентов параллельно. Есть готовые окружения для Rust, web и uv, переиспользование Codex homes и кэшей, управление сессиями, allowlist для сети и прокидывание секретов, SSH/GPG-agent, MCP и локальных сервисов.
 
 <AsciinemaPlayer
