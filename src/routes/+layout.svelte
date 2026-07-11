@@ -6,6 +6,7 @@
 	import { onMount, type Snippet } from "svelte";
 	import { SvelteURL } from "svelte/reactivity";
 	import { lineRainbowStore } from "$lib/store";
+	import { copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 	let { children }: { children: Snippet } = $props();
 
@@ -35,6 +36,9 @@
 	<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 	<link rel="alternate" type="application/rss+xml" title="cofob.dev blog RSS" href="/rss.xml" />
 	<link rel="alternate" type="application/atom+xml" title="cofob.dev blog Atom" href="/atom.xml" />
+	<link rel="license" href={siteLicenseUrl} />
+	<link rel="schema.dcterms" href="https://purl.org/dc/terms/" />
+	<meta name="dcterms.rights" content={copyrightNotice} />
 </svelte:head>
 
 <div>

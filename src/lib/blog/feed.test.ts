@@ -3,6 +3,7 @@ import { parseDocument, parseFeed } from "htmlparser2";
 import { getPublicPosts } from "./catalog";
 import { absolutizeHtmlUrls, renderAtomFeed, renderRssFeed } from "./feed";
 import { absoluteSiteUrl } from "./url";
+import { copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 describe("feed HTML URLs", () => {
 	it("makes responsive images and attachments absolute", () => {
@@ -72,5 +73,15 @@ describe("portable feed content", () => {
 		expect(atom).toContain(`<link rel="enclosure" href="${imageUrl}" type="${image.type}" />`);
 		const atomContent = atom.slice(atom.indexOf('<content type="html"'));
 		expect(atomContent.indexOf(`&lt;img src=&quot;${imageUrl}&quot;`)).toBe(atomContent.indexOf("&lt;img"));
+	});
+
+	it("publishes the content license in RSS and Atom", () => {
+		const rss = renderRssFeed();
+		expect(rss).toContain(`<copyright>${copyrightNotice}</copyright>`);
+		expect(rss).toContain(`<dc:rights>${copyrightNotice} ${siteLicenseUrl}</dc:rights>`);
+
+		const atom = renderAtomFeed();
+		expect(atom).toContain(`<rights>${copyrightNotice}</rights>`);
+		expect(atom).toContain(`<link href="${siteLicenseUrl}" rel="license" />`);
 	});
 });

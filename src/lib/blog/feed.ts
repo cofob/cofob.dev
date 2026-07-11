@@ -5,6 +5,7 @@ import { createPortableBlogContext } from "$lib/blog/render-mode";
 import { absoluteSiteUrl, getSiteOrigin } from "$lib/blog/url";
 import type { PostSummary } from "$lib/blog/types";
 import { escapeXml } from "$lib/blog/xml";
+import { copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 export function renderRssFeed(): string {
 	const posts = getPublicPosts();
@@ -16,6 +17,8 @@ export function renderRssFeed(): string {
 		<title>cofob.dev blog</title>
 		<link>${escapeXml(absoluteSiteUrl("/blog/"))}</link>
 		<description>Writing and notes from cofob.</description>
+		<copyright>${escapeXml(copyrightNotice)}</copyright>
+		<dc:rights>${escapeXml(copyrightNotice)} ${escapeXml(siteLicenseUrl)}</dc:rights>
 		<language>en</language>
 		<lastBuildDate>${new Date(latestUpdate(posts)).toUTCString()}</lastBuildDate>
 		<atom:link href="${escapeXml(absoluteSiteUrl("/rss.xml"))}" rel="self" type="application/rss+xml" />
@@ -35,6 +38,8 @@ export function renderAtomFeed(): string {
 	<id>${escapeXml(absoluteSiteUrl("/blog/"))}</id>
 	<link href="${escapeXml(absoluteSiteUrl("/blog/"))}" />
 	<link href="${escapeXml(absoluteSiteUrl("/atom.xml"))}" rel="self" type="application/atom+xml" />
+	<link href="${escapeXml(siteLicenseUrl)}" rel="license" />
+	<rights>${escapeXml(copyrightNotice)}</rights>
 	<updated>${new Date(latestUpdate(posts)).toISOString()}</updated>
 	<author><name>cofob</name><uri>${escapeXml(getSiteOrigin().href)}</uri></author>
 	${entries}
@@ -51,6 +56,7 @@ function renderRssItem(post: PostSummary): string {
 		<pubDate>${new Date(post.published).toUTCString()}</pubDate>
 		<dc:date>${new Date(post.updated ?? post.published).toISOString()}</dc:date>
 		<dc:language>${escapeXml(post.lang)}</dc:language>
+		<dc:rights>${escapeXml(copyrightNotice)} ${escapeXml(siteLicenseUrl)}</dc:rights>
 		${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n\t\t")}
 		${renderRssMedia(post)}
 		<content:encoded><![CDATA[${renderPostHtml(post).replaceAll("]]>", "]]]]><![CDATA[>")}]]></content:encoded>
@@ -66,6 +72,8 @@ function renderAtomEntry(post: PostSummary): string {
 		<published>${new Date(post.published).toISOString()}</published>
 		<updated>${new Date(post.updated ?? post.published).toISOString()}</updated>
 		<summary>${escapeXml(post.description)}</summary>
+		<rights>${escapeXml(copyrightNotice)}</rights>
+		<link href="${escapeXml(siteLicenseUrl)}" rel="license" />
 		${post.tags.map((tag) => `<category term="${escapeXml(tag)}" />`).join("\n\t\t")}
 		${renderAtomMedia(post)}
 		<content type="html" xml:lang="${escapeXml(post.lang)}">${escapeXml(renderPostHtml(post))}</content>

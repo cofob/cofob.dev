@@ -13,6 +13,10 @@ These instructions apply to the entire repository. Keep them current when blog a
 
 Do not edit generated output in `.blog-build/`, `.svelte-kit/`, `build/`, or `node_modules/`. Change the source or preparation script and regenerate it. Preserve unrelated working-tree changes.
 
+## Licensing
+
+Original source code and website content owned by cofob are licensed under the custom repository-root `LICENSE`. Contributions are submitted under that same license. Do not describe the project as MIT-licensed, Creative Commons, free software, or open source. Third-party materials, dependencies, stickers, and vendored software retain their own terms and attribution; do not remove or replace those notices.
+
 ## Development and verification
 
 Install dependencies and start the development server with:

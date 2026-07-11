@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl xmlns="https://rslstandard.org/rsl">
+	<content url="/">
+		<license>
+			<permits type="usage">search ai-input</permits>
+			<prohibits type="usage">ai-train</prohibits>
+		</license>
+		<terms>https://cofob.dev/license/</terms>
+	</content>
+</rsl>

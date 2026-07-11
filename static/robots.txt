@@ -1,4 +1,29 @@
+# Original cofob.dev material may not be used for AI or ML training.
+# Human-readable terms: https://cofob.dev/license/
+License: https://cofob.dev/rsl.xml
+
+User-agent: GPTBot
+User-agent: ClaudeBot
+User-agent: anthropic-ai
+User-agent: Google-Extended
+User-agent: Applebot-Extended
+User-agent: Amazonbot
+User-agent: CCBot
+User-agent: Meta-ExternalAgent
+User-agent: AI2Bot
+User-agent: Ai2Bot-Dolma
+User-agent: Bytespider
+User-agent: cohere-ai
+User-agent: cohere-training-data-crawler
+User-agent: ImagesiftBot
+User-agent: img2dataset
+User-agent: omgili
+User-agent: omgilibot
+Content-Signal: ai-train=no, search=no, ai-input=no
+Disallow: /
+
 User-agent: *
-Disallow:
+Content-Signal: ai-train=no, search=yes, ai-input=yes
+Allow: /
 
 Sitemap: https://cofob.dev/sitemap.xml

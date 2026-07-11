@@ -1,9 +1,19 @@
-MIT License
+cofob.dev License
 
-Copyright (c) <year> <copyright holders>
+Copyright © 2021-present cofob (Egor Ternovoi) · co@fob.wtf.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+Canonical license text: https://cofob.dev/license/
 
-The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.
+This license applies to any source code, software, documentation, website content, text, image, audio, video, or other material for which the copyright holder states that this license applies (the "covered material").
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+You may use, copy, share, modify, and distribute the covered material for non-commercial purposes if you credit cofob (Egor Ternovoi) and link to the original source.
+
+You may not use the covered material to train, fine-tune, evaluate, or otherwise improve an artificial-intelligence or machine-learning model, or include it in a dataset made for those purposes.
+
+Despite the non-commercial limit above, search indexing and user-requested AI processing by commercial services are allowed, provided that the covered material and the related request, response, and derived data are not used to train, fine-tune, evaluate, or otherwise improve a model.
+
+This license does not cover third-party materials, dependencies, or vendored software. Uses allowed by applicable law remain allowed. All other rights are reserved.
+
+The covered material is provided as-is, without warranty.
+
+For commercial use or AI-training permission, contact co@fob.wtf.

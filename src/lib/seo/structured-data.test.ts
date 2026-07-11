@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { PostMetadata, SocialImageAsset } from "$lib/blog/types";
 import { homeStructuredData, postStructuredData, serializeJsonLd } from "./structured-data";
+import { copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 const image: SocialImageAsset = {
 	src: "https://site-assets.cofob.dev/blog/test/social.png",
@@ -33,6 +34,7 @@ describe("structured data", () => {
 			"@id": "https://cofob.dev/#person",
 			name: "Egor Ternovoi",
 			alternateName: "cofob",
+			email: "co@fob.wtf",
 			sameAs: ["https://github.com/cofob/"],
 		});
 		expect(article).toMatchObject({
@@ -40,12 +42,15 @@ describe("structured data", () => {
 			datePublished: post.published,
 			dateModified: post.updated,
 			image: image.src,
+			copyrightNotice,
+			license: siteLicenseUrl,
 		});
 	});
 
 	it("emits Person and WebSite on the home page", () => {
 		const graph = homeStructuredData(image)["@graph"] as Array<Record<string, unknown>>;
 		expect(graph.map((entry) => entry["@type"])).toEqual(["Person", "WebSite"]);
+		expect(graph[1]).toMatchObject({ copyrightNotice, license: siteLicenseUrl });
 	});
 
 	it("escapes characters that could terminate a JSON-LD script", () => {

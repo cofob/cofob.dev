@@ -2,7 +2,7 @@
 	"name": "cofob-dev",
 	"type": "module",
 	"version": "0.0.1",
-	"license": "MIT",
+	"license": "SEE LICENSE IN LICENSE",
 	"description": "svelte-powered website",
 	"homepage": "https://cofob.dev/",
 	"engines": {

@@ -14,6 +14,10 @@ const requiredFiles = [
 	"build/atom.xml",
 	"build/_headers",
 	"build/blog/search.json",
+	"build/license/index.html",
+	"build/robots.txt",
+	"build/rsl.xml",
+	"build/.well-known/tdmrep.json",
 ];
 
 const contents = await Promise.all(requiredFiles.map((path) => readFile(path, "utf8")));
@@ -34,7 +38,14 @@ assert.match(contents[10], /Content-Type: text\/plain; charset=utf-8/);
 assert.match(contents[10], /Content-Type: application\/xml; charset=utf-8/);
 assert.match(contents[10], /Content-Type: application\/rss\+xml; charset=utf-8/);
 assert.match(contents[10], /Content-Type: application\/atom\+xml; charset=utf-8/);
-assert.ok(JSON.parse(contents[11]).some((entry) => entry.slug === "codex-start" && entry.tags.includes("codex")));
+assert.ok(JSON.parse(contents[11]).some((entry) => entry.slug === "codex-start" && entry.tags.includes("project")));
+assert.match(contents[12], /Original cofob.dev source code and website content/);
+assert.match(contents[12], /source code, software, documentation, website content/);
+assert.match(contents[12], /rel="license" href="https:\/\/cofob\.dev\/license\/"/);
+assert.match(contents[13], /User-agent: GPTBot[\s\S]*?Disallow: \//);
+assert.match(contents[13], /Content-Signal: ai-train=no, search=yes, ai-input=yes/);
+assert.match(contents[14], /<prohibits type="usage">ai-train<\/prohibits>/);
+assert.deepEqual(JSON.parse(contents[15]), [{ location: "/", "tdm-reservation": 1 }]);
 
 await assert.rejects(readFile("build/blog/example-post/index.html", "utf8"), { code: "ENOENT" });
 assert.match(await readFile("build/blog/codex-start/index.html", "utf8"), /Codex в отдельном контейнере/);

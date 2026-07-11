@@ -1,5 +1,6 @@
 import { absoluteSiteUrl } from "$lib/blog/url";
 import type { PostMetadata, PostSummary, SocialImageAsset } from "$lib/blog/types";
+import { copyrightEmail, copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 export type JsonLdDocument = Record<string, unknown>;
 
@@ -13,6 +14,7 @@ function personEntity() {
 		"@id": PERSON_ID,
 		name: "Egor Ternovoi",
 		alternateName: "cofob",
+		email: copyrightEmail,
 		url: absoluteSiteUrl("/"),
 		sameAs: ["https://github.com/cofob/"],
 	};
@@ -27,6 +29,9 @@ function websiteEntity(image?: SocialImageAsset) {
 		description: "Personal website and writing by Egor Ternovoi.",
 		inLanguage: "en",
 		publisher: { "@id": PERSON_ID },
+		copyrightHolder: { "@id": PERSON_ID },
+		copyrightNotice,
+		license: siteLicenseUrl,
 		...(image ? { image: absoluteAssetUrl(image.src) } : {}),
 	};
 }
@@ -40,6 +45,9 @@ function blogEntity(posts: PostSummary[]) {
 		description: "Writing and notes from cofob.",
 		inLanguage: "en",
 		publisher: { "@id": PERSON_ID },
+		copyrightHolder: { "@id": PERSON_ID },
+		copyrightNotice,
+		license: siteLicenseUrl,
 		isPartOf: { "@id": WEBSITE_ID },
 		blogPost: posts.map((post) => ({ "@id": articleId(post.slug) })),
 	};
@@ -92,6 +100,9 @@ export function postStructuredData(post: PostMetadata, image?: SocialImageAsset)
 				isPartOf: { "@id": BLOG_ID },
 				author: { "@id": PERSON_ID },
 				publisher: { "@id": PERSON_ID },
+				copyrightHolder: { "@id": PERSON_ID },
+				copyrightNotice,
+				license: siteLicenseUrl,
 				...(socialImage ? { image: absoluteAssetUrl(socialImage.src) } : {}),
 			},
 			{

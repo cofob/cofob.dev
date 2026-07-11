@@ -59,11 +59,29 @@ try {
 	const searchIndex = await fetch(`${origin}/blog/search.json`);
 	assert.equal(searchIndex.status, 200);
 	assert.match(searchIndex.headers.get("content-type") ?? "", /^application\/json/);
-	assert.ok((await searchIndex.json()).some((entry) => entry.slug === "codex-start" && entry.tags.includes("codex")));
+	assert.ok((await searchIndex.json()).some((entry) => entry.slug === "codex-start" && entry.tags.includes("project")));
 
 	const taggedBlog = await fetch(`${origin}/blog/?tag=CODEX`);
 	assert.equal(taggedBlog.status, 200);
 	assert.match(await taggedBlog.text(), /codex-start/);
+
+	const license = await fetch(`${origin}/license/`);
+	assert.equal(license.status, 200);
+	const licenseText = await license.text();
+	assert.match(licenseText, /Original cofob.dev source code and website content/);
+	assert.match(licenseText, /source code, software, documentation, website content/);
+
+	const robots = await fetch(`${origin}/robots.txt`);
+	assert.equal(robots.status, 200);
+	assert.match(await robots.text(), /Content-Signal: ai-train=no, search=yes, ai-input=yes/);
+
+	const rsl = await fetch(`${origin}/rsl.xml`);
+	assert.equal(rsl.status, 200);
+	assert.match(rsl.headers.get("content-type") ?? "", /^application\/xml/);
+
+	const tdm = await fetch(`${origin}/.well-known/tdmrep.json`);
+	assert.equal(tdm.status, 200);
+	assert.deepEqual(await tdm.json(), [{ location: "/", "tdm-reservation": 1 }]);
 
 	const sitemap = await fetch(`${origin}/sitemap.xml`);
 	assert.equal(sitemap.status, 200);

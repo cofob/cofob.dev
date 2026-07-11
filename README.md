@@ -2,6 +2,10 @@
 
 My personal website, built with SvelteKit.
 
+## License
+
+Original cofob.dev source code and website content owned by cofob are covered by the reusable custom [cofob.dev License](LICENSE), whose canonical public copy is available at [cofob.dev/license](https://cofob.dev/license/). It permits attributed non-commercial use, modification, and sharing, and expressly prohibits AI or machine-learning training, evaluation, and model improvement. Third-party materials, dependencies, and vendored software retain their own terms.
+
 ## Development
 
 Node.js 24.11 or newer is required.
