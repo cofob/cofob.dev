@@ -61,10 +61,15 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain(">cofob</p>");
 		expect(output).toContain('alt="Аватар cofob"');
 		expect(output).toContain("вайб на баше");
-		expect(output).toContain("https://site-assets.cofob.dev/codex-start/pi-start.cast");
-		expect(output).toContain("https://site-assets.cofob.dev/codex-start/codex-start-demo.cast");
+		expect(output).toContain(
+			"/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fpi-start.cast",
+		);
+		expect(output).toContain(
+			"/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fcodex-start-demo.cast",
+		);
 		expect(output).toContain('aria-label="Демонстрация codex-start в терминале"');
-		expect(output).toContain("Открыть запись напрямую");
+		expect(output).toContain("Открыть запись в плеере");
+		expect(output).not.toContain("Загрузка плеера");
 		expect(output).toContain('aria-label="Предупреждение"');
 		expect(output).toContain("Это вайбкод");
 		expect(output).toContain("https://t.me/addstickers/the_gates_of_orgrimmar");

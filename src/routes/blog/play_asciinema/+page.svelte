@@ -15,7 +15,7 @@
 	<p><a href={resolve("/blog")}>← All posts</a></p>
 	<h1>Terminal recording</h1>
 	{#if data.source}
-		<AsciinemaPlayer src={data.source} label="Terminal recording" />
+		<AsciinemaPlayer src={data.source} label="Terminal recording" directFallback />
 	{:else}
 		<p role="alert">{data.error}</p>
 	{/if}

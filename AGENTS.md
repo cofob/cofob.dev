@@ -129,7 +129,7 @@ Import reusable article components from `src/lib/components/blog/` rather than r
 - `NoticeBlock`: informational callout. Its optional `portableTitle` changes only the RSS/Atom heading.
 - `Sticker`: optimized shared sticker with required alt text and source attribution.
 - `ChatThread`: accepts `author`, `avatar`, `messages`, and an accessible `label`. Each message may have `text`, `link`, and `linkLabel`. Feed output becomes an avatar-free blockquote.
-- `AsciinemaPlayer`: accepts `src`, optional `cols`/`rows`, and a descriptive `label`. `src` must be an absolute HTTPS URL on exactly `site-assets.cofob.dev`; feeds link to `/blog/play_asciinema/?url=...`.
+- `AsciinemaPlayer`: accepts `src`, optional `cols`/`rows`, and a descriptive `label`. `src` must be an absolute HTTPS URL on exactly `site-assets.cofob.dev`. Before the inline enhancement is ready, articles show a link to `/blog/play_asciinema/?url=...` rather than loading text; feeds use the same browser-player link. The dedicated player page alone sets `directFallback` to avoid linking recursively to itself.
 - `ResponsiveImage`: use for image metadata supplied by the catalog or asset manifest. Ordinary post images should use Markdown so the build can rewrite them automatically.
 - `Comments`, `CommentThread`, `CommentMedia`, and `RichText`: page-level Fediverse comment infrastructure, not components to embed in post Markdown.
 - `PostCard` and `LatestPostLink`: blog listing/home-page components, not article-body components.

@@ -48,7 +48,10 @@ try {
 
 	const post = await fetch(`${origin}/blog/codex-start/`);
 	assert.equal(post.status, 200);
-	assert.match(await post.text(), /Codex в отдельном контейнере/);
+	const postText = await post.text();
+	assert.match(postText, /Codex в отдельном контейнере/);
+	assert.match(postText, /Открыть запись в плеере/);
+	assert.doesNotMatch(postText, /Загрузка плеера/);
 
 	const searchIndex = await fetch(`${origin}/blog/search.json`);
 	assert.equal(searchIndex.status, 200);
