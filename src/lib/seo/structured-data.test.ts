@@ -17,6 +17,7 @@ const post: PostMetadata = {
 	published: "2026-01-01T10:00:00+00:00",
 	updated: "2026-01-02T11:00:00+00:00",
 	lang: "en",
+	tags: ["testing"],
 	draft: false,
 	socialImage: image,
 	isPublic: true,

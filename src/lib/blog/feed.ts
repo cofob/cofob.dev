@@ -50,6 +50,7 @@ function renderRssItem(post: PostSummary): string {
 		<pubDate>${new Date(post.published).toUTCString()}</pubDate>
 		<dc:date>${new Date(post.updated ?? post.published).toISOString()}</dc:date>
 		<dc:language>${escapeXml(post.lang)}</dc:language>
+		${post.tags.map((tag) => `<category>${escapeXml(tag)}</category>`).join("\n\t\t")}
 		<content:encoded><![CDATA[${renderPostHtml(post).replaceAll("]]>", "]]]]><![CDATA[>")}]]></content:encoded>
 	</item>`;
 }
@@ -63,6 +64,7 @@ function renderAtomEntry(post: PostSummary): string {
 		<published>${new Date(post.published).toISOString()}</published>
 		<updated>${new Date(post.updated ?? post.published).toISOString()}</updated>
 		<summary>${escapeXml(post.description)}</summary>
+		${post.tags.map((tag) => `<category term="${escapeXml(tag)}" />`).join("\n\t\t")}
 		<content type="html" xml:lang="${escapeXml(post.lang)}">${escapeXml(renderPostHtml(post))}</content>
 	</entry>`;
 }

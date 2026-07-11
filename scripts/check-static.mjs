@@ -14,6 +14,7 @@ const requiredFiles = [
 	"build/rss.xml",
 	"build/atom.xml",
 	"build/_headers",
+	"build/blog/search.json",
 ];
 
 const contents = await Promise.all(requiredFiles.map((path) => readFile(path, "utf8")));
@@ -33,6 +34,7 @@ assert.match(contents[11], /Content-Type: text\/plain; charset=utf-8/);
 assert.match(contents[11], /Content-Type: application\/xml; charset=utf-8/);
 assert.match(contents[11], /Content-Type: application\/rss\+xml; charset=utf-8/);
 assert.match(contents[11], /Content-Type: application\/atom\+xml; charset=utf-8/);
+assert.ok(JSON.parse(contents[12]).some((entry) => entry.slug === "codex-start" && entry.tags.includes("codex")));
 
 await assert.rejects(readFile("build/blog/example-post/index.html", "utf8"), { code: "ENOENT" });
 assert.match(await readFile("build/blog/codex-start/index.html", "utf8"), /Codex в отдельном контейнере/);

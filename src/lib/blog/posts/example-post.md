@@ -4,6 +4,7 @@ description: A private authoring template for a new cofob.dev blog post.
 published: 2026-07-10T12:00:00+02:00
 # updated: 2026-07-11T09:30:00+02:00
 lang: en
+tags: [example, svelte]
 draft: true
 # cover: cover.png
 # coverAlt: A concise description of the cover image

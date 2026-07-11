@@ -20,6 +20,7 @@ const postSchema = z
 		published: dateTimeSchema,
 		updated: dateTimeSchema.optional(),
 		lang: z.string().regex(LANGUAGE_PATTERN).default("en"),
+		tags: z.array(z.string().trim().min(1).max(40)).max(12).default([]),
 		draft: z.boolean(),
 		cover: z.string().trim().min(1).optional(),
 		coverAlt: z.string().trim().min(1).optional(),
@@ -29,6 +30,10 @@ const postSchema = z
 	})
 	.strict()
 	.superRefine((post, context) => {
+		const normalizedTags = post.tags.map((tag) => tag.toLocaleLowerCase());
+		if (new Set(normalizedTags).size !== normalizedTags.length) {
+			context.addIssue({ code: "custom", path: ["tags"], message: "tags must be unique (case-insensitive)" });
+		}
 		validatePair(post, context, "cover", "coverAlt");
 		validatePair(post, context, "socialImage", "socialImageAlt");
 		if (post.socialImage && isRemoteAsset(post.socialImage) && !post.socialImage.startsWith("https://")) {

@@ -84,6 +84,7 @@ export function postStructuredData(post: PostMetadata, image?: SocialImageAsset)
 				url: pageUrl,
 				headline: post.title,
 				description: post.description,
+				keywords: post.tags,
 				inLanguage: post.lang,
 				datePublished: post.published,
 				dateModified: post.updated ?? post.published,

@@ -24,6 +24,7 @@ export interface PostMetadata {
 	published: string;
 	updated?: string;
 	lang: string;
+	tags: string[];
 	draft: boolean;
 	cover?: ResponsiveImageAsset;
 	socialImage?: SocialImageAsset;
@@ -32,4 +33,8 @@ export interface PostMetadata {
 }
 
 export type PostSummary = Omit<PostMetadata, "comments">;
+export type SearchPost = Pick<
+	PostSummary,
+	"slug" | "title" | "description" | "published" | "updated" | "lang" | "tags"
+>;
 export type PostComponent = Component;

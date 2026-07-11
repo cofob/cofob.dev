@@ -13,6 +13,7 @@
 	let Post = $derived(getPostComponent(data.post.slug));
 </script>
 
+<!-- eslint-disable svelte/no-navigation-without-resolve -- tag links append a query to the resolved blog route -->
 <Meta
 	title={data.post.title}
 	description={data.post.description}
@@ -45,6 +46,13 @@
 				>
 			{/if}
 		</p>
+		{#if data.post.tags.length > 0}
+			<nav class="tags" aria-label="Post tags">
+				{#each data.post.tags as tag (tag)}
+					<a href={`${resolve("/blog")}?tag=${encodeURIComponent(tag)}`}>{tag}</a>
+				{/each}
+			</nav>
+		{/if}
 	</header>
 
 	{#if data.post.cover}
@@ -93,6 +101,14 @@
 
 	.dates {
 		@apply mt-4 text-sm text-zinc-600;
+	}
+
+	.tags {
+		@apply mt-3 flex flex-wrap gap-2;
+	}
+
+	.tags a {
+		@apply rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-zinc-600 hover:bg-zinc-200;
 	}
 
 	.cover :global(img) {

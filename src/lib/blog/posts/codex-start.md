@@ -3,6 +3,7 @@ title: "codex-start: Codex в отдельном контейнере"
 description: "Codex в изолированном Docker-окружении с отдельными git worktree."
 published: 2026-07-10T18:00:00+00:00
 lang: ru
+tags: [vibecoding, project]
 draft: false
 ---
 

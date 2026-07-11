@@ -17,6 +17,8 @@ Run the core validation suite with `npm test`. It performs Svelte type checking,
 
 Blog posts live in `src/lib/blog/posts/` as MDsveX-flavoured Markdown. Copy `example-post.md` to a lower-kebab-case filename and update its frontmatter. A post is public only when `draft` is `false` and its `published` timestamp has passed at build time; scheduled static posts therefore appear on the next deployment.
 
+Set `tags` to a unique list of up to 12 short labels. Tags appear on post cards and article pages, are included in feeds and structured data, and provide SSR filters on `/blog`. The blog paginates SSR results in groups of 10. Search metadata is prerendered to `/blog/search.json`, but the browser only downloads it after the reader enters a search query.
+
 Set the optional `updated` field to a timezone-qualified ISO timestamp when a published article changes. It must not be earlier than `published`. The article, post cards, Open Graph metadata, JSON-LD, sitemap, RSS, and Atom feeds expose the modification date, while the blog and home page remain ordered by the original publication date.
 
 Put local media in `static/blog/<post-slug>/` and reference it from Markdown with a relative URL. Displayed JPEG, PNG, WebP, AVIF, and GIF images are automatically converted to responsive WebP variants up to 1440 pixels wide; SVG remains SVG. The generated markup includes intrinsic dimensions and mobile-friendly `srcset` data. Original raster files are published only when explicitly linked as downloads. Video, audio, PDFs, and other linked post-local attachments are copied or uploaded without conversion.

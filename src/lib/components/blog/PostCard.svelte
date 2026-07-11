@@ -30,6 +30,13 @@
 			</p>
 			<h3>{post.title}</h3>
 			<p>{post.description}</p>
+			{#if post.tags.length > 0}
+				<ul class="tags" aria-label="Tags">
+					{#each post.tags as tag (tag)}
+						<li>{tag}</li>
+					{/each}
+				</ul>
+			{/if}
 			<span class="read-link">Read post <span aria-hidden="true">→</span></span>
 		</div>
 	</article>
@@ -82,5 +89,18 @@
 
 	.read-link {
 		@apply mt-3 inline-block font-semibold text-sky-700 hover:underline;
+	}
+
+	.tags {
+		@apply mt-3 flex flex-wrap gap-1.5;
+	}
+
+	.tags li {
+		@apply rounded-full bg-zinc-100 px-2 py-0.5 text-xs text-zinc-600;
+	}
+
+	.card-link:hover .tags li,
+	.card-link:focus-visible .tags li {
+		@apply bg-white;
 	}
 </style>
