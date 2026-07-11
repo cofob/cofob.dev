@@ -27,7 +27,7 @@
 				create(
 					source: string,
 					target: HTMLElement,
-					options: { cols?: number; rows?: number },
+					options: { cols?: number; rows?: number; preload?: boolean },
 				): { dispose?: () => void };
 			};
 		}
@@ -45,7 +45,15 @@
 		rows,
 		label = "Запись терминальной сессии",
 		directFallback = false,
-	}: { src: string; cols?: number; rows?: number; label?: string; directFallback?: boolean } = $props();
+		preload = true,
+	}: {
+		src: string;
+		cols?: number;
+		rows?: number;
+		label?: string;
+		directFallback?: boolean;
+		preload?: boolean;
+	} = $props();
 	let target = $state<HTMLDivElement>();
 	let ready = $state(false);
 	let failed = $state(false);
@@ -59,7 +67,7 @@
 		void loadPlayer()
 			.then(() => {
 				if (disposed || !window.AsciinemaPlayer || !target) return;
-				player = window.AsciinemaPlayer.create(src, target, { cols, rows });
+				player = window.AsciinemaPlayer.create(src, target, { cols, rows, preload });
 				ready = true;
 			})
 			.catch(() => {
