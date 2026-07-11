@@ -36,6 +36,8 @@
 
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { asciinemaPlayerHref } from "$lib/blog/asciinema";
+	import { getBlogRenderMode } from "$lib/blog/render-mode";
 
 	let {
 		src,
@@ -43,9 +45,11 @@
 		rows,
 		label = "Запись терминальной сессии",
 	}: { src: string; cols?: number; rows?: number; label?: string } = $props();
-	let target: HTMLDivElement;
+	let target = $state<HTMLDivElement>();
 	let ready = $state(false);
 	let failed = $state(false);
+	const renderMode = getBlogRenderMode();
+	let portableHref = $derived(asciinemaPlayerHref(src));
 
 	onMount(() => {
 		let disposed = false;
@@ -53,7 +57,7 @@
 
 		void loadPlayer()
 			.then(() => {
-				if (disposed || !window.AsciinemaPlayer) return;
+				if (disposed || !window.AsciinemaPlayer || !target) return;
 				player = window.AsciinemaPlayer.create(src, target, { cols, rows });
 				ready = true;
 			})
@@ -73,15 +77,19 @@
 </svelte:head>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
-<figure class="recording" aria-label={label}>
-	<div class="player" bind:this={target}></div>
-	{#if !ready}
-		<p class="fallback" role={failed ? "status" : undefined}>
-			{failed ? "Плеер не загрузился. " : "Загрузка плеера… "}
-			<a href={src} target="_blank" rel="noopener noreferrer">Открыть запись напрямую</a>
-		</p>
-	{/if}
-</figure>
+{#if renderMode === "portable"}
+	<p><a href={portableHref}>{label}</a></p>
+{:else}
+	<figure class="recording" aria-label={label}>
+		<div class="player" bind:this={target}></div>
+		{#if !ready}
+			<p class="fallback" role={failed ? "status" : undefined}>
+				{failed ? "Плеер не загрузился. " : "Загрузка плеера… "}
+				<a href={src} target="_blank" rel="noopener noreferrer">Открыть запись напрямую</a>
+			</p>
+		{/if}
+	</figure>
+{/if}
 
 <style lang="postcss">
 	@reference "../../app.css";

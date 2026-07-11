@@ -77,12 +77,41 @@ try {
 	const rss = await fetch(`${origin}/rss.xml`);
 	assert.equal(rss.status, 200);
 	assert.match(rss.headers.get("content-type") ?? "", /^application\/rss\+xml/);
-	assert.match(await rss.text(), /<rss/);
+	const rssText = await rss.text();
+	assert.match(rssText, /<rss/);
+	assert.match(rssText, /@cofob wrote:/);
+	assert.match(rssText, /\/blog\/play_asciinema\/\?url=https%3A%2F%2Fsite-assets\.cofob\.dev%2F/);
+	assert.match(rssText, /<media:content [^>]*medium="image"/);
+	assert.match(
+		rssText,
+		/<content:encoded><!\[CDATA\[[\s\S]*?<img src="https:\/\/cofob\.dev\/blog\/codex-start\/social\./,
+	);
+	assert.doesNotMatch(rssText, /chat-avatar|Загрузка плеера/);
 
 	const atom = await fetch(`${origin}/atom.xml`);
 	assert.equal(atom.status, 200);
 	assert.match(atom.headers.get("content-type") ?? "", /^application\/atom\+xml/);
-	assert.match(await atom.text(), /<feed/);
+	const atomText = await atom.text();
+	assert.match(atomText, /<feed/);
+	assert.match(atomText, /@cofob wrote:/);
+	assert.match(atomText, /<link rel="enclosure" href="https:\/\/cofob\.dev\/blog\/codex-start\/social\./);
+	assert.match(
+		atomText,
+		/<content type="html"[^>]*>[\s\S]*?&lt;img src=&quot;https:\/\/cofob\.dev\/blog\/codex-start\/social\./,
+	);
+	assert.doesNotMatch(atomText, /chat-avatar|Загрузка плеера/);
+
+	const asciinemaPlayer = await fetch(
+		`${origin}/blog/play_asciinema/?url=${encodeURIComponent("https://site-assets.cofob.dev/demo.cast")}`,
+	);
+	assert.equal(asciinemaPlayer.status, 200);
+	assert.match(await asciinemaPlayer.text(), /Terminal recording/);
+
+	const rejectedAsciinemaPlayer = await fetch(
+		`${origin}/blog/play_asciinema/?url=${encodeURIComponent("https://evil.example/demo.cast")}`,
+	);
+	assert.equal(rejectedAsciinemaPlayer.status, 200);
+	assert.match(await rejectedAsciinemaPlayer.text(), /Asciinema source must use https:\/\/site-assets\.cofob\.dev/);
 
 	const missing = await fetch(`${origin}/missing`);
 	assert.equal(missing.status, 404);

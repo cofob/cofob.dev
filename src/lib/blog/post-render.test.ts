@@ -2,6 +2,7 @@ import { render } from "svelte/server";
 import { describe, expect, it } from "vitest";
 import PostCard from "$lib/components/blog/PostCard.svelte";
 import LatestPostLink from "$lib/components/blog/LatestPostLink.svelte";
+import { createPortableBlogContext } from "./render-mode";
 import type { PostSummary } from "./types";
 import CodexStart from "./posts/codex-start.md";
 import ExamplePost, { metadata } from "./posts/example-post.md";
@@ -75,5 +76,23 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar в примечании"');
 		expect(output).toContain('alt="Стикер из пака PhSilver"');
 		expect(output).toContain("https://t.me/addstickers/PhSilver");
+	});
+
+	it("renders complex post components as portable HTML when requested", () => {
+		const output = render(CodexStart, { context: createPortableBlogContext() }).body.replaceAll(/<!--[^]*?-->/g, "");
+		expect(output).toContain("<blockquote");
+		expect(output).toMatch(/<strong[^>]*>Warning!<\/strong>/);
+		expect(output).toMatch(/<strong[^>]*>Note:<\/strong>/);
+		expect(output).toMatch(/<strong[^>]*>@cofob wrote:<\/strong>/);
+		expect(output).toMatch(/вайб на баше<br[^>]*>ужасный\)<br[^>]*>но работает/);
+		expect(output).toContain("https://gist.github.com/cofob/4c9a7e2fdd71410fae65005633378a5c");
+		expect(output).not.toContain("chat-avatar");
+		expect(output).not.toContain('class="recording');
+		expect(output).not.toContain("Загрузка плеера");
+		expect(output).toContain(
+			'href="/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fcodex-start-demo.cast"',
+		);
+		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar"');
+		expect(output).toContain("https://t.me/addstickers/the_gates_of_orgrimmar");
 	});
 });

@@ -1,13 +1,22 @@
 <script lang="ts">
+	import { getBlogRenderMode } from "$lib/blog/render-mode";
 	import type { Snippet } from "svelte";
 
-	let { children }: { children: Snippet } = $props();
+	let { children, portableTitle = "Warning!" }: { children: Snippet; portableTitle?: string } = $props();
+	const renderMode = getBlogRenderMode();
 </script>
 
-<aside class="warning" aria-label="Предупреждение">
-	<strong>Warning:</strong>
-	<div>{@render children()}</div>
-</aside>
+{#if renderMode === "portable"}
+	<blockquote>
+		<p><strong>{portableTitle}</strong></p>
+		<div>{@render children()}</div>
+	</blockquote>
+{:else}
+	<aside class="warning" aria-label="Предупреждение">
+		<strong>Warning:</strong>
+		<div>{@render children()}</div>
+	</aside>
+{/if}
 
 <style lang="postcss">
 	@reference "../../app.css";

@@ -27,7 +27,9 @@ assert.match(contents[4], /cofob keys/);
 assert.match(contents[7], /<urlset/);
 assert.match(contents[7], /xmlns:image="http:\/\/www\.google\.com\/schemas\/sitemap-image\/1\.1"/);
 assert.match(contents[8], /<rss/);
+assert.match(contents[8], /<media:content [^>]*medium="image"/);
 assert.match(contents[9], /<feed/);
+assert.match(contents[9], /<link rel="enclosure" [^>]*type="image\/png"/);
 assert.match(contents[10], /Content-Type: text\/plain; charset=utf-8/);
 assert.match(contents[10], /Content-Type: application\/xml; charset=utf-8/);
 assert.match(contents[10], /Content-Type: application\/rss\+xml; charset=utf-8/);
@@ -36,6 +38,7 @@ assert.ok(JSON.parse(contents[11]).some((entry) => entry.slug === "codex-start" 
 
 await assert.rejects(readFile("build/blog/example-post/index.html", "utf8"), { code: "ENOENT" });
 assert.match(await readFile("build/blog/codex-start/index.html", "utf8"), /Codex в отдельном контейнере/);
+assert.match(await readFile("build/blog/play_asciinema/index.html", "utf8"), /_app\/immutable\/nodes\//);
 assert.ok((await readdir("build/blog/social")).some((name) => /^site\.[a-f0-9]{12}\.png$/.test(name)));
 
 console.log("Static adapter artifact checks passed");

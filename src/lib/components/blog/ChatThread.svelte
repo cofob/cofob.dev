@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { getBlogRenderMode } from "$lib/blog/render-mode";
+
 	interface ChatMessage {
 		text?: string;
 		link?: string;
@@ -11,25 +13,47 @@
 		messages,
 		label = "Фрагмент переписки",
 	}: { author: string; avatar: string; messages: ChatMessage[]; label?: string } = $props();
+	const renderMode = getBlogRenderMode();
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
-<section class="chat" aria-label={label}>
-	{#each messages as message, index (index)}
-		<div class="chat-row">
-			<img class="chat-avatar" src={avatar} alt={index === messages.length - 1 ? `Аватар ${author}` : ""} />
-			<div class="chat-bubble">
-				{#if index === 0}<p class="chat-author">{author}</p>{/if}
-				<p class="chat-text">
-					{#if message.link}
-						<a href={message.link} target="_blank" rel="noopener noreferrer">{message.linkLabel ?? message.link}</a
-						>{#if message.text}<br />{/if}
-					{/if}{message.text ?? ""}
-				</p>
-			</div>
-		</div>
+
+{#snippet portableText(text: string)}
+	{#each text.split("\n") as line, index (index)}
+		{#if index > 0}<br />{/if}{line}
 	{/each}
-</section>
+{/snippet}
+
+{#if renderMode === "portable"}
+	<blockquote aria-label={label}>
+		<p><strong>@{author} wrote:</strong></p>
+		{#each messages as message, index (index)}
+			<p>
+				{#if message.link}
+					<a href={message.link}>{message.linkLabel ?? message.link}</a>{#if message.text}<br />{/if}
+				{/if}
+				{#if message.text}{@render portableText(message.text)}{/if}
+			</p>
+		{/each}
+	</blockquote>
+{:else}
+	<section class="chat" aria-label={label}>
+		{#each messages as message, index (index)}
+			<div class="chat-row">
+				<img class="chat-avatar" src={avatar} alt={index === messages.length - 1 ? `Аватар ${author}` : ""} />
+				<div class="chat-bubble">
+					{#if index === 0}<p class="chat-author">{author}</p>{/if}
+					<p class="chat-text">
+						{#if message.link}
+							<a href={message.link} target="_blank" rel="noopener noreferrer">{message.linkLabel ?? message.link}</a
+							>{#if message.text}<br />{/if}
+						{/if}{message.text ?? ""}
+					</p>
+				</div>
+			</div>
+		{/each}
+	</section>
+{/if}
 
 <style lang="postcss">
 	@reference "../../app.css";

@@ -29,7 +29,11 @@ Every Markdown image needs meaningful alternative text, for example `![Terminal 
 
 Set the optional `comments` field to a public Mastodon status URL or Pleroma/Akkoma `/notice/` URL to use its replies as blog comments. Node and Cloudflare builds fetch comments server-side; static builds ask the reader before contacting the remote instance. All modes degrade to a link to the original thread if its API is unavailable.
 
-Posts may import Svelte components, but components must support server rendering and provide useful static HTML because RSS and Atom contain the complete server-rendered article.
+Posts may import Svelte components, but components must support server rendering and provide useful portable HTML because RSS and Atom contain the complete article. Blog components can use the portable blog render context to emit a simpler feed representation while preserving their normal browser UI. Portable output should use basic elements such as paragraphs, blockquotes, links, images, figures, and code blocks.
+
+Each feed entry exposes its generated social image as feed media metadata and as the first image in the full article HTML. This prevents feed readers that infer cover art from the first image from selecting a sticker or another inline illustration.
+
+Asciinema recordings must be hosted at `https://site-assets.cofob.dev`. Normal article pages keep the inline player, while feeds link to `/blog/play_asciinema/?url=...`, which validates the recording origin before loading it.
 
 ## Deployment targets
 
