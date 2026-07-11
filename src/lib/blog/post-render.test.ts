@@ -6,6 +6,7 @@ import { createPortableBlogContext } from "./render-mode";
 import type { PostSummary } from "./types";
 import CodexStart from "./posts/codex-start.md";
 import ExamplePost, { metadata } from "./posts/example-post.md";
+import FilamentSettings from "./posts/bambu-lab-p2s-filament-settings.md";
 
 describe("MDsveX post rendering", () => {
 	it("renders the draft template as semantic server HTML", () => {
@@ -14,6 +15,12 @@ describe("MDsveX post rendering", () => {
 		expect(metadata.draft).toBe(true);
 		expect(output).toContain("<h2>A section heading</h2>");
 		expect(output).toContain('<pre tabindex="0" role="region" aria-label="Scrollable code example in ts"');
+	});
+
+	it("renders accessible Markdown tables without exposing Svelte directives as text", () => {
+		const output = render(FilamentSettings).body;
+		expect(output).toContain('<table tabindex="0" role="region" aria-label="Scrollable table">');
+		expect(output).not.toContain("svelte-ignore a11y_no_noninteractive_tabindex");
 	});
 
 	it("renders published and updated dates without changing the post model", () => {

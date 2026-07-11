@@ -14,7 +14,10 @@ function walk(node) {
 			const children = [];
 			for (const child of node.children) {
 				if (child?.type === "element" && child.tagName === "table") {
-					children.push({ type: "comment", value: "svelte-ignore a11y_no_noninteractive_tabindex" });
+					children.push({
+						type: "raw",
+						value: "<!-- svelte-ignore a11y_no_noninteractive_tabindex -->",
+					});
 				}
 				children.push(child);
 				walk(child);
