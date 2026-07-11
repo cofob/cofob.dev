@@ -42,10 +42,6 @@ try {
 	assert.equal(social.status, 200);
 	assert.match(social.headers.get("content-type") ?? "", /^image\/png/);
 
-	const portfolio = await fetch(`${origin}/portfolio/`);
-	assert.equal(portfolio.status, 200);
-	assert.match(await portfolio.text(), /NDA company/);
-
 	const blog = await fetch(`${origin}/blog/`);
 	assert.equal(blog.status, 200);
 	assert.match(await blog.text(), /codex-start/);

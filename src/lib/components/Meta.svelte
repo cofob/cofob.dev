@@ -57,7 +57,7 @@
 	<meta content={locale} property="og:locale" />
 	<meta content="cofob.dev" property="og:site_name" />
 	<meta
-		content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой,portfolio,портфолио"
+		content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой"
 		name="keywords"
 	/>
 	<meta content={noindex ? "noindex" : "index, follow"} name="robots" />

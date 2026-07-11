@@ -24,7 +24,7 @@ function websiteEntity(image?: SocialImageAsset) {
 		"@id": WEBSITE_ID,
 		url: absoluteSiteUrl("/"),
 		name: "cofob.dev",
-		description: "Personal website, portfolio, and writing by Egor Ternovoi.",
+		description: "Personal website and writing by Egor Ternovoi.",
 		inLanguage: "en",
 		publisher: { "@id": PERSON_ID },
 		...(image ? { image: absoluteAssetUrl(image.src) } : {}),

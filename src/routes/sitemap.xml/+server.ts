@@ -32,7 +32,6 @@ export async function GET() {
 			images: siteSocialImage ? [siteSocialImage.src] : [],
 		},
 		{ path: "/blog/", priority: "0.8", changefreq: "weekly", lastmod: latestPostChange.slice(0, 10) },
-		{ path: "/portfolio/", priority: "0.7", changefreq: "weekly", lastmod: "2025-05-20" },
 	];
 	const postPages = posts.map((post) => ({
 		path: `/blog/${post.slug}/`,

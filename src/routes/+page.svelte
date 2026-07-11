@@ -22,7 +22,6 @@
 			Hi! I'm <BlueLine animate>cofob</BlueLine>.
 		</Heading>
 		<p>Python developer.</p>
-		<a class="portfolio-link" href={resolve("/portfolio")}>Portfolio <span aria-hidden="true">→</span></a>
 	</div>
 </Section>
 
@@ -37,10 +36,6 @@
 
 <style lang="postcss">
 	@reference "../lib/app.css";
-
-	.portfolio-link {
-		@apply mt-3 inline-flex min-h-11 items-center rounded-lg border-2 border-zinc-800 px-3 py-2 font-semibold hover:bg-zinc-100;
-	}
 
 	.latest {
 		@apply mx-auto max-w-2xl;

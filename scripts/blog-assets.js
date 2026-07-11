@@ -390,7 +390,7 @@ async function emitSiteSocialImage(writer, root) {
 	const buffer = await renderSocialCard({
 		root,
 		title: "cofob.dev",
-		description: "Personal website, portfolio, and writing by Egor Ternovoi.",
+		description: "Personal website and writing by Egor Ternovoi.",
 		eyebrow: "Egor Ternovoi · cofob",
 	});
 	const hash = contentHash(buffer);

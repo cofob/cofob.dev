@@ -12,7 +12,6 @@
 			<a href={resolve("/blog")}>Blog</a>
 			<a href={resolve("/pgp")}>PGP</a>
 			<a href={resolve("/keys")}>SSH</a>
-			<a href={resolve("/portfolio")}>Portfolio</a>
 		</div>
 	</div>
 </nav>
