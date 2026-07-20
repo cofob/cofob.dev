@@ -4,7 +4,7 @@ import { homeStructuredData, postStructuredData, serializeJsonLd } from "./struc
 import { copyrightNotice, siteLicenseUrl } from "$lib/license";
 
 const image: SocialImageAsset = {
-	src: "https://site-assets.cofob.dev/blog/test/social.png",
+	src: "https://cofob.dev/blog/test/social.png",
 	width: 1200,
 	height: 630,
 	type: "image/png",

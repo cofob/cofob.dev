@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
+	import { Alert, Container, Heading, Link, Section, Stack } from "@cofob/design-system-svelte";
 	import AsciinemaPlayer from "$lib/components/blog/AsciinemaPlayer.svelte";
 	import type { PageData } from "./$types";
 
@@ -11,32 +12,18 @@
 	<meta name="robots" content="noindex" />
 </svelte:head>
 
-<article>
-	<p><a href={resolve("/blog")}>← All posts</a></p>
-	<h1>Terminal recording</h1>
-	{#if data.source}
-		<AsciinemaPlayer src={data.source} label="Terminal recording" directFallback />
-	{:else}
-		<p role="alert">{data.error}</p>
-	{/if}
-</article>
-
-<style lang="postcss">
-	@reference "../../../lib/app.css";
-
-	article {
-		@apply mx-auto my-10 max-w-5xl px-4 sm:my-16;
-	}
-
-	h1 {
-		@apply mt-5 text-4xl font-semibold leading-tight sm:text-6xl;
-	}
-
-	a {
-		@apply text-sky-700 underline underline-offset-2;
-	}
-
-	[role="alert"] {
-		@apply mt-6 rounded-lg border-2 border-amber-400 bg-amber-50 p-4;
-	}
-</style>
+<Container size="wide">
+	<Section>
+		<article>
+			<Stack gap="lg">
+				<Link href={resolve("/blog")}>← All posts</Link>
+				<Heading level={1} size="2xl">Terminal recording</Heading>
+				{#if data.source}
+					<AsciinemaPlayer src={data.source} label="Terminal recording" directFallback />
+				{:else}
+					<Alert title="Recording unavailable" tone="danger">{data.error}</Alert>
+				{/if}
+			</Stack>
+		</article>
+	</Section>
+</Container>

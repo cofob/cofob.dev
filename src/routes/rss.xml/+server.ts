@@ -1,7 +1,5 @@
 import { renderRssFeed } from "$lib/blog/feed";
 
-export const prerender = process.env.DEPLOY_TARGET === "static";
-
 export function GET() {
 	return new Response(renderRssFeed(), {
 		headers: {

@@ -55,13 +55,16 @@ try {
 	const post = await fetch(`${origin}/blog/codex-start/`);
 	assert.equal(post.status, 200);
 	assert.match(await post.text(), /Codex в отдельном контейнере/);
+	const recording = await fetch(`${origin}/blog/codex-start/codex-start-demo.0607f3aebac2.cast`);
+	assert.equal(recording.status, 200);
+	assert.equal((await recording.arrayBuffer()).byteLength, 269_629);
 
 	const searchIndex = await fetch(`${origin}/blog/search.json`);
 	assert.equal(searchIndex.status, 200);
 	assert.match(searchIndex.headers.get("content-type") ?? "", /^application\/json/);
 	assert.ok((await searchIndex.json()).some((entry) => entry.slug === "codex-start" && entry.tags.includes("project")));
 
-	const taggedBlog = await fetch(`${origin}/blog/?tag=CODEX`);
+	const taggedBlog = await fetch(`${origin}/blog/?tag=PROJECT`);
 	assert.equal(taggedBlog.status, 200);
 	assert.match(await taggedBlog.text(), /codex-start/);
 

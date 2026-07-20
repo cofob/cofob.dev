@@ -48,7 +48,7 @@ function inferImageType(source) {
 }
 
 function getManifestAsset(root, slug, reference, manifest) {
-	if (!manifest || isRemoteAsset(reference)) return;
+	if (!manifest) return;
 	const resolved = resolvePostAsset(root, slug, reference);
 	return manifest.posts?.[slug]?.assets?.[resolved.sourceKey];
 }
@@ -56,18 +56,17 @@ function getManifestAsset(root, slug, reference, manifest) {
 function resolvePost(root, post, manifest) {
 	const { modulePath, source, cover, coverAlt, socialImage, socialImageAlt, ...metadata } = post;
 	void source;
+	void socialImage;
+	void socialImageAlt;
 	const coverAsset = cover
-		? isRemoteAsset(cover) || !manifest
+		? !manifest
 			? basicImage(cover, coverAlt)
 			: getManifestAsset(root, post.slug, cover, manifest)?.image
 		: undefined;
 	if (cover && !coverAsset) throw new Error(`${post.slug}: prepared cover is missing from the asset manifest`);
 
 	const generatedSocial = manifest?.posts?.[post.slug]?.socialImage;
-	const resolvedSocial =
-		socialImage && isRemoteAsset(socialImage)
-			? { src: socialImage, width: 1200, height: 630, type: inferImageType(socialImage), alt: socialImageAlt }
-			: generatedSocial;
+	const resolvedSocial = generatedSocial;
 	if (manifest && !resolvedSocial)
 		throw new Error(`${post.slug}: prepared social image is missing from the asset manifest`);
 
@@ -93,7 +92,7 @@ function escapeAttribute(value) {
 
 function responsiveImageMarkup(asset, alt) {
 	const dimensions = asset.width > 0 ? ` width="${asset.width}" height="${asset.height}"` : "";
-	return `<img src="${escapeAttribute(asset.src)}" srcset="${escapeAttribute(asset.srcset)}" sizes="(min-width: 800px) 768px, calc(100vw - 2rem)"${dimensions} alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">`;
+	return `<figure class="cf-responsive-image"><span class="cf-responsive-image__media"><img class="cf-responsive-image__light" src="${escapeAttribute(asset.src)}" srcset="${escapeAttribute(asset.srcset)}" sizes="(min-width: 800px) 768px, calc(100vw - 2rem)"${dimensions} alt="${escapeAttribute(alt)}" loading="lazy" decoding="async"></span></figure>`;
 }
 
 export function rewritePostMarkdown(root, id, source, manifest) {
@@ -104,7 +103,7 @@ export function rewritePostMarkdown(root, id, source, manifest) {
 
 	return rewriteOutsideCodeFences(source, (segment) => {
 		let rewritten = segment.replace(
-			/<(img|source|video|audio|Sticker|ChatThread)\b([^>]*?)\b(src|poster|avatar)=(['"])([^'"]+)\4([^>]*)>/gi,
+			/<(img|source|video|audio|Sticker|ChatThread|AsciinemaPlayer)\b([^>]*?)\b(src|poster|avatar)=(['"])([^'"]+)\4([^>]*)>/gi,
 			(original, tag, before, attribute, quote, reference, after) => {
 				if (isRemoteAsset(reference)) return original;
 				const resolved = resolvePostAsset(root, slug, reference, { required: false });
@@ -208,7 +207,7 @@ export function blogContentPlugin({ buildTime }) {
 
 			if (process.env.BLOG_ASSETS_PREPARED === "1") {
 				const { prepareBlogAssets } = await import("./blog-assets.js");
-				await prepareBlogAssets({ root, includePreviews: true, mode: "local" });
+				await prepareBlogAssets({ root, includePreviews: true });
 			}
 
 			for (const id of [RESOLVED_CATALOG_ID, RESOLVED_COMPONENTS_ID]) {

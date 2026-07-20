@@ -52,13 +52,16 @@ try {
 	assert.match(postText, /Codex в отдельном контейнере/);
 	assert.match(postText, /Открыть запись в плеере/);
 	assert.doesNotMatch(postText, /Загрузка плеера/);
+	const recording = await fetch(`${origin}/blog/codex-start/codex-start-demo.0607f3aebac2.cast`);
+	assert.equal(recording.status, 200);
+	assert.equal((await recording.arrayBuffer()).byteLength, 269_629);
 
 	const searchIndex = await fetch(`${origin}/blog/search.json`);
 	assert.equal(searchIndex.status, 200);
 	assert.match(searchIndex.headers.get("content-type") ?? "", /^application\/json/);
 	assert.ok((await searchIndex.json()).some((entry) => entry.slug === "codex-start" && entry.tags.includes("project")));
 
-	const taggedBlog = await fetch(`${origin}/blog/?tag=CODEX`);
+	const taggedBlog = await fetch(`${origin}/blog/?tag=PROJECT`);
 	assert.equal(taggedBlog.status, 200);
 	assert.match(await taggedBlog.text(), /codex-start/);
 
@@ -103,7 +106,7 @@ try {
 	const rssText = await rss.text();
 	assert.match(rssText, /<rss/);
 	assert.match(rssText, /@cofob wrote:/);
-	assert.match(rssText, /\/blog\/play_asciinema\/\?url=https%3A%2F%2Fsite-assets\.cofob\.dev%2F/);
+	assert.match(rssText, /\/blog\/play_asciinema\/\?url=%2Fblog%2Fcodex-start%2F/);
 	assert.match(rssText, /<media:content [^>]*medium="image"/);
 	assert.match(
 		rssText,
@@ -125,7 +128,7 @@ try {
 	assert.doesNotMatch(atomText, /chat-avatar|Загрузка плеера/);
 
 	const asciinemaPlayer = await fetch(
-		`${origin}/blog/play_asciinema/?url=${encodeURIComponent("https://site-assets.cofob.dev/demo.cast")}`,
+		`${origin}/blog/play_asciinema/?url=${encodeURIComponent("/blog/codex-start/codex-start-demo.0607f3aebac2.cast")}`,
 	);
 	assert.equal(asciinemaPlayer.status, 200);
 	assert.match(await asciinemaPlayer.text(), /Terminal recording/);
@@ -134,7 +137,7 @@ try {
 		`${origin}/blog/play_asciinema/?url=${encodeURIComponent("https://evil.example/demo.cast")}`,
 	);
 	assert.equal(rejectedAsciinemaPlayer.status, 200);
-	assert.match(await rejectedAsciinemaPlayer.text(), /Asciinema source must use https:\/\/site-assets\.cofob\.dev/);
+	assert.match(await rejectedAsciinemaPlayer.text(), /Asciinema source must be a local content-hashed \.cast asset/);
 
 	const missing = await fetch(`${origin}/missing`);
 	assert.equal(missing.status, 404);

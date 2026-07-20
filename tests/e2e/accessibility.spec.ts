@@ -9,7 +9,7 @@ for (const path of ["/", "/blog/", "/blog/example-post/", "/license/"]) {
 	});
 }
 
-test("skip navigation and static comment consent are keyboard accessible", async ({ page }) => {
+test("skip navigation and comment consent are keyboard accessible", async ({ page }) => {
 	await page.goto("/");
 	await page.keyboard.press("Tab");
 	const skipLink = page.getByRole("link", { name: "Skip to main content" });

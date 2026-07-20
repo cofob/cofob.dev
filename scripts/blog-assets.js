@@ -1,4 +1,3 @@
-import { ListObjectsV2Command, PutObjectCommand, S3Client } from "@aws-sdk/client-s3";
 import { Resvg } from "@resvg/resvg-js";
 import { createHash } from "node:crypto";
 import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
@@ -16,13 +15,13 @@ import {
 
 const IMAGE_EXTENSIONS = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".svg", ".webp"]);
 const RASTER_EXTENSIONS = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".webp"]);
-const CACHE_CONTROL = "public, max-age=31536000, immutable";
 const VARIANT_WIDTHS = [480, 960, 1440];
 const require = createRequire(import.meta.url);
 const MANROPE_ROOT = path.dirname(require.resolve("manrope/package.json"));
 
 const MIME_TYPES = new Map([
 	[".avif", "image/avif"],
+	[".cast", "application/x-asciicast"],
 	[".css", "text/css; charset=utf-8"],
 	[".gif", "image/gif"],
 	[".html", "text/html; charset=utf-8"],
@@ -80,9 +79,12 @@ function collectPostReferences(root, post) {
 		addReference(references, root, post, match[2], "original", false);
 	}
 	for (const match of prose.matchAll(
-		/<(img|source|video|audio|Sticker|ChatThread)\b[^>]*?\b(src|poster|avatar)=(['"])([^'"]+)\3[^>]*>/gi,
+		/<(img|source|video|audio|Sticker|ChatThread|AsciinemaPlayer)\b[^>]*?\b(src|poster|avatar)=(['"])([^'"]+)\3[^>]*>/gi,
 	)) {
 		const [, tag, attribute, , reference] = match;
+		if (isRemoteAsset(reference)) {
+			throw new Error(`${post.slug}: ${tag} ${attribute} must reference a local post asset`);
+		}
 		const role =
 			["img", "sticker"].includes(tag.toLowerCase()) || ["poster", "avatar"].includes(attribute.toLowerCase())
 				? "display"
@@ -96,51 +98,14 @@ function collectPostReferences(root, post) {
 	return references;
 }
 
-function normalizePrefix(value) {
-	const prefix = (value || "blog").replace(/^\/+|\/+$/g, "");
-	if (!prefix || prefix.split("/").some((part) => part === "." || part === "..")) {
-		throw new Error("BLOG_ASSET_PREFIX must be a non-empty path without . or .. segments");
-	}
-	return prefix;
-}
-
-function externalConfiguration(environment) {
-	const required = [
-		"BLOG_ASSET_S3_ENDPOINT",
-		"BLOG_ASSET_S3_BUCKET",
-		"BLOG_ASSET_S3_ACCESS_KEY_ID",
-		"BLOG_ASSET_S3_SECRET_ACCESS_KEY",
-		"BLOG_ASSET_PUBLIC_BASE_URL",
-	];
-	const missing = required.filter((key) => !environment[key]?.trim());
-	if (missing.length > 0) throw new Error(`External blog asset mode is missing: ${missing.join(", ")}`);
-
-	const publicBaseUrl = new URL(environment.BLOG_ASSET_PUBLIC_BASE_URL);
-	if (publicBaseUrl.protocol !== "https:") throw new Error("BLOG_ASSET_PUBLIC_BASE_URL must use HTTPS");
-	const endpoint = new URL(environment.BLOG_ASSET_S3_ENDPOINT);
-	if (endpoint.protocol !== "https:") throw new Error("BLOG_ASSET_S3_ENDPOINT must use HTTPS");
-	return {
-		endpoint: endpoint.href,
-		region: environment.BLOG_ASSET_S3_REGION || "auto",
-		bucket: environment.BLOG_ASSET_S3_BUCKET,
-		accessKeyId: environment.BLOG_ASSET_S3_ACCESS_KEY_ID,
-		secretAccessKey: environment.BLOG_ASSET_S3_SECRET_ACCESS_KEY,
-		forcePathStyle: environment.BLOG_ASSET_S3_FORCE_PATH_STYLE === "true",
-		publicBaseUrl,
-	};
-}
-
-function createArtifactWriter({ mode, stageRoot, prefix, external }) {
+function createArtifactWriter({ stageRoot, prefix }) {
 	const artifacts = new Map();
 	return {
 		artifacts,
 		async write(buffer, key, type) {
 			const normalizedKey = key.split(path.sep).join("/");
 			if (artifacts.has(normalizedKey)) return artifacts.get(normalizedKey).public;
-			const publicUrl =
-				mode === "external"
-					? new URL(normalizedKey, ensureTrailingSlash(external.publicBaseUrl.href)).href
-					: `/${normalizedKey}`;
+			const publicUrl = `/${normalizedKey}`;
 			const artifact = {
 				key: normalizedKey,
 				buffer,
@@ -148,19 +113,13 @@ function createArtifactWriter({ mode, stageRoot, prefix, external }) {
 				public: { url: publicUrl, type, size: buffer.byteLength },
 			};
 			artifacts.set(normalizedKey, artifact);
-			if (mode === "local") {
-				const outputPath = path.join(stageRoot, ...normalizedKey.split("/"));
-				await mkdir(path.dirname(outputPath), { recursive: true });
-				await writeFile(outputPath, buffer);
-			}
+			const outputPath = path.join(stageRoot, ...normalizedKey.split("/"));
+			await mkdir(path.dirname(outputPath), { recursive: true });
+			await writeFile(outputPath, buffer);
 			return artifact.public;
 		},
 		prefix,
 	};
-}
-
-function ensureTrailingSlash(value) {
-	return value.endsWith("/") ? value : `${value}/`;
 }
 
 function outputKey(prefix, slug, sourceKey, marker, extension) {
@@ -240,7 +199,7 @@ async function emitOriginal(writer, slug, reference) {
 }
 
 async function coverDataUrl(root, post) {
-	if (!post.cover || isRemoteAsset(post.cover)) return;
+	if (!post.cover) return;
 	const resolved = resolvePostAsset(root, post.slug, post.cover);
 	const buffer = await sharp(resolved.path, { animated: false })
 		.rotate()
@@ -349,17 +308,6 @@ async function renderSocialCard({ root, title, description, eyebrow, cover }) {
 
 async function emitSocialImage(writer, root, post) {
 	const alt = post.socialImageAlt ?? `${post.title} — cofob.dev`;
-	if (post.socialImage && isRemoteAsset(post.socialImage)) {
-		const extension = path.extname(new URL(post.socialImage).pathname).toLowerCase();
-		return {
-			src: post.socialImage,
-			width: 1200,
-			height: 630,
-			type: MIME_TYPES.get(extension) ?? "image/*",
-			alt,
-		};
-	}
-
 	let buffer;
 	if (post.socialImage) {
 		const resolved = resolvePostAsset(root, post.slug, post.socialImage);
@@ -404,74 +352,8 @@ async function emitSiteSocialImage(writer, root) {
 	};
 }
 
-async function listObjects(client, bucket, prefix) {
-	const keys = new Set();
-	let continuationToken;
-	do {
-		const result = await client.send(
-			new ListObjectsV2Command({ Bucket: bucket, Prefix: `${prefix}/`, ContinuationToken: continuationToken }),
-		);
-		for (const object of result.Contents ?? []) if (object.Key) keys.add(object.Key);
-		continuationToken = result.IsTruncated ? result.NextContinuationToken : undefined;
-	} while (continuationToken);
-	return keys;
-}
-
-export async function uploadArtifacts(artifacts, configuration, prefix, providedClient) {
-	const client =
-		providedClient ??
-		new S3Client({
-			endpoint: configuration.endpoint,
-			region: configuration.region,
-			forcePathStyle: configuration.forcePathStyle,
-			credentials: {
-				accessKeyId: configuration.accessKeyId,
-				secretAccessKey: configuration.secretAccessKey,
-			},
-			maxAttempts: 3,
-		});
-	const existing = await listObjects(client, configuration.bucket, prefix);
-	const queue = [...artifacts.values()].filter((artifact) => !existing.has(artifact.key));
-	const uploadCount = queue.length;
-
-	const workers = Array.from({ length: Math.min(4, queue.length) }, async () => {
-		for (;;) {
-			const artifact = queue.pop();
-			if (!artifact) return;
-			await client.send(
-				new PutObjectCommand({
-					Bucket: configuration.bucket,
-					Key: artifact.key,
-					Body: artifact.buffer,
-					ContentType: artifact.type,
-					CacheControl: CACHE_CONTROL,
-				}),
-			);
-		}
-	});
-	await Promise.all(workers);
-
-	const desired = new Set(artifacts.keys());
-	const orphaned = [...existing].filter((key) => !desired.has(key)).sort();
-	if (orphaned.length > 0) {
-		console.warn(
-			`Unreferenced blog objects retained in ${configuration.bucket}:\n${orphaned.map((key) => `  ${key}`).join("\n")}`,
-		);
-	}
-	console.log(`Blog assets: ${artifacts.size} desired, ${uploadCount} uploaded, ${orphaned.length} retained orphan(s)`);
-	return { uploaded: uploadCount, orphaned };
-}
-
-export async function prepareBlogAssets({
-	root = process.cwd(),
-	includePreviews = false,
-	mode = process.env.BLOG_ASSET_MODE || "local",
-	environment = process.env,
-	client,
-} = {}) {
-	if (mode !== "local" && mode !== "external") throw new Error("BLOG_ASSET_MODE must be local or external");
-	const prefix = normalizePrefix(environment.BLOG_ASSET_PREFIX);
-	const external = mode === "external" ? externalConfiguration(environment) : undefined;
+export async function prepareBlogAssets({ root = process.cwd(), includePreviews = false } = {}) {
+	const prefix = "blog";
 	const buildTime = new Date().toISOString();
 	const buildRoot = path.resolve(root, ".blog-build");
 	const stageRoot = path.join(buildRoot, "static");
@@ -481,9 +363,9 @@ export async function prepareBlogAssets({
 	await rm(path.join(stageRoot, "blog"), { recursive: true, force: true });
 	await rm(path.join(stageRoot, "stickers"), { recursive: true, force: true });
 
-	const writer = createArtifactWriter({ mode, stageRoot, prefix, external });
+	const writer = createArtifactWriter({ stageRoot, prefix });
 	const posts = readSourcePosts(root, buildTime, includePreviews);
-	const manifest = { version: 1, mode, buildTime, prefix, posts: {}, siteSocialImage: undefined };
+	const manifest = { version: 1, buildTime, prefix, posts: {}, siteSocialImage: undefined };
 
 	manifest.siteSocialImage = await emitSiteSocialImage(writer, root);
 	for (const post of posts) {
@@ -501,8 +383,7 @@ export async function prepareBlogAssets({
 		};
 	}
 
-	if (mode === "external") await uploadArtifacts(writer.artifacts, external, prefix, client);
 	await writeFile(path.join(buildRoot, "manifest.json"), `${JSON.stringify(manifest, undefined, 2)}\n`);
-	console.log(`Prepared ${posts.length} blog post(s) in ${mode} asset mode`);
+	console.log(`Prepared ${posts.length} blog post(s) with local assets`);
 	return manifest;
 }

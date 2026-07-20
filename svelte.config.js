@@ -3,19 +3,16 @@ import { code_highlighter, mdsvex } from "mdsvex";
 import remarkGfm from "remark-gfm";
 import { rehypeAccessibleScrollableContent } from "./scripts/mdsvex-accessibility.js";
 import cloudflareAdapter from "@sveltejs/adapter-cloudflare";
-import staticAdapter from "@sveltejs/adapter-static";
 import nodeAdapter from "@sveltejs/adapter-node";
 
 function getAdapter() {
 	switch (process.env.DEPLOY_TARGET) {
 		case "cloudflare":
 			return cloudflareAdapter();
-		case "static":
-			return staticAdapter({ fallback: "200.html" });
 		case "node":
 			return nodeAdapter({ precompress: true });
 		default:
-			return staticAdapter({ fallback: "200.html" });
+			return nodeAdapter({ precompress: true });
 	}
 }
 

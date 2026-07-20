@@ -5,12 +5,11 @@ import type { PageServerLoad } from "./$types";
 export const load: PageServerLoad = ({ setHeaders, url }) => {
 	setHeaders({ "cache-control": "public, max-age=300" });
 	const allPosts = getPublicPosts();
-	const searchParameters = process.env.DEPLOY_TARGET === "static" ? undefined : url.searchParams;
-	const requestedTag = searchParameters?.get("tag")?.trim() ?? "";
+	const requestedTag = url.searchParams.get("tag")?.trim() ?? "";
 	const canonicalTag =
 		collectTags(allPosts).find((tag) => tag.toLocaleLowerCase() === requestedTag.toLocaleLowerCase()) ?? "";
 	const filtered = filterPostsByTag(allPosts, canonicalTag || requestedTag);
-	const pagination = paginatePosts(filtered, parsePage(searchParameters?.get("page") ?? null));
+	const pagination = paginatePosts(filtered, parsePage(url.searchParams.get("page")));
 
 	return {
 		posts: pagination.posts,

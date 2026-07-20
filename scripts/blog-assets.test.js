@@ -1,10 +1,9 @@
-import { ListObjectsV2Command, PutObjectCommand } from "@aws-sdk/client-s3";
 import { mkdtemp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
 import os from "node:os";
 import path from "node:path";
 import sharp from "sharp";
 import { afterEach, describe, expect, it, vi } from "vitest";
-import { getResponsiveWidths, prepareBlogAssets, uploadArtifacts } from "./blog-assets.js";
+import { getResponsiveWidths, prepareBlogAssets } from "./blog-assets.js";
 import { rewritePostMarkdown } from "./blog-content-plugin.js";
 
 const temporaryDirectories = [];
@@ -48,6 +47,8 @@ coverAlt: A red test image
   sourceUrl="https://example.com/stickers"
 />
 
+<AsciinemaPlayer src="session.cast" label="Terminal session" />
+
 [Read another post](/blog/another-post/)
 `,
 	);
@@ -55,6 +56,7 @@ coverAlt: A red test image
 		.png()
 		.toFile(path.join(root, "static/blog/test-post/hero.png"));
 	await writeFile(path.join(root, "static/blog/test-post/guide.pdf"), "%PDF-1.4 fixture");
+	await writeFile(path.join(root, "static/blog/test-post/session.cast"), '{"version": 2}\n');
 	await sharp({ create: { width: 128, height: 128, channels: 4, background: "#facc15" } })
 		.png()
 		.toFile(path.join(root, "static/stickers/test-pack/sticker.png"));
@@ -64,12 +66,7 @@ coverAlt: A red test image
 describe("blog asset preparation", () => {
 	it("generates responsive WebP files, social PNGs, attachments, and rewrites Markdown", async () => {
 		const root = await fixtureRoot();
-		const manifest = await prepareBlogAssets({
-			root,
-			includePreviews: true,
-			mode: "local",
-			environment: { BLOG_ASSET_PREFIX: "media" },
-		});
+		const manifest = await prepareBlogAssets({ root, includePreviews: true });
 
 		const hero = manifest.posts["test-post"].assets["blog/test-post/hero.png"];
 		expect(hero.image.srcset).toContain("480w");
@@ -79,14 +76,14 @@ describe("blog asset preparation", () => {
 		expect(hero.original).toBeUndefined();
 
 		const guide = manifest.posts["test-post"].assets["blog/test-post/guide.pdf"];
-		expect(guide.original.url).toMatch(/^\/media\/test-post\/guide\.[a-f0-9]{12}\.pdf$/);
+		expect(guide.original.url).toMatch(/^\/blog\/test-post\/guide\.[a-f0-9]{12}\.pdf$/);
 		await expect(readFile(path.join(root, ".blog-build/static", guide.original.url))).resolves.toBeTruthy();
 		await expect(readFile(path.join(root, ".blog-build/static/blog/test-post/hero.png"))).rejects.toMatchObject({
 			code: "ENOENT",
 		});
 
 		const sticker = manifest.posts["test-post"].assets["stickers/test-pack/sticker.png"];
-		expect(sticker.image.src).toMatch(/^\/media\/stickers\/test-pack\/sticker\.[a-f0-9]{12}\.128w\.webp$/);
+		expect(sticker.image.src).toMatch(/^\/blog\/stickers\/test-pack\/sticker\.[a-f0-9]{12}\.128w\.webp$/);
 		await expect(readFile(path.join(root, ".blog-build/static", sticker.image.src))).resolves.toBeTruthy();
 
 		const social = manifest.posts["test-post"].socialImage;
@@ -100,6 +97,7 @@ describe("blog asset preparation", () => {
 		expect(rewritten).toContain("1440w");
 		expect(rewritten).toContain(guide.original.url);
 		expect(rewritten).toContain(sticker.image.src);
+		expect(rewritten).toMatch(/src="\/blog\/test-post\/session\.[a-f0-9]{12}\.cast"/);
 		expect(rewritten).toContain("[Read another post](/blog/another-post/)");
 	});
 
@@ -109,84 +107,13 @@ describe("blog asset preparation", () => {
 		expect(getResponsiveWidths(2000)).toEqual([480, 960, 1440]);
 	});
 
-	it("fails external mode before building when credentials are missing", async () => {
+	it("rejects remotely hosted post media", async () => {
 		const root = await fixtureRoot();
-		await expect(
-			prepareBlogAssets({ root, mode: "external", environment: { BLOG_ASSET_MODE: "external" } }),
-		).rejects.toThrow("BLOG_ASSET_S3_ENDPOINT");
-	});
-
-	it("uses public storage URLs and leaves media out of the Cloudflare static tree", async () => {
-		const root = await fixtureRoot();
-		const puts = [];
-		const client = {
-			async send(command) {
-				if (command instanceof ListObjectsV2Command) return { Contents: [] };
-				if (command instanceof PutObjectCommand) {
-					puts.push(command.input);
-					return {};
-				}
-				throw new Error(`Unexpected command ${command.constructor.name}`);
-			},
-		};
-		vi.spyOn(console, "log").mockImplementation(() => {});
-		const manifest = await prepareBlogAssets({
-			root,
-			includePreviews: true,
-			mode: "external",
-			client,
-			environment: {
-				BLOG_ASSET_S3_ENDPOINT: "https://account.r2.cloudflarestorage.com",
-				BLOG_ASSET_S3_REGION: "auto",
-				BLOG_ASSET_S3_BUCKET: "site-assets",
-				BLOG_ASSET_S3_ACCESS_KEY_ID: "access-key",
-				BLOG_ASSET_S3_SECRET_ACCESS_KEY: "secret-key",
-				BLOG_ASSET_PUBLIC_BASE_URL: "https://site-assets.cofob.dev/",
-				BLOG_ASSET_PREFIX: "blog",
-			},
-		});
-
-		expect(manifest.posts["test-post"].socialImage.src).toMatch(
-			/^https:\/\/site-assets\.cofob\.dev\/blog\/test-post\/social\.[a-f0-9]{12}\.png$/,
+		const postPath = path.join(root, "src/lib/blog/posts/test-post.md");
+		const source = await readFile(postPath, "utf8");
+		await writeFile(postPath, `${source}\n![Remote image](https://assets.example/image.png)\n`);
+		await expect(prepareBlogAssets({ root, includePreviews: true })).rejects.toThrow(
+			"must reference a local post asset",
 		);
-		expect(manifest.posts["test-post"].assets["blog/test-post/hero.png"].image.src).toMatch(
-			/^https:\/\/site-assets\.cofob\.dev\/blog\/test-post\/hero\./,
-		);
-		expect(puts.length).toBeGreaterThan(4);
-		await expect(readFile(path.join(root, ".blog-build/static/blog"))).rejects.toMatchObject({ code: "ENOENT" });
-	});
-});
-
-describe("S3 synchronization", () => {
-	it("skips immutable keys, uploads missing objects, and only reports orphans", async () => {
-		const sent = [];
-		const client = {
-			async send(command) {
-				sent.push(command);
-				if (command instanceof ListObjectsV2Command) {
-					return { Contents: [{ Key: "blog/existing.webp" }, { Key: "blog/orphan.webp" }] };
-				}
-				if (command instanceof PutObjectCommand) return {};
-				throw new Error(`Unexpected command ${command.constructor.name}`);
-			},
-		};
-		const artifacts = new Map([
-			["blog/existing.webp", { key: "blog/existing.webp", buffer: Buffer.from("old"), type: "image/webp" }],
-			["blog/new.webp", { key: "blog/new.webp", buffer: Buffer.from("new"), type: "image/webp" }],
-		]);
-		vi.spyOn(console, "warn").mockImplementation(() => {});
-		vi.spyOn(console, "log").mockImplementation(() => {});
-
-		const result = await uploadArtifacts(artifacts, { bucket: "assets" }, "blog", client);
-		const puts = sent.filter((command) => command instanceof PutObjectCommand);
-		expect(puts).toHaveLength(1);
-		expect(puts[0].input).toMatchObject({
-			Bucket: "assets",
-			Key: "blog/new.webp",
-			ContentType: "image/webp",
-			CacheControl: "public, max-age=31536000, immutable",
-		});
-		expect(result).toEqual({ uploaded: 1, orphaned: ["blog/orphan.webp"] });
-		expect(sent.map((command) => command.constructor.name)).not.toContain("DeleteObjectCommand");
 	});
 });

@@ -4,10 +4,9 @@
 	import { absoluteSiteUrl } from "$lib/blog/url";
 	import type { JsonLdDocument } from "$lib/seo/structured-data";
 	import { serializeJsonLd } from "$lib/seo/structured-data";
-	import { getIPFSLink } from "$lib/utils";
 
 	const fallbackImage: SocialImageAsset = {
-		src: getIPFSLink("bafybeibkbtxn255q765pfxw2tcfgi34bnehu3egsiro7xwpvtfl4nx6a7e/splash.png"),
+		src: "/static/social-default.png",
 		width: 1200,
 		height: 630,
 		type: "image/png",
@@ -56,10 +55,7 @@
 	<meta content={lang} name="language" />
 	<meta content={locale} property="og:locale" />
 	<meta content="cofob.dev" property="og:site_name" />
-	<meta
-		content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой"
-		name="keywords"
-	/>
+	<meta content="cofob,cofob.dev,персональный сайт,personal website,кофоб,егор терновой" name="keywords" />
 	<meta content={noindex ? "noindex" : "index, follow"} name="robots" />
 	<meta content={fullTitle} name="title" />
 	<meta content={fullTitle} property="og:title" />

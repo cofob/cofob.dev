@@ -24,7 +24,7 @@ describe("portable feed content", () => {
 		expect(output).toContain("@cofob wrote:");
 		expect(output).toContain("Warning!");
 		expect(output).toContain("Note:");
-		expect(output).toContain("/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2F");
+		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2F");
 		expect(output).not.toContain("chat-avatar");
 		expect(output).not.toContain('class="recording');
 		expect(output).not.toContain("Загрузка плеера");

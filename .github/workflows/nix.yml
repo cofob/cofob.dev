@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  packages: read
 
 jobs:
   validate:
@@ -18,11 +19,14 @@ jobs:
         with:
           node-version: 24.11.0
           cache: npm
+      - name: Configure GitHub Packages authentication
+        run: npm config set //npm.pkg.github.com/:_authToken "$GITHUB_PACKAGES_TOKEN" --location=user
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - run: npm ci
       - run: npx playwright install --with-deps chromium
       - run: npm test
       - run: npm audit --audit-level=high
-      - run: npm run test:static
       - run: npm run test:cloudflare
 
   cache:
