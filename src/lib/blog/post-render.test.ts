@@ -140,6 +140,10 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast");
 		expect(output).toContain('aria-label="Демонстрация codex-start в терминале"');
 		expect(output).toContain("Открыть запись в плеере");
+		expect(output).toContain('class="cf-terminal-code-block"');
+		expect(output).toContain('data-language="bash"');
+		expect(output).toContain("--proto");
+		expect(output).toContain("Installed codex-start 0.1.6");
 		expect(output).not.toContain("Загрузка плеера");
 		expect(output).toContain('aria-label="Предупреждение"');
 		expect(output).toContain("Это вайбкод");
@@ -150,7 +154,7 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain('aria-label="Примечание"');
 		expect(output).toContain('class="cf-sticker"');
 		expect(output).toContain('alt="Персонаж заявляет, что он не долбоёб"');
-		expect(output).toContain('alt="Лис с нимбом доволен собой"');
+		expect(output).toContain('alt="Лис доволен собой"');
 		expect(output).toContain("https://t.me/addstickers/PhSilver");
 	});
 
@@ -165,6 +169,10 @@ describe("MDsveX post rendering", () => {
 		expect(output).not.toContain("chat-avatar");
 		expect(output).not.toContain('class="recording');
 		expect(output).not.toContain("Загрузка плеера");
+		expect(output).not.toContain('class="cf-terminal-code-block"');
+		expect(output).not.toContain("Copy command");
+		expect(output).toContain("Установка codex-start");
+		expect(output).toContain("Installed codex-start 0.1.6");
 		expect(output).toContain(
 			'href="/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast"',
 		);

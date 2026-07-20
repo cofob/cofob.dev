@@ -135,6 +135,7 @@ Import reusable article components from `src/lib/components/blog/` rather than r
 - `Sticker`: optimized shared sticker with required alt text and source attribution.
 - `ChatThread`: accepts `author`, `avatar`, `messages`, and an accessible `label`. Each message may have `text`, `link`, and `linkLabel`. Feed output becomes an avatar-free blockquote.
 - `AsciinemaPlayer`: accepts `src`, optional `cols`/`rows`, optional `preload` (default `true`), and a descriptive `label`. Store each `.cast` file in `static/blog/<slug>/` and use a relative `src`; the build rewrites it to a local content-hashed asset. Before the inline enhancement is ready, articles show a link to `/blog/play_asciinema/?url=...` rather than loading text; feeds use the same browser-player link. The dedicated player page alone sets `directFallback` to avoid linking recursively to itself.
+- `TerminalCodeBlock`: displays copyable design-system terminal commands in the browser and plain `pre`/`code` command-and-output pairs in portable feeds. Pass an `entries` array and a descriptive `label`.
 - `ResponsiveImage`: use for image metadata supplied by the catalog or asset manifest. Ordinary post images should use Markdown so the build can rewrite them automatically.
 - `Comments`, `CommentThread`, `CommentMedia`, and `RichText`: page-level Fediverse comment infrastructure, not components to embed in post Markdown.
 - `PostCard` and `LatestPostLink`: blog listing/home-page components, not article-body components.

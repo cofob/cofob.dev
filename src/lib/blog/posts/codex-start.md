@@ -12,6 +12,7 @@ draft: false
 	import ChatThread from "$lib/components/blog/ChatThread.svelte";
 	import NoticeBlock from "$lib/components/blog/NoticeBlock.svelte";
 	import Sticker from "$lib/components/blog/Sticker.svelte";
+	import TerminalCodeBlock from "$lib/components/blog/TerminalCodeBlock.svelte";
 	import WarningBlock from "$lib/components/blog/WarningBlock.svelte";
 	import PhSilver084 from "@cofob/design-system-stickers/svelte/PhSilver084";
 	import TheGatesOfOrgrimmar005 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
@@ -33,6 +34,17 @@ draft: false
 		},
 		{ text: "в теории прокидывается еще и ssh-agent/gpg-agent, но чет сломалось(" },
 		{ text: "ну и так как агенты в отдельных worktree то можно запускать сколько угодно их параллельно" },
+	];
+
+	const installation = [
+		{
+			command:
+				"curl --proto '=https' --tlsv1.2 -fsSLo install.sh \\\n  https://github.com/cofob/codex-start/releases/latest/download/install.sh",
+		},
+		{
+			command: "sh install.sh",
+			output: "Verified OK\nInstalled codex-start 0.1.6 to /root/.local/bin/codex-start",
+		},
 	];
 </script>
 
@@ -59,6 +71,10 @@ draft: false
 ![Схема двух изолированных worktree Codex в Docker с SSH, .git и ~/.config](visualization.webp)
 
 Сейчас он запускает полноценный Codex в воспроизводимых Docker или Podman-окружениях, сам создаёт отдельные git worktree и позволяет запускать сколько угодно агентов параллельно. Есть готовые окружения для Rust, web и uv, переиспользование Codex homes и кэшей, управление сессиями, allowlist для сети и прокидывание секретов, SSH/GPG-agent, MCP и локальных сервисов.
+
+Установка:
+
+<TerminalCodeBlock entries={installation} label="Установка codex-start" />
 
 <AsciinemaPlayer
 	src="codex-start-demo.cast"
