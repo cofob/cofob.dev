@@ -3,7 +3,6 @@ declare global {
 
 	interface ImportMetaEnv {
 		readonly VITE_DOMAIN: string;
-		readonly VITE_IPFS_ENDPOINT: string;
 		readonly VITE_ANALYTICS: string;
 	}
 

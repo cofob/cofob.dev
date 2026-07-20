@@ -71,7 +71,6 @@
 </script>
 
 <svelte:head>
-	<link rel="preconnect" href={import.meta.env.VITE_IPFS_ENDPOINT} />
 	<link rel="icon" type="image/x-icon" href="/static/favicon.ico" />
 	<link rel="alternate" type="application/rss+xml" title="cofob.dev blog RSS" href="/rss.xml" />
 	<link rel="alternate" type="application/atom+xml" title="cofob.dev blog Atom" href="/atom.xml" />

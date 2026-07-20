@@ -2,8 +2,6 @@ import { buildTime, getPublicPosts, siteSocialImage } from "$lib/blog/catalog";
 import { absoluteSiteUrl } from "$lib/blog/url";
 import { escapeXml } from "$lib/blog/xml";
 
-export const prerender = process.env.DEPLOY_TARGET === "static";
-
 export async function GET() {
 	const headers = {
 		"Cache-Control": "public, max-age=3600",

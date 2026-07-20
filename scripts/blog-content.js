@@ -36,11 +36,18 @@ const postSchema = z
 		}
 		validatePair(post, context, "cover", "coverAlt");
 		validatePair(post, context, "socialImage", "socialImageAlt");
-		if (post.socialImage && isRemoteAsset(post.socialImage) && !post.socialImage.startsWith("https://")) {
+		if (post.cover && isRemoteAsset(post.cover)) {
+			context.addIssue({
+				code: "custom",
+				path: ["cover"],
+				message: "cover must reference a local post asset",
+			});
+		}
+		if (post.socialImage && isRemoteAsset(post.socialImage)) {
 			context.addIssue({
 				code: "custom",
 				path: ["socialImage"],
-				message: "remote socialImage must use an absolute HTTPS URL",
+				message: "socialImage must reference a local post asset",
 			});
 		}
 		if (post.updated && Date.parse(post.updated) < Date.parse(post.published)) {
@@ -139,6 +146,7 @@ function validateMarkdownImages(root, slug, source) {
 		if (!alt.trim()) {
 			throw new Error(`Markdown image ${url} needs meaningful alt text; use an explicit <img alt=""> for decoration`);
 		}
+		if (isRemoteAsset(url)) throw new Error(`Markdown image ${url} must reference a local post asset`);
 		resolvePostAsset(root, slug, url);
 	}
 }

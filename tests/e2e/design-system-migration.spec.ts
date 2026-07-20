@@ -52,6 +52,25 @@ test("mobile navbar opens and remains keyboard operable", async ({ page }, testI
 	await expect(page.locator("[data-cf-navbar]")).toHaveAttribute("data-state", "closed");
 });
 
+test("collapsed navbar keeps the home hero within the tablet rhythm", async ({ page }) => {
+	await page.setViewportSize({ width: 790, height: 500 });
+	await page.goto("/");
+
+	const spacing = await page.evaluate(() => {
+		const navbar = document.querySelector<HTMLElement>(".cf-navbar")?.getBoundingClientRect();
+		const trigger = document.querySelector<HTMLElement>("[data-cf-navbar-trigger]")?.getBoundingClientRect();
+		const heading = document.querySelector<HTMLElement>("main h1")?.getBoundingClientRect();
+		if (!navbar || !trigger || !heading) throw new Error("Expected navbar, trigger, and home heading");
+		return {
+			rightInset: navbar.right - trigger.right,
+			contentGap: heading.top - navbar.bottom,
+		};
+	});
+
+	expect(spacing.rightInset).toBe(16);
+	expect(spacing.contentGap).toBe(40);
+});
+
 test("blog search and tag filtering preserve their behavior", async ({ page }) => {
 	await page.goto("/blog/");
 	await waitForHydration(page);

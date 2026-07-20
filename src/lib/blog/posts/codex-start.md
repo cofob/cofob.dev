@@ -57,7 +57,7 @@ draft: false
 Сейчас он запускает полноценный Codex в воспроизводимых Docker или Podman-окружениях, сам создаёт отдельные git worktree и позволяет запускать сколько угодно агентов параллельно. Есть готовые окружения для Rust, web и uv, переиспользование Codex homes и кэшей, управление сессиями, allowlist для сети и прокидывание секретов, SSH/GPG-agent, MCP и локальных сервисов.
 
 <AsciinemaPlayer
-	src="https://site-assets.cofob.dev/codex-start/codex-start-demo.cast"
+	src="codex-start-demo.cast"
 	label="Демонстрация codex-start в терминале"
 />
 
@@ -87,7 +87,7 @@ draft: false
 Изначально это было около тысячи строк баша, но по мере добавления необходимого мне функционала оно выросло до 2,5 тысяч строк баша, что уже сложно мейнтейнить, но в целом оно работало.
 
 <AsciinemaPlayer
-	src="https://site-assets.cofob.dev/codex-start/pi-start.cast"
+	src="pi-start.cast"
 	cols={200}
 	rows={56}
 	label="Демонстрация pi-start в терминале"

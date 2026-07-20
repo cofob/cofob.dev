@@ -2,21 +2,20 @@ import { describe, expect, it } from "vitest";
 import { asciinemaPlayerHref, getAsciinemaPageData, validateAsciinemaSource } from "./asciinema";
 
 describe("asciinema source URLs", () => {
-	it("accepts recordings from the exact HTTPS assets origin", () => {
-		expect(validateAsciinemaSource("https://site-assets.cofob.dev/demo/session.cast?raw=1")).toBe(
-			"https://site-assets.cofob.dev/demo/session.cast?raw=1",
+	it("accepts only local content-hashed recordings", () => {
+		expect(validateAsciinemaSource("/blog/demo/session.0123456789ab.cast")).toBe(
+			"/blog/demo/session.0123456789ab.cast",
 		);
-		expect(asciinemaPlayerHref("https://site-assets.cofob.dev/demo.cast")).toBe(
-			"/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fdemo.cast",
+		expect(asciinemaPlayerHref("/blog/demo/session.0123456789ab.cast")).toBe(
+			"/blog/play_asciinema/?url=%2Fblog%2Fdemo%2Fsession.0123456789ab.cast",
 		);
 	});
 
 	it.each([
-		"http://site-assets.cofob.dev/demo.cast",
-		"https://other.site-assets.cofob.dev/demo.cast",
-		"https://cofob.dev/demo.cast",
-		"https://user@site-assets.cofob.dev/demo.cast",
-		"https://site-assets.cofob.dev:444/demo.cast",
+		"https://assets.example/demo.cast",
+		"/blog/demo/session.cast",
+		"/blog/demo/session.0123456789ab.cast?download=1",
+		"/blog/../session.0123456789ab.cast",
 		"not a URL",
 	])("rejects a disallowed source: %s", (source) => {
 		expect(() => validateAsciinemaSource(source)).toThrow();
@@ -30,11 +29,11 @@ describe("asciinema source URLs", () => {
 			getAsciinemaPageData(
 				new URL("https://cofob.dev/blog/play_asciinema/?url=https%3A%2F%2Fevil.example%2Fdemo.cast"),
 			),
-		).toEqual({ error: "Asciinema source must use https://site-assets.cofob.dev" });
+		).toEqual({ error: "Asciinema source must be a local content-hashed .cast asset" });
 		expect(
 			getAsciinemaPageData(
-				new URL("https://cofob.dev/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fdemo.cast"),
+				new URL("https://cofob.dev/blog/play_asciinema/?url=%2Fblog%2Fdemo%2Fsession.0123456789ab.cast"),
 			),
-		).toEqual({ source: "https://site-assets.cofob.dev/demo.cast" });
+		).toEqual({ source: "/blog/demo/session.0123456789ab.cast" });
 	});
 });

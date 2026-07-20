@@ -11,7 +11,7 @@ export const load: PageServerLoad = async ({ params, fetch, setHeaders }) => {
 	if (!post || (!dev && !post.isPublic)) error(404, "Post not found");
 
 	setHeaders({ "cache-control": "public, max-age=300, stale-while-revalidate=600" });
-	const commentMode: "manual" | "automatic" = process.env.DEPLOY_TARGET === "static" ? "manual" : "automatic";
+	const commentMode: "manual" | "automatic" = process.env.COMMENTS_MODE === "manual" ? "manual" : "automatic";
 	const comments =
 		post.comments && commentMode === "automatic" ? await getServerComments(post.comments, fetch) : undefined;
 

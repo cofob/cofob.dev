@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { browser } from "$app/environment";
 	import { resolve } from "$app/paths";
-	import { page } from "$app/state";
 	import { siteSocialImage } from "$lib/blog/catalog";
 	import { toPostModel } from "$lib/blog/post-model";
 	import type { SearchPost } from "$lib/blog/types";
@@ -24,7 +22,6 @@
 	} from "$lib/components";
 	import PostCard from "$lib/components/blog/PostCard.svelte";
 	import { blogStructuredData } from "$lib/seo/structured-data";
-	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
@@ -34,31 +31,7 @@
 	let searchError = $state(false);
 	let normalizedQuery = $derived(query.trim().toLocaleLowerCase());
 	let searching = $derived(normalizedQuery.length > 0);
-	let selectedTag = $derived.by(() => {
-		const requested =
-			data.clientSideFiltering && browser ? (page.url.searchParams.get("tag")?.trim() ?? "") : data.selectedTag;
-		return data.tags.find((tag) => tag.toLocaleLowerCase() === requested.toLocaleLowerCase()) ?? requested;
-	});
-	let requestedPage = $derived.by(() => {
-		if (!data.clientSideFiltering || !browser) return data.page;
-		const value = page.url.searchParams.get("page");
-		return value && /^\d+$/.test(value) ? Math.max(1, Number.parseInt(value, 10)) : 1;
-	});
-	let clientFilteredPosts = $derived(
-		(searchIndex ?? []).filter(
-			(post) => !selectedTag || post.tags.some((tag) => tag.toLocaleLowerCase() === selectedTag.toLocaleLowerCase()),
-		),
-	);
-	let clientPageCount = $derived(Math.max(1, Math.ceil(clientFilteredPosts.length / 10)));
-	let clientPage = $derived(Math.min(requestedPage, clientPageCount));
-	let listedPosts = $derived(
-		data.clientSideFiltering && searchIndex
-			? clientFilteredPosts.slice((clientPage - 1) * 10, clientPage * 10)
-			: data.posts,
-	);
-	let listedTotal = $derived(data.clientSideFiltering && searchIndex ? clientFilteredPosts.length : data.total);
-	let listedPage = $derived(data.clientSideFiltering && searchIndex ? clientPage : data.page);
-	let listedPageCount = $derived(data.clientSideFiltering && searchIndex ? clientPageCount : data.pageCount);
+	let selectedTag = $derived(data.selectedTag);
 	let searchResults = $derived(
 		(searchIndex ?? []).filter((post) => {
 			if (selectedTag && !post.tags.some((tag) => tag.toLocaleLowerCase() === selectedTag.toLocaleLowerCase())) {
@@ -97,10 +70,6 @@
 		query = (event.currentTarget as HTMLInputElement).value;
 		if (query.trim()) void loadSearchIndex();
 	}
-
-	onMount(() => {
-		if (data.clientSideFiltering) void loadSearchIndex();
-	});
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -- dynamic query links are based on resolved routes -->
@@ -188,18 +157,18 @@
 						{/each}
 					</Stack>
 				{/if}
-			{:else if listedPosts.length > 0}
-				<Text size="sm" tone="muted">Showing {listedPosts.length} of {listedTotal} posts</Text>
+			{:else if data.posts.length > 0}
+				<Text size="sm" tone="muted">Showing {data.posts.length} of {data.total} posts</Text>
 				<Stack gap="lg">
-					{#each listedPosts as post (post.slug)}
+					{#each data.posts as post (post.slug)}
 						<PostCard {post} />
 					{/each}
 				</Stack>
 
-				{#if listedPageCount > 1}
+				{#if data.pageCount > 1}
 					<Pagination
-						page={listedPage}
-						totalPages={listedPageCount}
+						page={data.page}
+						totalPages={data.pageCount}
 						getHref={(page) => blogHref(page)}
 						label="Blog pages"
 					/>

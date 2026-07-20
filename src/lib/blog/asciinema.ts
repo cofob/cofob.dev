@@ -1,18 +1,10 @@
-const ASCIINEMA_ASSET_ORIGIN = "https://site-assets.cofob.dev";
+const ASCIINEMA_PATH = /^\/blog\/[a-z0-9]+(?:-[a-z0-9]+)*\/[a-z0-9]+(?:-[a-z0-9]+)*\.[a-f0-9]{12}\.cast$/u;
 
 export function validateAsciinemaSource(value: string): string {
-	let source: URL;
-	try {
-		source = new URL(value);
-	} catch {
-		throw new Error("Asciinema source must be a valid absolute URL");
+	if (!ASCIINEMA_PATH.test(value)) {
+		throw new Error("Asciinema source must be a local content-hashed .cast asset");
 	}
-
-	if (source.origin !== ASCIINEMA_ASSET_ORIGIN || source.username || source.password) {
-		throw new Error(`Asciinema source must use ${ASCIINEMA_ASSET_ORIGIN}`);
-	}
-
-	return source.href;
+	return value;
 }
 
 export function asciinemaPlayerHref(source: string): string {

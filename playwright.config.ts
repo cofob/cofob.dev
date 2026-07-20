@@ -13,7 +13,7 @@ export default defineConfig({
 		{ name: "mobile", use: { browserName: "chromium", viewport: { width: 375, height: 812 } } },
 	],
 	webServer: {
-		command: "DEPLOY_TARGET=static npm run dev -- --host 127.0.0.1 --port 4173",
+		command: "COMMENTS_MODE=manual npm run dev -- --host 127.0.0.1 --port 4173",
 		url: "http://127.0.0.1:4173",
 		reuseExistingServer: true,
 		timeout: 30_000,

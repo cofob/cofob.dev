@@ -95,7 +95,7 @@
 			<Card padding="none"><div bind:this={target} data-asciinema-player-mount></div></Card>
 			{#if !ready}
 				<Alert title={failed ? "Плеер не загрузился" : "Терминальная запись"} tone={failed ? "warning" : "info"}>
-					<Link href={directFallback ? src : portableHref} external rel="noopener noreferrer">
+					<Link href={directFallback ? src : portableHref}>
 						{directFallback ? "Открыть запись напрямую" : "Открыть запись в плеере"}
 					</Link>
 				</Alert>

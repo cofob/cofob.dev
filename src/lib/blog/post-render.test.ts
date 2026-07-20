@@ -136,12 +136,8 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain('class="cf-chat__avatar"');
 		expect(output).toContain('alt=""');
 		expect(output).toContain("вайб на баше");
-		expect(output).toContain(
-			"/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fpi-start.cast",
-		);
-		expect(output).toContain(
-			"/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fcodex-start-demo.cast",
-		);
+		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fpi-start.64b0f412daf9.cast");
+		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast");
 		expect(output).toContain('aria-label="Демонстрация codex-start в терминале"');
 		expect(output).toContain("Открыть запись в плеере");
 		expect(output).not.toContain("Загрузка плеера");
@@ -170,7 +166,7 @@ describe("MDsveX post rendering", () => {
 		expect(output).not.toContain('class="recording');
 		expect(output).not.toContain("Загрузка плеера");
 		expect(output).toContain(
-			'href="/blog/play_asciinema/?url=https%3A%2F%2Fsite-assets.cofob.dev%2Fcodex-start%2Fcodex-start-demo.cast"',
+			'href="/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast"',
 		);
 		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar"');
 		expect(output).toContain("https://t.me/addstickers/the_gates_of_orgrimmar");

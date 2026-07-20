@@ -91,7 +91,7 @@
 					/>
 				{/if}
 
-				<Prose>
+				<Prose size="default">
 					<Post />
 				</Prose>
 
