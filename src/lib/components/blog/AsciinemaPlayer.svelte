@@ -36,6 +36,7 @@
 
 <script lang="ts">
 	import { onMount } from "svelte";
+	import { Alert, Card, Link, Stack } from "@cofob/design-system-svelte";
 	import { asciinemaPlayerHref } from "$lib/blog/asciinema";
 	import { getBlogRenderMode } from "$lib/blog/render-mode";
 
@@ -89,32 +90,16 @@
 {#if renderMode === "portable"}
 	<p><a href={portableHref}>{label}</a></p>
 {:else}
-	<figure class="recording" aria-label={label}>
-		<div class="player" bind:this={target}></div>
-		{#if !ready}
-			<p class="fallback" role={failed ? "status" : undefined}>
-				{#if failed}Плеер не загрузился.
-				{/if}
-				<a href={directFallback ? src : portableHref} target="_blank" rel="noopener noreferrer">
-					{directFallback ? "Открыть запись напрямую" : "Открыть запись в плеере"}
-				</a>
-			</p>
-		{/if}
+	<figure aria-label={label}>
+		<Stack gap="sm">
+			<Card padding="none"><div bind:this={target} data-asciinema-player-mount></div></Card>
+			{#if !ready}
+				<Alert title={failed ? "Плеер не загрузился" : "Терминальная запись"} tone={failed ? "warning" : "info"}>
+					<Link href={directFallback ? src : portableHref} external rel="noopener noreferrer">
+						{directFallback ? "Открыть запись напрямую" : "Открыть запись в плеере"}
+					</Link>
+				</Alert>
+			{/if}
+		</Stack>
 	</figure>
 {/if}
-
-<style lang="postcss">
-	@reference "../../app.css";
-
-	.recording {
-		@apply my-8;
-	}
-
-	.player {
-		@apply max-w-full overflow-x-auto rounded-lg bg-zinc-800;
-	}
-
-	.fallback {
-		@apply my-0! rounded-lg border border-zinc-500 bg-zinc-100 px-4 py-3 text-base;
-	}
-</style>

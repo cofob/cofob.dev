@@ -93,7 +93,7 @@ function escapeAttribute(value) {
 
 function responsiveImageMarkup(asset, alt) {
 	const dimensions = asset.width > 0 ? ` width="${asset.width}" height="${asset.height}"` : "";
-	return `<img src="${escapeAttribute(asset.src)}" srcset="${escapeAttribute(asset.srcset)}" sizes="(min-width: 800px) 768px, calc(100vw - 2rem)"${dimensions} alt="${escapeAttribute(alt)}" loading="lazy" decoding="async">`;
+	return `<figure class="cf-responsive-image"><span class="cf-responsive-image__media"><img class="cf-responsive-image__light" src="${escapeAttribute(asset.src)}" srcset="${escapeAttribute(asset.srcset)}" sizes="(min-width: 800px) 768px, calc(100vw - 2rem)"${dimensions} alt="${escapeAttribute(alt)}" loading="lazy" decoding="async"></span></figure>`;
 }
 
 export function rewritePostMarkdown(root, id, source, manifest) {

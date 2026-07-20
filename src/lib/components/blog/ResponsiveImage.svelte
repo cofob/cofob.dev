@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ResponsiveImageAsset } from "$lib/blog/types";
+	import { ResponsiveImage } from "@cofob/design-system-svelte";
 
 	let {
 		image,
@@ -16,17 +17,12 @@
 		fetchpriority?: "high" | "low" | "auto";
 		class?: string;
 	} = $props();
+	let source = $derived({ ...image, alt, sizes });
 </script>
 
-<img
+<ResponsiveImage
+	image={source}
 	class={className}
-	src={image.src}
-	srcset={image.srcset}
-	{sizes}
-	width={image.width || undefined}
-	height={image.height || undefined}
-	{alt}
-	{loading}
-	{fetchpriority}
-	decoding="async"
+	priority={loading === "eager" || fetchpriority === "high"}
+	fit="cover"
 />

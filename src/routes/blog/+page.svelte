@@ -1,11 +1,30 @@
 <script lang="ts">
+	import { browser } from "$app/environment";
 	import { resolve } from "$app/paths";
+	import { page } from "$app/state";
 	import { siteSocialImage } from "$lib/blog/catalog";
-	import { formatPostDate } from "$lib/blog/format";
+	import { toPostModel } from "$lib/blog/post-model";
 	import type { SearchPost } from "$lib/blog/types";
-	import { BlueLine, Heading, Meta, Section } from "$lib/components";
+	import {
+		BlueLine,
+		Card,
+		Container,
+		EmptyState,
+		Heading,
+		Inline,
+		Link,
+		Meta,
+		Pagination,
+		SearchResultCard,
+		Section,
+		Stack,
+		Tag,
+		Text,
+		TextField,
+	} from "$lib/components";
 	import PostCard from "$lib/components/blog/PostCard.svelte";
 	import { blogStructuredData } from "$lib/seo/structured-data";
+	import { onMount } from "svelte";
 	import type { PageData } from "./$types";
 
 	let { data }: { data: PageData } = $props();
@@ -15,12 +34,34 @@
 	let searchError = $state(false);
 	let normalizedQuery = $derived(query.trim().toLocaleLowerCase());
 	let searching = $derived(normalizedQuery.length > 0);
+	let selectedTag = $derived.by(() => {
+		const requested =
+			data.clientSideFiltering && browser ? (page.url.searchParams.get("tag")?.trim() ?? "") : data.selectedTag;
+		return data.tags.find((tag) => tag.toLocaleLowerCase() === requested.toLocaleLowerCase()) ?? requested;
+	});
+	let requestedPage = $derived.by(() => {
+		if (!data.clientSideFiltering || !browser) return data.page;
+		const value = page.url.searchParams.get("page");
+		return value && /^\d+$/.test(value) ? Math.max(1, Number.parseInt(value, 10)) : 1;
+	});
+	let clientFilteredPosts = $derived(
+		(searchIndex ?? []).filter(
+			(post) => !selectedTag || post.tags.some((tag) => tag.toLocaleLowerCase() === selectedTag.toLocaleLowerCase()),
+		),
+	);
+	let clientPageCount = $derived(Math.max(1, Math.ceil(clientFilteredPosts.length / 10)));
+	let clientPage = $derived(Math.min(requestedPage, clientPageCount));
+	let listedPosts = $derived(
+		data.clientSideFiltering && searchIndex
+			? clientFilteredPosts.slice((clientPage - 1) * 10, clientPage * 10)
+			: data.posts,
+	);
+	let listedTotal = $derived(data.clientSideFiltering && searchIndex ? clientFilteredPosts.length : data.total);
+	let listedPage = $derived(data.clientSideFiltering && searchIndex ? clientPage : data.page);
+	let listedPageCount = $derived(data.clientSideFiltering && searchIndex ? clientPageCount : data.pageCount);
 	let searchResults = $derived(
 		(searchIndex ?? []).filter((post) => {
-			if (
-				data.selectedTag &&
-				!post.tags.some((tag) => tag.toLocaleLowerCase() === data.selectedTag.toLocaleLowerCase())
-			) {
+			if (selectedTag && !post.tags.some((tag) => tag.toLocaleLowerCase() === selectedTag.toLocaleLowerCase())) {
 				return false;
 			}
 			return [post.title, post.description, ...post.tags].some((value) =>
@@ -29,7 +70,7 @@
 		}),
 	);
 
-	function blogHref(page = 1, tag = data.selectedTag): string {
+	function blogHref(page = 1, tag = selectedTag): string {
 		const parameters = [];
 		if (tag) parameters.push(`tag=${encodeURIComponent(tag)}`);
 		if (page > 1) parameters.push(`page=${page}`);
@@ -56,6 +97,10 @@
 		query = (event.currentTarget as HTMLInputElement).value;
 		if (query.trim()) void loadSearchIndex();
 	}
+
+	onMount(() => {
+		if (data.clientSideFiltering) void loadSearchIndex();
+	});
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -- dynamic query links are based on resolved routes -->
@@ -66,169 +111,105 @@
 	structuredData={blogStructuredData(data.posts, siteSocialImage)}
 />
 
-<Section>
-	<header class="page-header">
-		<Heading level={1}><BlueLine>Blog</BlueLine></Heading>
-		<p>Writing and notes from cofob.</p>
-		<nav aria-label="Blog feeds">
-			<a href={resolve("/rss.xml")}>RSS</a>
-			<span aria-hidden="true">·</span>
-			<a href={resolve("/atom.xml")}>Atom</a>
-		</nav>
-	</header>
+<Container size="wide">
+	<Section>
+		<Stack gap="xl">
+			<header>
+				<Stack align="center" gap="sm">
+					<Heading level={1} size="2xl"><BlueLine>Blog</BlueLine></Heading>
+					<Text size="lg" tone="muted">Writing and notes from cofob.</Text>
+					<nav aria-label="Blog feeds">
+						<Inline gap="sm" justify="center">
+							<Link href={resolve("/rss.xml")}>RSS</Link>
+							<Link href={resolve("/atom.xml")}>Atom</Link>
+						</Inline>
+					</nav>
+				</Stack>
+			</header>
 
-	<div class="controls">
-		<label for="blog-search">Search posts</label>
-		<input
-			id="blog-search"
-			type="search"
-			placeholder="Title, description, or tag"
-			value={query}
-			oninput={handleSearch}
-			autocomplete="off"
-		/>
+			<Card variant="outlined" padding="lg">
+				<Stack gap="md">
+					<TextField
+						id="blog-search"
+						type="search"
+						label="Search posts"
+						placeholder="Title, description, or tag"
+						bind:value={query}
+						oninput={handleSearch}
+						autocomplete="off"
+					/>
 
-		{#if data.tags.length > 0}
-			<nav class="tag-filters" aria-label="Filter posts by tag">
-				<a href={blogHref(1, "")} aria-current={!data.selectedTag ? "page" : undefined}>All</a>
-				{#each data.tags as tag (tag)}
-					<a href={blogHref(1, tag)} aria-current={data.selectedTag === tag ? "page" : undefined}>{tag}</a>
-				{/each}
-			</nav>
-		{/if}
-	</div>
+					{#if data.tags.length > 0}
+						<nav aria-label="Filter posts by tag">
+							<Inline gap="sm">
+								<a
+									class="cf-link"
+									data-underline="none"
+									href={blogHref(1, "")}
+									aria-current={!selectedTag ? "page" : undefined}
+								>
+									<Tag tone={!selectedTag ? "accent" : "neutral"}>All</Tag>
+								</a>
+								{#each data.tags as tag (tag)}
+									<a
+										class="cf-link"
+										data-underline="none"
+										href={blogHref(1, tag)}
+										aria-current={selectedTag === tag ? "page" : undefined}
+									>
+										<Tag tone={selectedTag === tag ? "accent" : "neutral"}>{tag}</Tag>
+									</a>
+								{/each}
+							</Inline>
+						</nav>
+					{/if}
+				</Stack>
+			</Card>
 
-	{#if searching}
-		<p class="result-count" aria-live="polite">
-			{#if searchLoading}
-				Loading search index…
-			{:else if searchError}
-				Search could not be loaded.
-			{:else}
-				{searchResults.length} {searchResults.length === 1 ? "result" : "results"}
-			{/if}
-		</p>
+			{#if searching}
+				<Text size="sm" tone="muted" aria-live="polite">
+					{#if searchLoading}
+						Loading search index…
+					{:else if searchError}
+						Search could not be loaded.
+					{:else}
+						{searchResults.length} {searchResults.length === 1 ? "result" : "results"}
+					{/if}
+				</Text>
 
-		{#if !searchLoading && !searchError}
-			<div class="search-results">
-				{#each searchResults as post (post.slug)}
-					<a class="search-result" href={resolve("/blog/[slug]", { slug: post.slug })}>
-						<span class="search-date">{formatPostDate(post.published, post.lang)}</span>
-						<strong>{post.title}</strong>
-						<span>{post.description}</span>
-						{#if post.tags.length > 0}<small>{post.tags.join(" · ")}</small>{/if}
-					</a>
-				{/each}
-			</div>
-		{/if}
-	{:else}
-		{#if data.posts.length > 0}
-			<p class="result-count">Showing {data.posts.length} of {data.total} posts</p>
-			<div class="post-list">
-				{#each data.posts as post (post.slug)}
-					<PostCard {post} />
-				{/each}
-			</div>
-
-			{#if data.pageCount > 1}
-				<nav class="pagination" aria-label="Blog pages">
-					{#if data.page > 1}<a href={blogHref(data.page - 1)} rel="prev">Previous</a>{/if}
-					{#each Array.from({ length: data.pageCount }, (_, index) => index + 1) as page (page)}
-						<a href={blogHref(page)} aria-current={page === data.page ? "page" : undefined}>{page}</a>
+				{#if !searchLoading && !searchError}
+					<Stack gap="md">
+						{#each searchResults as post (post.slug)}
+							<SearchResultCard
+								result={toPostModel(post, resolve("/blog/[slug]", { slug: post.slug }))}
+								{query}
+								headingLevel={2}
+							/>
+						{/each}
+					</Stack>
+				{/if}
+			{:else if listedPosts.length > 0}
+				<Text size="sm" tone="muted">Showing {listedPosts.length} of {listedTotal} posts</Text>
+				<Stack gap="lg">
+					{#each listedPosts as post (post.slug)}
+						<PostCard {post} />
 					{/each}
-					{#if data.page < data.pageCount}<a href={blogHref(data.page + 1)} rel="next">Next</a>{/if}
-				</nav>
+				</Stack>
+
+				{#if listedPageCount > 1}
+					<Pagination
+						page={listedPage}
+						totalPages={listedPageCount}
+						getHref={(page) => blogHref(page)}
+						label="Blog pages"
+					/>
+				{/if}
+			{:else}
+				<EmptyState
+					title="No posts"
+					description={selectedTag ? `No posts tagged “${selectedTag}”.` : "No posts have been published yet."}
+				/>
 			{/if}
-		{:else}
-			<p class="empty-state">
-				{data.selectedTag ? `No posts tagged “${data.selectedTag}”.` : "No posts have been published yet."}
-			</p>
-		{/if}
-	{/if}
-</Section>
-
-<style lang="postcss">
-	@reference "../../lib/app.css";
-
-	.page-header {
-		@apply mb-8 text-center;
-	}
-
-	.page-header p {
-		@apply text-lg text-zinc-600;
-	}
-
-	.page-header nav {
-		@apply mt-3 flex justify-center gap-2;
-	}
-
-	.page-header a {
-		@apply text-sky-700 hover:underline;
-	}
-
-	.controls {
-		@apply mx-auto mb-7 max-w-4xl;
-	}
-
-	.controls > label {
-		@apply mb-1 block text-sm font-semibold;
-	}
-
-	.controls > input {
-		@apply w-full rounded-lg border-2 border-zinc-100 px-3 py-2;
-	}
-
-	.tag-filters {
-		@apply mt-3 flex flex-wrap gap-2;
-	}
-
-	.tag-filters a {
-		@apply rounded-full bg-zinc-100 px-2.5 py-1 text-sm text-zinc-600 hover:bg-zinc-200;
-	}
-
-	.tag-filters a[aria-current="page"] {
-		@apply bg-zinc-800 text-white;
-	}
-
-	.result-count {
-		@apply mx-auto mb-3 max-w-4xl text-sm text-zinc-600;
-	}
-
-	.post-list,
-	.search-results {
-		@apply mx-auto grid max-w-4xl gap-5;
-	}
-
-	.search-result {
-		@apply grid rounded-xl border-2 border-zinc-100 p-4 hover:bg-zinc-100;
-	}
-
-	.search-result strong {
-		@apply text-xl;
-	}
-
-	.search-result > span:not(.search-date) {
-		@apply text-zinc-600;
-	}
-
-	.search-result small,
-	.search-date {
-		@apply text-sm text-zinc-600;
-	}
-
-	.pagination {
-		@apply mx-auto mt-7 flex max-w-4xl flex-wrap justify-center gap-2;
-	}
-
-	.pagination a {
-		@apply min-w-9 rounded-lg bg-zinc-100 px-3 py-2 text-center text-sm hover:bg-zinc-200;
-	}
-
-	.pagination a[aria-current="page"] {
-		@apply bg-zinc-800 text-white;
-	}
-
-	.empty-state {
-		@apply mx-auto max-w-xl rounded-xl bg-zinc-100 p-6 text-center;
-	}
-</style>
+		</Stack>
+	</Section>
+</Container>

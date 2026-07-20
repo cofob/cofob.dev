@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { RichTextNode } from "$lib/fediverse/types";
+	import { InlineEmoji, Prose } from "@cofob/design-system-svelte";
 
 	let { nodes }: { nodes: RichTextNode[] } = $props();
 </script>
@@ -13,19 +14,13 @@
 		{:else if node.type === "break"}
 			<br />
 		{:else if node.type === "emoji"}
-			<img
-				class="emoji"
-				src={node.src}
-				alt={node.alt}
-				width="20"
-				height="20"
-				loading="lazy"
-				referrerpolicy="no-referrer"
-			/>
+			<InlineEmoji image={{ src: node.src, alt: node.alt, width: 20, height: 20 }} />
 		{:else if node.tag === "p"}
 			<p>{@render renderNodes(node.children)}</p>
 		{:else if node.tag === "link"}
-			<a href={node.href} target="_blank" rel="nofollow noopener noreferrer">{@render renderNodes(node.children)}</a>
+			<a class="cf-link" href={node.href} target="_blank" rel="nofollow noopener noreferrer"
+				>{@render renderNodes(node.children)}</a
+			>
 		{:else if node.tag === "strong"}
 			<strong>{@render renderNodes(node.children)}</strong>
 		{:else if node.tag === "em"}
@@ -44,39 +39,4 @@
 	{/each}
 {/snippet}
 
-<div class="rich-text">{@render renderNodes(nodes)}</div>
-
-<style lang="postcss">
-	@reference "../../app.css";
-
-	.rich-text :global(p + p) {
-		@apply mt-2;
-	}
-
-	.rich-text :global(a) {
-		@apply text-sky-700 underline underline-offset-2;
-	}
-
-	.rich-text :global(blockquote) {
-		@apply border-l-2 border-zinc-500 pl-3 my-2 text-zinc-600;
-	}
-
-	.rich-text :global(ul) {
-		@apply list-disc ml-5;
-	}
-
-	.rich-text :global(ol) {
-		@apply list-decimal ml-5;
-	}
-
-	.rich-text :global(code) {
-		@apply bg-zinc-100 rounded px-1;
-	}
-
-	.emoji {
-		display: inline-block;
-		width: 1.25em;
-		height: 1.25em;
-		vertical-align: -0.2em;
-	}
-</style>
+<Prose>{@render renderNodes(nodes)}</Prose>

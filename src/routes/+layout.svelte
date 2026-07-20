@@ -1,16 +1,55 @@
 <script lang="ts">
-	import "$lib/app.css";
+	import "@cofob/design-system-css/index.css";
 	import { page } from "$app/state";
+	import { resolve } from "$app/paths";
 	import { replaceState } from "$app/navigation";
-	import { Footer, Navbar } from "$lib/components";
+	import {
+		AppShell,
+		BlueLine,
+		Footer,
+		Navbar,
+		SkipLink,
+		ThemeProvider,
+		ThemeScript,
+		ThemeToggle,
+		type LinkItem,
+		type ThemePreference,
+	} from "@cofob/design-system-svelte";
 	import { onMount, type Snippet } from "svelte";
 	import { SvelteURL } from "svelte/reactivity";
 	import { lineRainbowStore } from "$lib/store";
-	import { copyrightNotice, siteLicenseUrl } from "$lib/license";
+	import { copyrightEmail, copyrightNotice, siteLicensePath, siteLicenseUrl } from "$lib/license";
 
 	let { children }: { children: Snippet } = $props();
+	let themePreference = $state<ThemePreference>();
+	let navigationLinks = $derived<LinkItem[]>([
+		{ label: "Blog", href: resolve("/blog"), current: page.url.pathname.startsWith(resolve("/blog")) },
+		{ label: "PGP", href: resolve("/pgp"), current: page.url.pathname === resolve("/pgp") },
+		{ label: "SSH", href: resolve("/keys"), current: page.url.pathname === resolve("/keys") },
+	]);
+	const footerGroups = [
+		{
+			title: "Feeds",
+			links: [
+				{ label: "RSS", href: resolve("/rss.xml") },
+				{ label: "Atom", href: resolve("/atom.xml") },
+			],
+		},
+		{
+			title: "Project",
+			links: [
+				{ label: "Source code", href: "https://github.com/cofob/cofob.dev", external: true },
+				{ label: "License", href: resolve(siteLicensePath) },
+			],
+		},
+	] satisfies Array<{ title: string; links: LinkItem[] }>;
 
 	onMount(() => {
+		const storedTheme = localStorage.getItem("cf-theme");
+		if (storedTheme === "system" || storedTheme === "light" || storedTheme === "dark") {
+			themePreference = storedTheme;
+		}
+
 		const url = new SvelteURL(window.location.href);
 		const hasRainbowQuery = url.searchParams.has("rainbow");
 		const storedRainbow = sessionStorage.getItem("rainbow");
@@ -41,36 +80,39 @@
 	<meta name="dcterms.rights" content={copyrightNotice} />
 </svelte:head>
 
-<div>
-	<a class="skip-link" href="#main-content">Skip to main content</a>
-	<Navbar />
+<ThemeScript />
+{#snippet brandContent()}<BlueLine rainbow={$lineRainbowStore}>cofob</BlueLine>{/snippet}
+{#snippet themeAction()}
+	<ThemeToggle
+		preference={themePreference ?? "system"}
+		onPreferenceChange={(preference) => (themePreference = preference)}
+	/>
+{/snippet}
 
-	<main id="main-content" tabindex="-1">
-		{@render children()}
-	</main>
+<ThemeProvider bind:preference={themePreference}>
+	<AppShell>
+		<SkipLink>Skip to main content</SkipLink>
+		<Navbar
+			brand="cofob"
+			brandHref={resolve("/")}
+			{brandContent}
+			links={navigationLinks}
+			actions={themeAction}
+			collapseAt="tablet"
+		/>
 
-	<Footer />
-</div>
+		<main id="main-content" tabindex="-1">
+			{@render children()}
+		</main>
+
+		<Footer
+			brand="cofob.dev"
+			description={`Contact: ${copyrightEmail}`}
+			groups={footerGroups}
+			copyright={copyrightNotice}
+		/>
+	</AppShell>
+</ThemeProvider>
 
 <!-- eslint-disable-next-line svelte/no-at-html-tags -- trusted deployment-controlled analytics markup -->
 {@html import.meta.env.VITE_ANALYTICS}
-
-<style lang="postcss">
-	@reference "../lib/app.css";
-
-	div {
-		@apply flex flex-col min-h-screen;
-	}
-
-	main {
-		flex: 1;
-	}
-
-	.skip-link {
-		@apply fixed top-2 left-2 z-50 -translate-y-20 rounded-lg bg-zinc-800 px-3 py-2 font-semibold text-white;
-	}
-
-	.skip-link:focus {
-		@apply translate-y-0;
-	}
-</style>

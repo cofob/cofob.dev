@@ -163,7 +163,7 @@ Feed rendering passes `createPortableBlogContext()` to Svelte’s server rendere
 - Links must make sense out of context. Avoid “click here” and bare URLs when a useful label is available.
 - Use real buttons for actions and real links for navigation. All interaction must work by keyboard and expose visible focus.
 - Do not convey meaning by color alone. Keep text/background contrast at WCAG AA or better.
-- Respect `prefers-reduced-motion`; the global stylesheet suppresses animation, and new motion must remain understandable when removed.
+- Respect `prefers-reduced-motion`; the design-system stylesheet suppresses animation, and new motion must remain understandable when removed.
 - Tables need header cells and should have a caption or nearby explanation. MDsveX automatically makes overflowing tables and code blocks keyboard-focusable regions; do not remove that behavior.
 - Video and audio need controls, a descriptive label or caption, and usable fallback link text. Provide captions/transcripts when speech or sound carries information.
 - New-window links must use `rel="noopener noreferrer"`; remote user-generated links should also use `nofollow` and an appropriate `referrerpolicy`.
@@ -186,7 +186,8 @@ Feed rendering passes `createPortableBlogContext()` to Svelte’s server rendere
 - Use Svelte 5 runes (`$props`, `$state`, `$derived`) and TypeScript in components.
 - Components used in posts must server-render without touching browser globals during initialization. Put browser-only work in `onMount`.
 - Use `$app/paths.resolve` for typed internal navigation in Svelte pages/components. Feed-only URLs are made absolute later by the feed renderer.
-- Component PostCSS should begin with `@reference "../../app.css"` (adjusted for depth) before using Tailwind utilities.
+- Import `@cofob/design-system-css/index.css` exactly once in the root layout. Use components and documented `cf-*` semantic classes from `@cofob/design-system-svelte`; do not add Tailwind, local PostCSS, authored `<style>` blocks, utility classes, or presentation CSS.
+- Close reusable presentation gaps in `/Users/cofob/Development/design-system` and release the fixed package group instead of adding consumer-only styling.
 - Keep responsive layouts usable at narrow widths and avoid fixed content widths that cause page-level horizontal scrolling.
 - External links opened in a new tab require the appropriate `rel` values.
 

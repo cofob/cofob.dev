@@ -19,5 +19,6 @@ export const load: PageServerLoad = ({ setHeaders, url }) => {
 		page: pagination.page,
 		pageCount: pagination.pageCount,
 		total: pagination.total,
+		clientSideFiltering: process.env.DEPLOY_TARGET === "static",
 	};
 };

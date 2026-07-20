@@ -10,12 +10,22 @@ Original cofob.dev source code and website content owned by cofob are covered by
 
 Node.js 24.11 or newer is required.
 
+The site uses `@cofob/design-system-css` and `@cofob/design-system-svelte` as its only presentation layer. Configure a classic GitHub token with `read:packages` once in the user npm configuration before installing the public packages from GitHub Packages:
+
 ```sh
+npm config set @cofob:registry https://npm.pkg.github.com --location=user
+npm config set //npm.pkg.github.com/:_authToken "$(gh auth token)" --location=user
 npm ci
 npm run dev
 ```
 
+The token must never be committed. GitHub Actions configures an ephemeral user credential from `GITHUB_TOKEN`. Cloudflare Production and Preview builds need `GITHUB_PACKAGES_TOKEN` as an encrypted build variable and `NPM_CONFIG_USERCONFIG=.npmrc.github-packages` as a plain build variable. No registry credential is passed into the Nix sandbox: Nix substitutes packages built from the pinned public design-system release commit.
+
 Run the core validation suite with `npm test`. It performs Svelte type checking, formatting and lint checks, unit tests, Chromium accessibility checks at mobile and desktop widths, builds the Node adapter, and smoke-tests pages, endpoints, status codes, content types, and cache headers. Install the accessibility-test browser once with `npx playwright install chromium`. `npm run test:static` validates static artifacts, while `npm run test:cloudflare` starts a local Wrangler runtime and checks Cloudflare responses.
+
+`npm run check:styles` enforces the DS-only boundary: Tailwind dependencies and utilities, local PostCSS, `@apply`, `@reference`, and authored component style blocks are rejected.
+
+`npm run test:visual` compares intentional light/dark home-page snapshots at the configured desktop and mobile widths.
 
 ## Blog authoring
 

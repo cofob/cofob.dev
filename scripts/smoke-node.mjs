@@ -58,7 +58,7 @@ try {
 	assert.match(searchIndex.headers.get("content-type") ?? "", /^application\/json/);
 	assert.ok((await searchIndex.json()).some((entry) => entry.slug === "codex-start" && entry.tags.includes("project")));
 
-	const taggedBlog = await fetch(`${origin}/blog/?tag=CODEX`);
+	const taggedBlog = await fetch(`${origin}/blog/?tag=PROJECT`);
 	assert.equal(taggedBlog.status, 200);
 	assert.match(await taggedBlog.text(), /codex-start/);
 
