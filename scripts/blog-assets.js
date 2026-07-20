@@ -1,6 +1,6 @@
 import { Resvg } from "@resvg/resvg-js";
 import { createHash } from "node:crypto";
-import { cp, mkdir, readFile, rm, writeFile } from "node:fs/promises";
+import { cp, mkdir, readFile, readdir, rm, writeFile } from "node:fs/promises";
 import { createRequire } from "node:module";
 import path from "node:path";
 import satori from "satori";
@@ -18,6 +18,9 @@ const RASTER_EXTENSIONS = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".w
 const VARIANT_WIDTHS = [480, 960, 1440];
 const require = createRequire(import.meta.url);
 const MANROPE_ROOT = path.dirname(require.resolve("manrope/package.json"));
+const STICKER_PACKAGE_ROOT = path.dirname(require.resolve("@cofob/design-system-stickers/package.json"));
+const STICKER_MANIFEST_ROOT = path.join(STICKER_PACKAGE_ROOT, "dist/generated/manifests");
+const STICKER_ASSET_ROOT = path.join(STICKER_PACKAGE_ROOT, "dist/assets");
 
 const MIME_TYPES = new Map([
 	[".avif", "image/avif"],
@@ -352,9 +355,81 @@ async function emitSiteSocialImage(writer, root) {
 	};
 }
 
+function collectDesignSystemStickerComponents(posts) {
+	const components = new Set();
+	for (const post of posts) {
+		for (const match of post.source.matchAll(
+			/import\s+[A-Za-z_$][\w$]*\s+from\s+["']@cofob\/design-system-stickers\/svelte\/([A-Za-z_$][\w$]*)["']/gu,
+		)) {
+			components.add(match[1]);
+		}
+		for (const match of post.source.matchAll(
+			/import\s*\{([^}]*)\}\s*from\s*["']@cofob\/design-system-stickers\/svelte["']/gu,
+		)) {
+			for (const specifier of match[1].split(",")) {
+				const importedName = specifier.trim().match(/^(?:type\s+)?([A-Za-z_$][\w$]*)/u)?.[1];
+				if (importedName) components.add(importedName);
+			}
+		}
+	}
+	return components;
+}
+
+async function findJsonFiles(directory) {
+	const files = [];
+	for (const entry of await readdir(directory, { withFileTypes: true })) {
+		const entryPath = path.join(directory, entry.name);
+		if (entry.isDirectory()) files.push(...(await findJsonFiles(entryPath)));
+		else if (entry.isFile() && entry.name.endsWith(".json")) files.push(entryPath);
+	}
+	return files;
+}
+
+async function loadStickerManifestIndex() {
+	const manifests = await Promise.all(
+		(await findJsonFiles(STICKER_MANIFEST_ROOT)).map(async (manifestPath) =>
+			JSON.parse(await readFile(manifestPath, "utf8")),
+		),
+	);
+	return new Map(manifests.map((manifest) => [manifest.componentName, manifest]));
+}
+
+function resolveContainedPath(root, relativePath) {
+	const resolved = path.resolve(root, relativePath);
+	if (resolved !== root && !resolved.startsWith(`${root}${path.sep}`)) {
+		throw new Error(`Sticker asset path escapes its package root: ${relativePath}`);
+	}
+	return resolved;
+}
+
+async function copyDesignSystemStickers(stageRoot, posts) {
+	const componentNames = collectDesignSystemStickerComponents(posts);
+	if (componentNames.size === 0) return;
+
+	const manifests = await loadStickerManifestIndex();
+	const selected = [...componentNames].map((componentName) => {
+		const manifest = manifests.get(componentName);
+		if (!manifest) throw new Error(`Unknown @cofob/design-system-stickers component: ${componentName}`);
+		return manifest;
+	});
+	const assetPaths = new Set(
+		selected.flatMap((sticker) => [sticker.assetPath, sticker.firstFrameAssetPath]).filter(Boolean),
+	);
+
+	await Promise.all(
+		[...assetPaths].map(async (assetPath) => {
+			const source = resolveContainedPath(STICKER_ASSET_ROOT, assetPath);
+			const destination = resolveContainedPath(path.join(stageRoot, "stickers"), assetPath);
+			await mkdir(path.dirname(destination), { recursive: true });
+			await cp(source, destination);
+		}),
+	);
+}
+
 export async function prepareBlogAssets({ root = process.cwd(), includePreviews = false } = {}) {
 	const prefix = "blog";
 	const buildTime = new Date().toISOString();
+	const posts = readSourcePosts(root, buildTime, includePreviews);
 	const buildRoot = path.resolve(root, ".blog-build");
 	const stageRoot = path.join(buildRoot, "static");
 	await rm(buildRoot, { recursive: true, force: true });
@@ -362,9 +437,9 @@ export async function prepareBlogAssets({ root = process.cwd(), includePreviews 
 	await cp(path.resolve(root, "static"), stageRoot, { recursive: true });
 	await rm(path.join(stageRoot, "blog"), { recursive: true, force: true });
 	await rm(path.join(stageRoot, "stickers"), { recursive: true, force: true });
+	await copyDesignSystemStickers(stageRoot, posts);
 
 	const writer = createArtifactWriter({ stageRoot, prefix });
-	const posts = readSourcePosts(root, buildTime, includePreviews);
 	const manifest = { version: 1, buildTime, prefix, posts: {}, siteSocialImage: undefined };
 
 	manifest.siteSocialImage = await emitSiteSocialImage(writer, root);

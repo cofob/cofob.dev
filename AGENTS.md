@@ -95,6 +95,8 @@ Markdown images must have meaningful alt text. The build rejects `![](...)`. For
 
 Reusable stickers belong in `static/stickers/<pack-slug>/<sticker-name>.webp`; never copy the same pack asset into individual post folders.
 
+Stickers available from `@cofob/design-system-stickers` should use its generated Svelte components instead of local copies. The preparation step detects Svelte sticker imports in included posts and copies only their assets into the deployment output under `/stickers/`; do not maintain a manual asset list.
+
 The canonical committed sticker format is:
 
 - exactly `192×192` pixels;

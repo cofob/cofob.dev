@@ -63,6 +63,7 @@
 	},
 	"dependencies": {
 		"@cofob/design-system-css": "0.4.0",
+		"@cofob/design-system-stickers": "^0.2.0",
 		"@cofob/design-system-svelte": "0.4.0",
 		"@lucide/svelte": "1.25.0",
 		"@resvg/resvg-js": "2.6.2",

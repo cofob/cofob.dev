@@ -48,6 +48,8 @@ try {
 
 	const post = await fetch(`${origin}/blog/codex-start/`);
 	assert.equal(post.status, 200);
+	const sticker = await fetch(`${origin}/stickers/the-gates-of-orgrimmar/005.3de660f58515.webp`);
+	assert.equal(sticker.status, 200);
 	const postText = await post.text();
 	assert.match(postText, /Codex в отдельном контейнере/);
 	assert.match(postText, /Открыть запись в плеере/);

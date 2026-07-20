@@ -1,14 +1,31 @@
 <script lang="ts">
-	import { Link, Stack, Sticker, Text } from "@cofob/design-system-svelte";
+	import { Link, Stack, Text } from "@cofob/design-system-svelte";
+	import type { Component } from "svelte";
 
-	let { src, alt, sourceName, sourceUrl }: { src: string; alt: string; sourceName: string; sourceUrl: string } =
-		$props();
+	type StickerComponent = Component<{
+		alt: string;
+		rotation?: -6 | -3 | 0 | 3 | 6;
+	}>;
+
+	let {
+		sticker: StickerComponent,
+		alt,
+		rotation = -3,
+		sourceName,
+		sourceUrl,
+	}: {
+		sticker: StickerComponent;
+		alt: string;
+		rotation?: -6 | -3 | 0 | 3 | 6;
+		sourceName: string;
+		sourceUrl: string;
+	} = $props();
 </script>
 
 <!-- eslint-disable svelte/no-navigation-without-resolve -->
 <figure>
 	<Stack align="center" gap="xs">
-		<Sticker data-image="true"><img {src} {alt} width="192" height="192" loading="lazy" decoding="async" /></Sticker>
+		<StickerComponent {alt} {rotation} />
 		<figcaption>
 			<Text as="span" size="sm" tone="muted">
 				Источник: <Link href={sourceUrl} external rel="noopener noreferrer">{sourceName}</Link>

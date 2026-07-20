@@ -144,13 +144,13 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain('aria-label="Предупреждение"');
 		expect(output).toContain("Это вайбкод");
 		expect(output).toContain("https://t.me/addstickers/the_gates_of_orgrimmar");
-		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar"');
+		expect(output).toContain('alt="Персонаж просит завалить ебало"');
 		expect(output).toContain("Источник:");
 		expect(output).toContain('class="cf-alert" data-tone="info"');
 		expect(output).toContain('aria-label="Примечание"');
 		expect(output).toContain('class="cf-sticker"');
-		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar в примечании"');
-		expect(output).toContain('alt="Стикер из пака PhSilver"');
+		expect(output).toContain('alt="Персонаж заявляет, что он не долбоёб"');
+		expect(output).toContain('alt="Лис с нимбом доволен собой"');
 		expect(output).toContain("https://t.me/addstickers/PhSilver");
 	});
 
@@ -168,7 +168,7 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain(
 			'href="/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast"',
 		);
-		expect(output).toContain('alt="Стикер из пака The Gates of Orgrimmar"');
+		expect(output).toContain('alt="Персонаж просит завалить ебало"');
 		expect(output).toContain("https://t.me/addstickers/the_gates_of_orgrimmar");
 	});
 });

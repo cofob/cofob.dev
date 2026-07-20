@@ -54,6 +54,8 @@ try {
 
 	const post = await fetch(`${origin}/blog/codex-start/`);
 	assert.equal(post.status, 200);
+	const sticker = await fetch(`${origin}/stickers/the-gates-of-orgrimmar/005.3de660f58515.webp`);
+	assert.equal(sticker.status, 200);
 	assert.match(await post.text(), /Codex в отдельном контейнере/);
 	const recording = await fetch(`${origin}/blog/codex-start/codex-start-demo.0607f3aebac2.cast`);
 	assert.equal(recording.status, 200);

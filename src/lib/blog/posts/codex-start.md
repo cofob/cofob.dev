@@ -13,6 +13,9 @@ draft: false
 	import NoticeBlock from "$lib/components/blog/NoticeBlock.svelte";
 	import Sticker from "$lib/components/blog/Sticker.svelte";
 	import WarningBlock from "$lib/components/blog/WarningBlock.svelte";
+	import PhSilver084 from "@cofob/design-system-stickers/svelte/PhSilver084";
+	import TheGatesOfOrgrimmar005 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
+	import TheGatesOfOrgrimmar046 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar046";
 
 	const piStartMessages = [
 		{
@@ -36,10 +39,11 @@ draft: false
 <WarningBlock>
 	Это вайбкод. Я писал его исключительно для себя и своих задач и не гарантирую, что у вас он вообще будет работать.
 	<Sticker
-		src="/stickers/the-gates-of-orgrimmar/zavali_ebalo.webp"
-		alt="Стикер из пака The Gates of Orgrimmar"
+		sticker={TheGatesOfOrgrimmar005}
+		alt="Персонаж просит завалить ебало"
 		sourceName="стикерпак The Gates of Orgrimmar"
 		sourceUrl="https://t.me/addstickers/the_gates_of_orgrimmar"
+		rotation={3}
 	/>
 </WarningBlock>
 
@@ -64,10 +68,11 @@ draft: false
 <NoticeBlock>
 	Справедливости ради я попробовал настроить sandboxing средствами самого Codex, но не смог достичь желаемого результата. Правила были либо слишком слабые, либо слишком сильные и мешали работать.
 	<Sticker
-		src="/stickers/the-gates-of-orgrimmar/ya_ne_dolboeb.webp"
-		alt="Стикер из пака The Gates of Orgrimmar в примечании"
+		sticker={TheGatesOfOrgrimmar046}
+		alt="Персонаж заявляет, что он не долбоёб"
 		sourceName="стикерпак The Gates of Orgrimmar"
 		sourceUrl="https://t.me/addstickers/the_gates_of_orgrimmar"
+		rotation={-3}
 	/>
 </NoticeBlock>
 
@@ -98,8 +103,9 @@ draft: false
 Сама модель решила взять на себя много ответственности и придумала очень широкий функционал. Также решила сделать хороший (но бесполезный) тулинг вокруг, включая Sigstore для сборок, vulnerability scanning, SBOM/SPDX и так далее. У меня ушло, конечно, много времени потом на то, чтобы это всё запустить, но изначально база придумана неплохая.
 
 <Sticker
-	src="/stickers/fox_pack/ya_ahuenen.webp"
-	alt="Стикер из пака PhSilver"
+	sticker={PhSilver084}
+	alt="Лис доволен собой"
 	sourceName="стикерпак PhSilver"
 	sourceUrl="https://t.me/addstickers/PhSilver"
+	rotation={3}
 />

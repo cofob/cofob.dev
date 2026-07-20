@@ -36,6 +36,10 @@ cover: hero.png
 coverAlt: A red test image
 ---
 
+<script>
+  import TheGatesOfOrgrimmar005 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
+</script>
+
 ![A red test image](hero.png)
 
 [Download the guide](guide.pdf)
@@ -85,6 +89,12 @@ describe("blog asset preparation", () => {
 		const sticker = manifest.posts["test-post"].assets["stickers/test-pack/sticker.png"];
 		expect(sticker.image.src).toMatch(/^\/blog\/stickers\/test-pack\/sticker\.[a-f0-9]{12}\.128w\.webp$/);
 		await expect(readFile(path.join(root, ".blog-build/static", sticker.image.src))).resolves.toBeTruthy();
+		await expect(
+			readFile(path.join(root, ".blog-build/static/stickers/the-gates-of-orgrimmar/005.3de660f58515.webp")),
+		).resolves.toBeTruthy();
+		await expect(
+			readFile(path.join(root, ".blog-build/static/stickers/the-gates-of-orgrimmar/046.88c202cfb988.webp")),
+		).rejects.toMatchObject({ code: "ENOENT" });
 
 		const social = manifest.posts["test-post"].socialImage;
 		expect(social).toMatchObject({ width: 1200, height: 630, type: "image/png" });
