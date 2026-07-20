@@ -92,7 +92,7 @@
 {:else}
 	<figure aria-label={label}>
 		<Stack gap="sm">
-			<Card padding="none"><div bind:this={target} data-asciinema-player-mount></div></Card>
+			<Card padding="none" hidden={!ready}><div bind:this={target} data-asciinema-player-mount></div></Card>
 			{#if !ready}
 				<Alert title={failed ? "Плеер не загрузился" : "Терминальная запись"} tone={failed ? "warning" : "info"}>
 					<Link href={directFallback ? src : portableHref}>
