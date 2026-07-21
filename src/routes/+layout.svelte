@@ -1,5 +1,6 @@
 <script lang="ts">
 	import "@cofob/design-system-css/index.css";
+	import "@cofob/design-system-asciinema-player/styles.css";
 	import { page } from "$app/state";
 	import { resolve } from "$app/paths";
 	import { replaceState } from "$app/navigation";

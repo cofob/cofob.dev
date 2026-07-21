@@ -139,7 +139,7 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fpi-start.64b0f412daf9.cast");
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast");
 		expect(output).toContain('aria-label="Демонстрация codex-start в терминале"');
-		expect(output).toMatch(/class="cf-card"[^>]*hidden/);
+		expect(output).toMatch(/class="cf-card cf-asciinema-player__stage"[^>]*hidden/);
 		expect(output).toContain("Открыть запись в плеере");
 		expect(output).toContain('class="cf-terminal-code-block"');
 		expect(output).toContain('data-language="bash"');

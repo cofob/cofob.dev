@@ -16,7 +16,6 @@ export default defineConfig(
 		"playwright-report/**",
 		"test-results/**",
 		"result",
-		"static/static/vendor/**",
 	]),
 	js.configs.recommended,
 	...ts.configs.recommended,

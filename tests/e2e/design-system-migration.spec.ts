@@ -88,6 +88,15 @@ test("blog search and tag filtering preserve their behavior", async ({ page }) =
 	await expect(page.locator(".cf-post-card")).toContainText("Bambu Lab P2S");
 });
 
+test("asciinema recordings hydrate into the design-system player", async ({ page }) => {
+	await page.goto("/blog/codex-start/");
+	const player = page.locator("[data-cf-asciinema-player]").first();
+	await expect(player).toHaveAttribute("data-state", "ready");
+	await expect(player.locator("[data-cf-asciinema-player-stage]")).toBeVisible();
+	await expect(player.locator("[data-cf-asciinema-player-fallback]")).toBeHidden();
+	await expect(player.locator(".ap-player")).toBeVisible();
+});
+
 test("representative pages do not create page-level overflow", async ({ page }) => {
 	for (const path of ["/", "/blog/", "/blog/codex-start/", "/blog/example-post/", "/license/"]) {
 		await page.goto(path);
