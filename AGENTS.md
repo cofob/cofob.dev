@@ -142,6 +142,8 @@ Import reusable article components from `src/lib/components/blog/` rather than r
 
 Use descriptive component `label` values in the language of the post. Prefer data arrays in the post’s script block over repeating large component markup.
 
+Keep browser terminal blocks and recordings in labeled `figure` elements in the blog wrappers. The design-system prose styles give these figures the same vertical margins as other article content.
+
 ## Adding or changing a blog component
 
 Normal browser behavior and portable feed behavior are separate contracts:

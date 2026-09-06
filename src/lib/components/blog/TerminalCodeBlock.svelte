@@ -24,5 +24,7 @@
 		{/each}
 	</figure>
 {:else}
-	<DesignSystemTerminalCodeBlock {entries} {label} {prompt} />
+	<figure aria-label={label}>
+		<DesignSystemTerminalCodeBlock {entries} {label} {prompt} />
+	</figure>
 {/if}

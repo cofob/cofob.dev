@@ -106,6 +106,29 @@ test("representative pages do not create page-level overflow", async ({ page }) 
 	}
 });
 
+test("article terminal blocks have prose spacing before and after player hydration", async ({ page }) => {
+	await page.route("**/*.cast", (route) => route.abort());
+	await page.goto("/blog/codex-start/");
+	const checkSpacing = async () => {
+		const gaps = await page.evaluate(() => {
+			const terminal = document.querySelector('.cf-prose figure[aria-label="Установка codex-start"]');
+			const player = document.querySelector('.cf-prose figure[aria-label="Демонстрация codex-start в терминале"]');
+			const notice = player?.nextElementSibling;
+			if (!terminal || !player || !notice) throw new Error("Expected article blocks");
+			return [
+				player.getBoundingClientRect().top - terminal.getBoundingClientRect().bottom,
+				notice.getBoundingClientRect().top - player.getBoundingClientRect().bottom,
+			];
+		});
+		for (const gap of gaps) expect(gap).toBe(16);
+	};
+	await checkSpacing();
+	await page.unroute("**/*.cast");
+	await page.reload();
+	await expect(page.locator("[data-cf-asciinema-player]").first()).toHaveAttribute("data-state", "ready");
+	await checkSpacing();
+});
+
 for (const theme of ["light", "dark"] as const) {
 	test(`@visual home page has an intentional ${theme} DS snapshot`, async ({ page }) => {
 		await page.emulateMedia({ colorScheme: theme, reducedMotion: "reduce" });

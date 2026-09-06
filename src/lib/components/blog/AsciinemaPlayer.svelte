@@ -32,15 +32,17 @@
 {#if renderMode === "portable"}
 	<p><a href={portableHref}>{label}</a></p>
 {:else}
-	<DesignSystemAsciinemaPlayer
-		source={src}
-		{options}
-		{label}
-		{fallbackHref}
-		labels={{
-			loadingTitle: "Терминальная запись",
-			errorTitle: "Плеер не загрузился",
-			fallbackLink: directFallback ? "Открыть запись напрямую" : "Открыть запись в плеере",
-		}}
-	/>
+	<figure aria-label={label}>
+		<DesignSystemAsciinemaPlayer
+			source={src}
+			{options}
+			{label}
+			{fallbackHref}
+			labels={{
+				loadingTitle: "Терминальная запись",
+				errorTitle: "Плеер не загрузился",
+				fallbackLink: directFallback ? "Открыть запись напрямую" : "Открыть запись в плеере",
+			}}
+		/>
+	</figure>
 {/if}

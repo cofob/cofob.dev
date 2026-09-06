@@ -24,6 +24,9 @@ describe("portable feed content", () => {
 		expect(output).toContain("@cofob wrote:");
 		expect(output).toContain("Warning!");
 		expect(output).toContain("Note:");
+		expect(output).toContain("Installed codex-start 0.1.6");
+		expect(output).not.toContain("cf-terminal-code-block");
+		expect(output).not.toContain("data-cf-asciinema-player");
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2F");
 		expect(output).not.toContain("chat-avatar");
 		expect(output).not.toContain('class="recording');

@@ -142,6 +142,8 @@ describe("MDsveX post rendering", () => {
 		expect(output).toMatch(/class="cf-card cf-asciinema-player__stage"[^>]*hidden/);
 		expect(output).toContain("Открыть запись в плеере");
 		expect(output).toContain('class="cf-terminal-code-block"');
+		expect(output).toContain('<figure aria-label="Установка codex-start">');
+		expect(output).toContain('<figure aria-label="Демонстрация codex-start в терминале">');
 		expect(output).toContain('data-language="bash"');
 		expect(output).toContain("--proto");
 		expect(output).toContain("Installed codex-start 0.1.6");
@@ -172,6 +174,8 @@ describe("MDsveX post rendering", () => {
 		expect(output).not.toContain("Загрузка плеера");
 		expect(output).not.toContain('class="cf-terminal-code-block"');
 		expect(output).not.toContain("Copy command");
+		expect(output).toContain('<figure aria-label="Установка codex-start"><figcaption>');
+		expect(output).not.toContain('<figure aria-label="Демонстрация codex-start в терминале">');
 		expect(output).toContain("Установка codex-start");
 		expect(output).toContain("Installed codex-start 0.1.6");
 		expect(output).toContain(
