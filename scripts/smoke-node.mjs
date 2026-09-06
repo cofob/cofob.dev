@@ -57,6 +57,17 @@ try {
 	const recording = await fetch(`${origin}/blog/codex-start/codex-start-demo.0607f3aebac2.cast`);
 	assert.equal(recording.status, 200);
 	assert.equal((await recording.arrayBuffer()).byteLength, 269_629);
+	for (const face of ["regular", "bold", "italic", "bold-italic"]) {
+		const font = await fetch(`${origin}/fonts/meslo/${face}.woff2`);
+		assert.equal(font.status, 200);
+		assert.match(font.headers.get("content-type") ?? "", /^font\/woff2/);
+		assert.equal(
+			Buffer.from(await font.arrayBuffer())
+				.subarray(0, 4)
+				.toString(),
+			"wOF2",
+		);
+	}
 
 	const searchIndex = await fetch(`${origin}/blog/search.json`);
 	assert.equal(searchIndex.status, 200);

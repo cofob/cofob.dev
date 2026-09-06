@@ -139,7 +139,8 @@ describe("MDsveX post rendering", () => {
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fpi-start.64b0f412daf9.cast");
 		expect(output).toContain("/blog/play_asciinema/?url=%2Fblog%2Fcodex-start%2Fcodex-start-demo.0607f3aebac2.cast");
 		expect(output).toContain('aria-label="Демонстрация codex-start в терминале"');
-		expect(output).toMatch(/class="cf-card cf-asciinema-player__stage"[^>]*hidden/);
+		expect(output).toContain("Терминальная запись");
+		expect(output).not.toContain("data-cf-asciinema-player-stage");
 		expect(output).toContain("Открыть запись в плеере");
 		expect(output).toContain('class="cf-terminal-code-block"');
 		expect(output).toContain('<figure aria-label="Установка codex-start">');
@@ -174,6 +175,7 @@ describe("MDsveX post rendering", () => {
 		expect(output).not.toContain("Загрузка плеера");
 		expect(output).not.toContain('class="cf-terminal-code-block"');
 		expect(output).not.toContain("Copy command");
+		expect(output).not.toContain("MesloLGS");
 		expect(output).toContain('<figure aria-label="Установка codex-start"><figcaption>');
 		expect(output).not.toContain('<figure aria-label="Демонстрация codex-start в терминале">');
 		expect(output).toContain("Установка codex-start");

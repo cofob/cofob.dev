@@ -97,6 +97,47 @@ test("asciinema recordings hydrate into the design-system player", async ({ page
 	await expect(player.locator(".ap-player")).toBeVisible();
 });
 
+test("terminal waits for local Meslo Nerd Font before measuring cells", async ({ page }) => {
+	let releaseFonts!: () => void;
+	const fontGate = new Promise<void>((resolve) => {
+		releaseFonts = resolve;
+	});
+	const requestedFonts = new Set<string>();
+	await page.route("**/fonts/meslo/*.woff2", async (route) => {
+		requestedFonts.add(route.request().url());
+		await fontGate;
+		await route.continue();
+	});
+	await page.goto("/blog/codex-start/");
+	const figure = page.locator('figure[aria-label="Демонстрация codex-start в терминале"]').first();
+	await expect.poll(() => requestedFonts.size).toBe(4);
+	await expect(figure.getByRole("link", { name: "Открыть запись в плеере" })).toBeVisible();
+	await expect(page.locator(".ap-term")).toHaveCount(0);
+	releaseFonts();
+	await expect(page.locator("[data-cf-asciinema-player]").first()).toHaveAttribute("data-state", "ready");
+	await expect(page.locator(".ap-term").first()).toHaveCSS("font-family", '"MesloLGS NF", monospace');
+	const faces = await page.evaluate(() =>
+		Array.from(document.fonts)
+			.filter((font) => font.family.replaceAll('"', "") === "MesloLGS NF")
+			.map((font) => ({ weight: font.weight, style: font.style, status: font.status })),
+	);
+	expect(faces).toHaveLength(4);
+	expect(faces.every((font) => font.status === "loaded")).toBe(true);
+	const fallback = new URL(
+		(await page.locator("[data-cf-asciinema-player-fallback-link]").first().getAttribute("href")) ?? "",
+		page.url(),
+	);
+	await page.goto(fallback.href);
+	await expect(page.locator(".ap-term")).toHaveCSS("font-family", '"MesloLGS NF", monospace');
+});
+
+test("terminal playback remains available if font requests fail", async ({ page }) => {
+	await page.route("**/fonts/meslo/*.woff2", (route) => route.abort());
+	await page.goto("/blog/codex-start/");
+	await expect(page.locator("[data-cf-asciinema-player]").first()).toHaveAttribute("data-state", "ready");
+	await expect(page.locator(".ap-player").first()).toBeVisible();
+});
+
 test("representative pages do not create page-level overflow", async ({ page }) => {
 	for (const path of ["/", "/blog/", "/blog/codex-start/", "/blog/example-post/", "/license/"]) {
 		await page.goto(path);
