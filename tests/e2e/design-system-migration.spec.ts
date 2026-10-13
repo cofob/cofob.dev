@@ -2,8 +2,11 @@ import { expect, test } from "@playwright/test";
 
 async function visibleThemeToggle(page: import("@playwright/test").Page) {
 	const toggle = page.locator(".cf-theme-toggle");
-	if (!(await toggle.isVisible())) await page.locator("[data-cf-navbar-trigger]").click();
-	await expect(toggle).toBeVisible();
+	// A click on the mobile navbar trigger is lost if it lands before hydration, so retry until it opens.
+	await expect(async () => {
+		if (!(await toggle.isVisible())) await page.locator("[data-cf-navbar-trigger]").click();
+		await expect(toggle).toBeVisible({ timeout: 1_000 });
+	}).toPass();
 	return toggle;
 }
 
