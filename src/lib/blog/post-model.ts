@@ -1,4 +1,4 @@
-import type { PostModel } from "@cofob/design-system-svelte";
+import type { PostModel } from "@cofob2/design-system-svelte";
 import { formatPostDate } from "./format";
 import type { PostSummary } from "./types";
 

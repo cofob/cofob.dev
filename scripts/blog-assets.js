@@ -18,7 +18,7 @@ const RASTER_EXTENSIONS = new Set([".avif", ".gif", ".jpeg", ".jpg", ".png", ".w
 const VARIANT_WIDTHS = [480, 960, 1440];
 const require = createRequire(import.meta.url);
 const MANROPE_ROOT = path.dirname(require.resolve("manrope/package.json"));
-const STICKER_PACKAGE_ROOT = path.dirname(require.resolve("@cofob/design-system-stickers/package.json"));
+const STICKER_PACKAGE_ROOT = path.dirname(require.resolve("@cofob2/design-system-stickers/package.json"));
 const STICKER_MANIFEST_ROOT = path.join(STICKER_PACKAGE_ROOT, "dist/generated/manifests");
 const STICKER_ASSET_ROOT = path.join(STICKER_PACKAGE_ROOT, "dist/assets");
 
@@ -359,12 +359,12 @@ function collectDesignSystemStickerComponents(posts) {
 	const components = new Set();
 	for (const post of posts) {
 		for (const match of post.source.matchAll(
-			/import\s+[A-Za-z_$][\w$]*\s+from\s+["']@cofob\/design-system-stickers\/svelte\/([A-Za-z_$][\w$]*)["']/gu,
+			/import\s+[A-Za-z_$][\w$]*\s+from\s+["']@cofob2\/design-system-stickers\/svelte\/([A-Za-z_$][\w$]*)["']/gu,
 		)) {
 			components.add(match[1]);
 		}
 		for (const match of post.source.matchAll(
-			/import\s*\{([^}]*)\}\s*from\s*["']@cofob\/design-system-stickers\/svelte["']/gu,
+			/import\s*\{([^}]*)\}\s*from\s*["']@cofob2\/design-system-stickers\/svelte["']/gu,
 		)) {
 			for (const specifier of match[1].split(",")) {
 				const importedName = specifier.trim().match(/^(?:type\s+)?([A-Za-z_$][\w$]*)/u)?.[1];
@@ -409,7 +409,7 @@ async function copyDesignSystemStickers(stageRoot, posts) {
 	const manifests = await loadStickerManifestIndex();
 	const selected = [...componentNames].map((componentName) => {
 		const manifest = manifests.get(componentName);
-		if (!manifest) throw new Error(`Unknown @cofob/design-system-stickers component: ${componentName}`);
+		if (!manifest) throw new Error(`Unknown @cofob2/design-system-stickers component: ${componentName}`);
 		return manifest;
 	});
 	const assetPaths = new Set(

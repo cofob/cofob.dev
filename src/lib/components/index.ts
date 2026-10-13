@@ -28,4 +28,4 @@ export {
 	ThemeProvider,
 	ThemeScript,
 	ThemeToggle,
-} from "@cofob/design-system-svelte";
+} from "@cofob2/design-system-svelte";

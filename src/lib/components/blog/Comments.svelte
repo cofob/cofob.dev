@@ -12,7 +12,7 @@
 		Stack,
 		Text,
 		TextField,
-	} from "@cofob/design-system-svelte";
+	} from "@cofob2/design-system-svelte";
 	import CommentThread from "./CommentThread.svelte";
 
 	let {

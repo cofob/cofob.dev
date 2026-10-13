@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { FediverseAttachment } from "$lib/fediverse/types";
-	import { MediaGrid } from "@cofob/design-system-svelte";
+	import { MediaGrid } from "@cofob2/design-system-svelte";
 
 	let { attachments }: { attachments: FediverseAttachment[] } = $props();
 </script>

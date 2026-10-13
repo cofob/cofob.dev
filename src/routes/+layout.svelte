@@ -1,6 +1,6 @@
 <script lang="ts">
-	import "@cofob/design-system-css/index.css";
-	import "@cofob/design-system-asciinema-player/styles.css";
+	import "@cofob2/design-system-css/index.css";
+	import "@cofob2/design-system-asciinema-player/styles.css";
 	import { page } from "$app/state";
 	import { resolve } from "$app/paths";
 	import { replaceState } from "$app/navigation";
@@ -15,7 +15,7 @@
 		ThemeToggle,
 		type LinkItem,
 		type ThemePreference,
-	} from "@cofob/design-system-svelte";
+	} from "@cofob2/design-system-svelte";
 	import { onMount, type Snippet } from "svelte";
 	import { SvelteURL } from "svelte/reactivity";
 	import { lineRainbowStore } from "$lib/store";

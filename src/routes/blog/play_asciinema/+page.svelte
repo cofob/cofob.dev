@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
-	import { Alert, Container, Heading, Link, Section, Stack } from "@cofob/design-system-svelte";
+	import { Alert, Container, Heading, Link, Section, Stack } from "@cofob2/design-system-svelte";
 	import AsciinemaPlayer from "$lib/components/blog/AsciinemaPlayer.svelte";
 	import type { PageData } from "./$types";
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Link, Stack, Text } from "@cofob/design-system-svelte";
+	import { Link, Stack, Text } from "@cofob2/design-system-svelte";
 	import type { Component } from "svelte";
 
 	type StickerComponent = Component<{

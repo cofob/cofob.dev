@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { RichTextNode } from "$lib/fediverse/types";
-	import { InlineEmoji, Prose } from "@cofob/design-system-svelte";
+	import { InlineEmoji, Prose } from "@cofob2/design-system-svelte";
 
 	let { nodes }: { nodes: RichTextNode[] } = $props();
 </script>

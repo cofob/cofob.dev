@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { TerminalCodeBlock as DesignSystemTerminalCodeBlock } from "@cofob/design-system-svelte";
-	import type { TerminalCodeEntry } from "@cofob/design-system-css";
+	import { TerminalCodeBlock as DesignSystemTerminalCodeBlock } from "@cofob2/design-system-svelte";
+	import type { TerminalCodeEntry } from "@cofob2/design-system-css";
 	import { getBlogRenderMode } from "$lib/blog/render-mode";
 
 	let {

@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getBlogRenderMode } from "$lib/blog/render-mode";
-	import { ChatThread, type ChatMessage as DesignSystemChatMessage } from "@cofob/design-system-svelte";
+	import { ChatThread, type ChatMessage as DesignSystemChatMessage } from "@cofob2/design-system-svelte";
 
 	interface ChatMessage {
 		text?: string;
