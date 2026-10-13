@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { resolve } from "$app/paths";
 	import { toPostModel, type PostModelSource } from "$lib/blog/post-model";
-	import { PostCard as DesignSystemPostCard } from "@cofob/design-system-svelte";
+	import { PostCard as DesignSystemPostCard } from "@cofob2/design-system-svelte";
 
 	let {
 		post,

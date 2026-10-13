@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { FediverseComment } from "$lib/fediverse/types";
-	import { Avatar, Inline, Link, Stack, Text } from "@cofob/design-system-svelte";
+	import { Avatar, Inline, Link, Stack, Text } from "@cofob2/design-system-svelte";
 	import CommentMedia from "./CommentMedia.svelte";
 	import RichText from "./RichText.svelte";
 

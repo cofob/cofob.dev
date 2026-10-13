@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { ResponsiveImageAsset } from "$lib/blog/types";
-	import { ResponsiveImage } from "@cofob/design-system-svelte";
+	import { ResponsiveImage } from "@cofob2/design-system-svelte";
 
 	let {
 		image,

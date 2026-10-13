@@ -37,7 +37,7 @@ coverAlt: A red test image
 ---
 
 <script>
-  import TheGatesOfOrgrimmar005 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
+  import TheGatesOfOrgrimmar005 from "@cofob2/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
 </script>
 
 ![A red test image](hero.png)

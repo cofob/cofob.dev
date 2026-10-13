@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { AsciinemaPlayer as DesignSystemAsciinemaPlayer } from "@cofob/design-system-asciinema-player/svelte";
+	import { AsciinemaPlayer as DesignSystemAsciinemaPlayer } from "@cofob2/design-system-asciinema-player/svelte";
 	import { asciinemaPlayerHref } from "$lib/blog/asciinema";
 	import { getBlogRenderMode } from "$lib/blog/render-mode";
 	import { loadTerminalFont, terminalFontFamily } from "$lib/blog/terminal-font";
-	import { Alert } from "@cofob/design-system-svelte";
+	import { Alert } from "@cofob2/design-system-svelte";
 	import { onMount } from "svelte";
 
 	let {

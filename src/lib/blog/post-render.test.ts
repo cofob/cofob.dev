@@ -3,7 +3,7 @@ import { describe, expect, it } from "vitest";
 import PostCard from "$lib/components/blog/PostCard.svelte";
 import LatestPostLink from "$lib/components/blog/LatestPostLink.svelte";
 import CommentThread from "$lib/components/blog/CommentThread.svelte";
-import { SearchResultCard } from "@cofob/design-system-svelte";
+import { SearchResultCard } from "@cofob2/design-system-svelte";
 import { createPortableBlogContext } from "./render-mode";
 import type { PostSummary } from "./types";
 import CodexStart from "./posts/codex-start.md";

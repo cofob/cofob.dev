@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { getBlogRenderMode } from "$lib/blog/render-mode";
-	import { Alert } from "@cofob/design-system-svelte";
+	import { Alert } from "@cofob2/design-system-svelte";
 	import type { Snippet } from "svelte";
 
 	let { children, portableTitle = "Warning!" }: { children: Snippet; portableTitle?: string } = $props();

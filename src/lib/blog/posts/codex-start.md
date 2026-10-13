@@ -14,9 +14,9 @@ draft: false
 	import Sticker from "$lib/components/blog/Sticker.svelte";
 	import TerminalCodeBlock from "$lib/components/blog/TerminalCodeBlock.svelte";
 	import WarningBlock from "$lib/components/blog/WarningBlock.svelte";
-	import PhSilver084 from "@cofob/design-system-stickers/svelte/PhSilver084";
-	import TheGatesOfOrgrimmar005 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
-	import TheGatesOfOrgrimmar046 from "@cofob/design-system-stickers/svelte/TheGatesOfOrgrimmar046";
+	import PhSilver084 from "@cofob2/design-system-stickers/svelte/PhSilver084";
+	import TheGatesOfOrgrimmar005 from "@cofob2/design-system-stickers/svelte/TheGatesOfOrgrimmar005";
+	import TheGatesOfOrgrimmar046 from "@cofob2/design-system-stickers/svelte/TheGatesOfOrgrimmar046";
 
 	const piStartMessages = [
 		{
