@@ -3,7 +3,7 @@
 	import "@cofob2/design-system-asciinema-player/styles.css";
 	import { page } from "$app/state";
 	import { resolve } from "$app/paths";
-	import { replaceState } from "$app/navigation";
+	import { afterNavigate, replaceState } from "$app/navigation";
 	import {
 		AppShell,
 		BlueLine,
@@ -51,23 +51,24 @@
 			themePreference = storedTheme;
 		}
 
-		const url = new SvelteURL(window.location.href);
-		const hasRainbowQuery = url.searchParams.has("rainbow");
 		const storedRainbow = sessionStorage.getItem("rainbow");
-
-		if (hasRainbowQuery) {
-			sessionStorage.setItem("rainbow", "1");
-			lineRainbowStore.set(true);
-		} else if (storedRainbow !== null) {
+		if (storedRainbow !== null) {
 			lineRainbowStore.set(storedRainbow === "1");
 		}
+	});
 
-		if (hasRainbowQuery) {
-			url.searchParams.delete("rainbow");
-			// The URL is derived from the current page, not an application route literal.
-			// eslint-disable-next-line svelte/no-navigation-without-resolve
-			replaceState(url, page.state);
-		}
+	// The router is not ready in the root layout's onMount, so replaceState must run here.
+	afterNavigate(({ to }) => {
+		if (!to?.url.searchParams.has("rainbow")) return;
+
+		sessionStorage.setItem("rainbow", "1");
+		lineRainbowStore.set(true);
+
+		const url = new SvelteURL(to.url);
+		url.searchParams.delete("rainbow");
+		// The URL is derived from the current page, not an application route literal.
+		// eslint-disable-next-line svelte/no-navigation-without-resolve
+		replaceState(url, page.state);
 	});
 </script>
 

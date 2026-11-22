@@ -21,6 +21,7 @@
 		TextField,
 	} from "$lib/components";
 	import PostCard from "$lib/components/blog/PostCard.svelte";
+	import { lineRainbowStore } from "$lib/store";
 	import { blogStructuredData } from "$lib/seo/structured-data";
 	import type { PageData } from "./$types";
 
@@ -85,7 +86,7 @@
 		<Stack gap="xl">
 			<header>
 				<Stack align="center" gap="sm">
-					<Heading level={1} size="2xl"><BlueLine>Blog</BlueLine></Heading>
+					<Heading level={1} size="2xl"><BlueLine rainbow={$lineRainbowStore}>Blog</BlueLine></Heading>
 					<Text size="lg" tone="muted">Writing and notes from cofob.</Text>
 					<nav aria-label="Blog feeds">
 						<Inline gap="sm" justify="center">
